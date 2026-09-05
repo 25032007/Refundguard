@@ -9,7 +9,7 @@
 
 > **Note:** RefundGuard is **not** a payment gateway. It is an investigation dashboard for risk analysts to surface and explore suspected refund-abuse rings.
 
-> **Status:** Data foundation, an explainable deterministic **Risk Signal Engine**, and a deterministic **Complaint NLP & Evidence Extraction** layer are in place. The engine evaluates six per-customer risk signals; the NLP layer detects similar complaint wording, reused templates, evidence categories, and per-customer text-based risk, all fully explainable. Graph construction, ring detection, composition of the two analyses into one score, metrics exposure, and dashboard integration are intentionally **not** implemented yet and will be added in later phases.
+> **Status:** Data foundation, an explainable deterministic **Risk Signal Engine**, a deterministic **Complaint NLP & Evidence Extraction** layer, and a **Graph-Based Refund Ring Detection** engine are in place. The engine evaluates six per-customer risk signals; the NLP layer detects similar complaint wording, reused templates, and per-customer text-based risk; the graph engine builds a heterogeneous entity graph, projects customer relationships, finds connected components, and scores refund rings — all explainable and deterministic. Composing the three analyses into one investigation experience, API/metrics exposure, and dashboard integration are intentionally **not** implemented yet and will be added in later phases.
 
 ---
 
@@ -45,6 +45,17 @@ refundguard/
 │   ├── evidence.js   # Evidence category/phrase extraction
 │   ├── analyze.js    # Repeated templates + per-customer NLP contribution
 │   ├── run.js        # CLI runner (npm run nlp:analyze)
+│   └── tests/        # Unit tests (node --test, no MongoDB required)
+│
+├── graph/            # Graph-based refund ring detection (relationship intelligence)
+│   ├── index.js      # analyzeRefundRings pipeline + public API
+│   ├── config.js     # Node/edge/relationship types, candidate rules, score budget, bands
+│   ├── buildGraph.js # Heterogeneous graph construction (nodes/edges/adjacency)
+│   ├── components.js # findConnectedComponents (BFS on the customer graph)
+│   ├── detectRings.js# buildCustomerGraph + detectRingCandidates
+│   ├── evidence.js   # extractRingEvidence (shared resources + refund/complaint behavior)
+│   ├── scoreRing.js  # scoreRing (deterministic explainable 0-100 score + signals)
+│   ├── run.js        # CLI runner (npm run graph:analyze)
 │   └── tests/        # Unit tests (node --test, no MongoDB required)
 │
 ├── backend/
@@ -213,6 +224,61 @@ The similarity threshold and every other tunable live in `nlp/config.js`.
 
 ---
 
+## Graph-Based Refund Ring Detection
+
+The relationship-intelligence layer builds a heterogeneous in-memory graph
+(customer, device, ip, transaction, refund, complaint nodes), projects it onto
+connected customers, and detects explainable refund rings:
+
+```bash
+# Build the graph, detect rings, score them, print a report
+npm run graph:analyze
+
+# Run the graph engine unit tests (no MongoDB required)
+npm run graph:test
+
+# Run ALL analysis tests (risk engine + NLP + graph)
+npm test
+```
+
+Pipeline: raw records → `buildGraph` (typed nodes/edges) →
+`buildCustomerGraph` (shared-IP / shared-device relationship edges, indexed
+per resource so there is no O(n²) entity-pair scan) → `findConnectedComponents`
+(BFS) → `detectRingCandidates` (configurable minimums) → `extractRingEvidence`
+→ `scoreRing` (0-100, every point traceable to evidence).
+
+What `npm run graph:analyze` reports:
+
+- **Graph statistics** — node counts per type and edge counts. On the synthetic
+  dataset: 2,608 edges = 1,054 primary edges (`customer_transaction` 518,
+  `transaction_refund` 243, `customer_complaint` 151, `complaint_refund` 142)
+  + 1,554 derived edges (`customer_ip` 518, `customer_device` 518,
+  `transaction_device` 518).
+- **Connected components** — 70 on the synthetic dataset (6 multi-member
+  components; the rest are isolated normal customers).
+- **Ring candidates** — 6 on the synthetic dataset, each scored **80-90**,
+  all **CRITICAL**.
+- **Evidence** — every shared IP and shared device with its customer lists,
+  plus per-ring refund/complaint/transaction behavior.
+- **Score breakdown** — six explained signals (`shared_ip`, `shared_device`,
+  `graph_density`, `refund_concentration`, `multi_member_refund_activity`,
+  `complaint_concentration`) with per-signal severity and description.
+- **Ground-truth comparison** — `data/raw/clusters.json` is read **only** for
+  this final evaluation line, never during analysis.
+
+Design notes:
+
+- **No external graph libraries** — plain JavaScript Maps and arrays only.
+- **Density** counts unique customer pairs connected under any relationship
+  (not each relationship type as a separate edge).
+- **`shared_transaction_context`** is implemented but disabled by default:
+  in the synthetic dataset order IDs are drawn from a shared pool, so same-order
+  reuse between unrelated customers is coincidental (120 accidental groups).
+- Ground truth (`clusters.json`) is never read by any core graph module — a
+  source-guard test enforces this.
+
+---
+
 ## Tech Stack
 
 | Layer     | Technology                                   |
@@ -254,12 +320,13 @@ Implemented so far:
 4. Data foundation (Mongoose models + deterministic synthetic generator + seed script)
 5. Risk Signal Engine (explainable, deterministic per-customer risk scoring)
 6. Complaint NLP & Evidence Extraction (deterministic lexical normalization, similarity, reused-template detection, evidence extraction, per-customer contribution)
+7. Graph-Based Refund Ring Detection (heterogeneous graph, customer projection, connected components, ring detection, evidence, explainable scoring)
 
 Planned future work (not yet implemented):
 
-1. Compose the risk-engine and NLP analyses into a single per-customer risk score
-2. Graph construction & ring detection (`graphlib`)
-3. Ring risk scoring & metrics
-4. API exposure of analysis results & investigation dashboard features (visualization via `react-force-graph-2d`)
+1. Compose the risk-engine, NLP, and graph analyses into a single investigation experience
+2. Ring risk scoring cross-metrics & refined metrics
+3. API exposure of analysis results & investigation dashboard features (visualization via `react-force-graph-2d`)
+4. Production streaming detection / external graph databases (e.g. Neo4j)
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the system design.

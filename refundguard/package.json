@@ -14,7 +14,9 @@
     "risk:test": "node --test \"risk-engine/tests/*.test.js\"",
     "nlp:analyze": "node nlp/run.js",
     "nlp:test": "node --test \"nlp/tests/*.test.js\"",
-    "test": "npm run risk:test && npm run nlp:test"
+    "graph:analyze": "node graph/run.js",
+    "graph:test": "node --test \"graph/tests/*.test.js\"",
+    "test": "npm run risk:test && npm run nlp:test && npm run graph:test"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
