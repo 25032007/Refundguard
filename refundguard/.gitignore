@@ -26,6 +26,8 @@ Thumbs.db
 .idea/
 *.swp
 
-# Data - raw and processed artifacts (uncomment when data files are added)
-# data/raw/*
-# data/processed/*
+# Data - generated artifacts (reproducible via npm run data:generate)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep

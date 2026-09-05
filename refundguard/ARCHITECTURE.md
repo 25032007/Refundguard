@@ -74,7 +74,32 @@ RefundGuard is a web application that helps risk analysts investigate **coordina
 - **Storage areas:**
   - Raw input data (ingested into `data/raw`).
   - Processed / normalized data (written to `data/processed`).
-- **Status:** Schemas/models are **not** yet implemented; they will define the entities needed for identity, behavior, complaints, and ring membership.
+- **Status:** Mongoose models are implemented for `Customer`, `Device`, `Transaction`, `Refund`, `Complaint`, and `RefundRing`. The `RefundRing` model exists as the future investigation container (risk fields present, not yet computed).
+
+### Data Layer
+
+The data foundation models the core entities the risk engine will analyze. Relationships use string IDs/references rather than embedded duplicate objects, so the future graph layer can link across entities by shared identifiers.
+
+```text
+Customers
+   │
+   ├── Transactions ──┐
+   │                  ├── Refunds
+   │                  │
+   ├── Devices        │
+   ├── Complaints ────┘  (refundId → Refund; orderId → Order)
+   │
+   └── Order metadata (orders.json)
+```
+
+- **Customer** — identity anchor (`customerId`, name, email, phone, status). Can own many transactions, refunds, devices, and complaints.
+- **Device** — device profile (`deviceId`, primary owning `customerId`, type/os/browser, seen timestamps). A device may be referenced from transactions across customers, enabling shared-device signals.
+- **Transaction** — payment event (`transactionId`, `customerId`, `orderId`, amount, currency, payment method, `deviceId`, `ipAddress`, status). IP addresses and device IDs are deliberately repeated across records so shared-`ipAddress`/`deviceId` signals are discoverable.
+- **Refund** — refund case (`refundId`, `transactionId`, `customerId`, `orderId`, amount, reason, status, request/process times).
+- **Complaint** — free-text complaint (`complaintId`, `customerId`, `orderId`, optional `refundId`, text, category, status). Text serves the future NLP similarity layer.
+- **RefundRing** — future investigation container (`ringId`, member ID arrays, `riskScore`, `riskLevel`, `status`). Fields exist but are **not** populated by the data foundation.
+
+Synthetic development data (`data/generate.js`) produces ~100 normal customers plus 6 coordinated clusters that share IPs, devices, similar complaint wording, and refund behavior — giving the future risk engine realistic structure to discover. No risk values are assigned.
 
 ---
 
@@ -103,8 +128,7 @@ All endpoints are prefixed with `/api/v1` to allow future breaking changes witho
 
 - No payment processing.
 - No risk engine implementation yet.
-- No synthetic data generation yet.
-- No database models yet.
 - No graph / ring detection / scoring / metrics yet.
+- No risk values assigned to synthetic data (by design).
 
-These are intentionally deferred to keep the foundation clean and verifiable.
+Risk scoring, graph construction, ring detection, similarity scoring, and metrics are intentionally deferred and will be built on top of this data foundation.

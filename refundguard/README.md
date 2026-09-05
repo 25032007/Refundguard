@@ -9,7 +9,7 @@
 
 > **Note:** RefundGuard is **not** a payment gateway. It is an investigation dashboard for risk analysts to surface and explore suspected refund-abuse rings.
 
-> **Status:** Foundation only. The risk engine, synthetic data, graph, ring detection, scoring, and metrics are intentionally **not** implemented yet and will be added in later phases.
+> **Status:** Data foundation is in place: Mongoose models and a deterministic synthetic dataset generator are implemented. The risk engine, graph, ring detection, scoring, and metrics are intentionally **not** implemented yet and will be added in later phases.
 
 ---
 
@@ -24,17 +24,20 @@ refundguard/
 ├── .gitignore
 │
 ├── data/
-│   ├── raw/            # Raw input data (to be added later)
+│   ├── generate.js     # Deterministic synthetic data generator
+│   ├── validate.js     # Cross-reference validation of generated data
+│   ├── raw/            # Generated JSON datasets
 │   └── processed/      # Processed/normalized data (to be added later)
 │
 ├── risk-engine/        # Risk engine (to be implemented later)
 │
 ├── backend/
 │   ├── server.js       # Express entry point
-│   ├── package.json
+│   ├── seed.js         # Mongoose database seeding script
+│   ├── config/         # Connection/config modules
 │   ├── routes/         # API route definitions
 │   ├── controllers/    # Request handlers
-│   ├── models/         # Mongoose models (to be added later)
+│   ├── models/         # Mongoose models (Customer, Device, Transaction, Refund, Complaint, RefundRing)
 │   └── services/       # Business/service logic
 │
 ├── frontend/
@@ -43,6 +46,7 @@ refundguard/
 │   └── src/
 │       ├── main.jsx
 │       ├── App.jsx
+│       ├── components/ # Sidebar, Header, Layout
 │       └── pages/      # Dashboard, RingList, RingDetail, Metrics
 │
 └── docs/               # Additional documentation
@@ -77,7 +81,7 @@ Backend expects a `.env` file in `backend/`. Create one:
 cp backend/.env.example backend/.env
 ```
 
-Then set `MONGODB_URI` (and optionally `PORT`) to your MongoDB connection string.
+Then set `MONGO_URI` (and optionally `PORT`) to your MongoDB connection string.
 
 ### 3. Run the whole stack
 
@@ -85,7 +89,7 @@ Then set `MONGODB_URI` (and optionally `PORT`) to your MongoDB connection string
 npm run dev
 ```
 
-This starts both the backend (Express, default `http://localhost:4000`) and the frontend (Vite, default `http://localhost:5173`) concurrently.
+This starts both the backend (Express, default `http://localhost:5000`) and the frontend (Vite, default `http://localhost:5173`) concurrently.
 
 ### Run individually
 
@@ -93,6 +97,35 @@ This starts both the backend (Express, default `http://localhost:4000`) and the 
 npm run dev --prefix backend    # Express API
 npm run dev --prefix frontend   # Vite dev server
 ```
+
+---
+
+## Local Development Data
+
+RefundGuard ships a deterministic synthetic dataset generator plus a Mongoose
+seed script. Use the root-level commands:
+
+```bash
+# Generate reproducible synthetic data into data/raw/
+npm run data:generate
+
+# Validate cross-references between generated entities
+npm run data:validate
+
+# Load the generated data into MongoDB (requires backend/.env with MONGO_URI)
+npm run db:seed
+```
+
+The generator is seeded with a fixed value, so repeated executions produce
+byte-identical output. It creates ~100 customers, ~180 devices, ~520
+transactions, ~240 refunds, and ~150 complaints. Six of the generated customer
+clusters deliberately share IP addresses, devices, similar complaint wording,
+and refund behavior so the future risk engine has structure to find. **No risk
+scores are assigned.**
+
+The app itself does **not** require MongoDB to run: the API server starts
+(and `/api/v1/health` responds) even when MongoDB is unavailable. Only
+`db:seed` and future database-backed features need a running MongoDB.
 
 ---
 
@@ -129,13 +162,18 @@ Example:
 
 ## Contributing / Next Steps
 
+Implemented so far:
+
+1. Project foundation (frontend + backend + data scaffolding)
+2. Backend foundation (Express API, `/api/v1/health`, error handling, nonfatal Mongo connect)
+3. Frontend investigation-console UI (Layout / Sidebar / Header + placeholder pages)
+4. Data foundation (Mongoose models + deterministic synthetic generator + seed script)
+
 Planned future work (not yet implemented):
 
-1. Synthetic data generation (`@faker-js/faker`)
-2. Database models (Mongoose)
-3. Graph construction & ring detection (`graphlib`)
-4. Complaint text similarity scoring (`natural`)
-5. Risk scoring & metrics
-6. Investigation dashboard features
+1. Risk engine (identity / behavioral signals, complaint similarity via `natural`)
+2. Graph construction & ring detection (`graphlib`)
+3. Risk scoring & metrics
+4. Investigation dashboard features (API integration, visualization via `react-force-graph-2d`)
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the system design.
