@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getInvestigation } from '../services/api.js';
 import RiskBadge from '../components/RiskBadge.jsx';
+import CaseHeader from '../components/CaseHeader.jsx';
+import InvestigationDecision from '../components/InvestigationDecision.jsx';
+import { buildKeyEvidence } from '../components/EvidenceList.jsx';
+import EvidenceList from '../components/EvidenceList.jsx';
 import RefundRingGraph from '../components/RefundRingGraph.jsx';
+import { buildGraphModel, buildTextSummary } from '../utils/ringGraphModel.js';
 
 export default function RingDetail() {
   const { id } = useParams();
@@ -31,12 +36,9 @@ export default function RingDetail() {
 
   return (
     <div className="page">
-      <div className="page-intro">
-        <h1 className="page-title">Investigation</h1>
-        <p className="page-subtitle mono">
-          {investigation ? investigation.customer.customerId : 'Detailed investigation workspace'}
-        </p>
-      </div>
+      {!loading && !error && investigation && (
+        <InvestigationBody investigation={investigation} />
+      )}
 
       {loading && <div className="state-message">Loading...</div>}
 
@@ -44,10 +46,6 @@ export default function RingDetail() {
         <div className="state-message state-message--error">
           Unable to load investigation data.
         </div>
-      )}
-
-      {!loading && !error && investigation && (
-        <InvestigationBody investigation={investigation} />
       )}
     </div>
   );
@@ -65,49 +63,65 @@ function Section({ title, children }) {
 
 function InvestigationBody({ investigation }) {
   const { customer, risk, nlp, graph, summary } = investigation;
+  const inRing = !!graph && graph.inRing;
+
+  const [decision, setDecision] = useState('UNREVIEWED');
+
+  const riskSignalCount = (risk && risk.signals ? risk.signals : []).length;
+  const complaintCount = nlp && typeof nlp.complaintCount === 'number' ? nlp.complaintCount : 0;
+
+  const ringSummary = inRing
+    ? buildTextSummary(buildGraphModel(investigation))
+    : '';
+
+  const topEvidence = buildKeyEvidence(investigation);
+  const strongest = topEvidence[0];
+  const recommendation = summary ? summary.recommendation : '';
+  const explanation = summary ? summary.explanation : '';
 
   return (
     <>
-      <Section title="Customer">
-        <div className="detail-grid">
-          <div className="detail-card">
-            <span className="detail-label">Customer ID</span>
-            <span className="detail-value mono">{customer.customerId}</span>
-          </div>
-          <div className="detail-card">
-            <span className="detail-label">Overall Risk</span>
-            <span className="detail-value">
-              <RiskBadge level={summary.overallRisk} />
+      {/* 1. Case Header */}
+      <CaseHeader investigation={investigation} />
+
+      {/* 2. Investigation Status / Analyst Decision */}
+      <Section title="Investigation Status">
+        <InvestigationDecision value={decision} onChange={setDecision} />
+      </Section>
+
+      {/* 3. Risk Overview */}
+      <Section title="Risk Overview">
+        <div className="overview-grid">
+          <div className="detail-card overview-score">
+            <span className="detail-label">Risk Score</span>
+            <span className="overview-score-value">{risk.score}</span>
+            <span className="overview-score-badge">
+              <RiskBadge level={risk.level} />
             </span>
           </div>
           <div className="detail-card">
-            <span className="detail-label">Recommendation</span>
-            <span className="detail-value">{summary.recommendation}</span>
+            <span className="detail-label">Risk Signals</span>
+            <span className="detail-value mono">{riskSignalCount}</span>
+          </div>
+          <div className="detail-card">
+            <span className="detail-label">Ring Involvement</span>
+            <span className="detail-value mono">{inRing ? graph.ringId : 'No ring'}</span>
+          </div>
+          <div className="detail-card">
+            <span className="detail-label">Complaints</span>
+            <span className="detail-value mono">{complaintCount}</span>
           </div>
         </div>
       </Section>
 
-      <Section title="Risk Engine">
-        <div className="detail-grid">
-          <div className="detail-card">
-            <span className="detail-label">Score</span>
-            <span className="detail-value">{risk.score}</span>
-          </div>
-          <div className="detail-card">
-            <span className="detail-label">Level</span>
-            <span className="detail-value">
-              <RiskBadge level={risk.level} />
-            </span>
-          </div>
-        </div>
+      {/* 4. Risk Signals */}
+      <Section title="Risk Signals">
         <div className="signal-grid">
           {(risk.signals || []).map((signal, index) => (
             <div key={`${signal.type}-${index}`} className="signal-card">
               <div className="signal-head">
                 <span className="mono signal-type">{signal.type}</span>
-                <span className="signal-contribution">
-                  {signal.contribution}
-                </span>
+                <span className="signal-contribution">{signal.contribution}</span>
               </div>
               <div className="signal-desc">{signal.description || ''}</div>
               {signal.evidence && (
@@ -123,11 +137,34 @@ function InvestigationBody({ investigation }) {
         </div>
       </Section>
 
-      <Section title="Complaint NLP">
+      {/* 5. Key Evidence */}
+      <Section title="Key Evidence">
+        {strongest ? (
+          <div className="detail-panel key-evidence-strongest">
+            <div className="evidence-row-body">
+              <div className="evidence-row-head">
+                <span className="evidence-type">{strongest.title}</span>
+                {strongest.score !== null && (
+                  <span className="evidence-score mono">{strongest.score}</span>
+                )}
+              </div>
+              {strongest.cap && <span className="evidence-cap">{strongest.cap}</span>}
+              <p className="evidence-detail">{strongest.detail}</p>
+              <span className="evidence-source">{strongest.source}</span>
+            </div>
+          </div>
+        ) : (
+          <div className="detail-muted">No evidence available for this investigation.</div>
+        )}
+        <EvidenceList investigation={investigation} />
+      </Section>
+
+      {/* 6. Complaint Evidence */}
+      <Section title="Complaint Evidence">
         <div className="detail-grid">
           <div className="detail-card">
             <span className="detail-label">Complaint Count</span>
-            <span className="detail-value mono">{nlp.complaintCount}</span>
+            <span className="detail-value mono">{complaintCount}</span>
           </div>
           <div className="detail-card">
             <span className="detail-label">Repeated Templates</span>
@@ -140,42 +177,6 @@ function InvestigationBody({ investigation }) {
             <span className="detail-value mono">
               {(nlp.similarComplaints || []).length}
             </span>
-          </div>
-        </div>
-
-        <div className="detail-grid">
-          <div className="detail-panel">
-            <span className="detail-label">Repeated Templates</span>
-            {(nlp.repeatedTemplates || []).map((template) => (
-              <div key={template.templateKey} className="list-item">
-                <div className="mono">{template.representativeText}</div>
-                <div className="list-meta">
-                  count {template.count} · customers{' '}
-                  {template.customerIds.join(', ')}
-                </div>
-              </div>
-            ))}
-            {!(nlp.repeatedTemplates || []).length && (
-              <div className="detail-muted">None detected.</div>
-            )}
-          </div>
-
-          <div className="detail-panel">
-            <span className="detail-label">Similar Complaints</span>
-            {(nlp.similarComplaints || []).map((similar, index) => (
-              <div key={`${similar.complaintId}-${index}`} className="list-item">
-                <div className="mono">
-                  {similar.complaintId} ↔ {similar.similarComplaintId}
-                  <span className="list-meta"> (customer {similar.similarCustomerId})</span>
-                </div>
-                <div className="list-meta">
-                  similarity {similar.similarity}
-                </div>
-              </div>
-            ))}
-            {!(nlp.similarComplaints || []).length && (
-              <div className="detail-muted">None detected.</div>
-            )}
           </div>
         </div>
 
@@ -192,33 +193,69 @@ function InvestigationBody({ investigation }) {
             <div className="detail-muted">None detected.</div>
           )}
         </div>
+
+        <div className="detail-grid">
+          <div className="detail-panel">
+            <span className="detail-label">Repeated Templates</span>
+            {(nlp.repeatedTemplates || []).map((template) => (
+              <div key={template.templateKey} className="list-item">
+                <div className="mono">{template.representativeText}</div>
+                <div className="list-meta">
+                  count {template.count} · customers {template.customerIds.join(', ')}
+                </div>
+              </div>
+            ))}
+            {!(nlp.repeatedTemplates || []).length && (
+              <div className="detail-muted">None detected.</div>
+            )}
+          </div>
+
+          <div className="detail-panel">
+            <span className="detail-label">Similar Complaints</span>
+            {(nlp.similarComplaints || []).map((similar, index) => (
+              <div key={`${similar.complaintId}-${index}`} className="list-item">
+                <div className="mono">
+                  {similar.complaintId} ↔ {similar.similarComplaintId}
+                  <span className="list-meta"> (customer {similar.similarCustomerId})</span>
+                </div>
+                <div className="list-meta">similarity {similar.similarity}</div>
+              </div>
+            ))}
+            {!(nlp.similarComplaints || []).length && (
+              <div className="detail-muted">None detected.</div>
+            )}
+          </div>
+        </div>
       </Section>
 
+      {/* 7. Graph Analysis */}
       <Section title="Graph Analysis">
         <div className="detail-grid">
           <div className="detail-card">
             <span className="detail-label">Ring ID</span>
-            <span className="detail-value mono">
-              {graph.inRing ? graph.ringId : '\u2014'}
-            </span>
+            <span className="detail-value mono">{inRing ? graph.ringId : '\u2014'}</span>
           </div>
           <div className="detail-card">
             <span className="detail-label">Ring Score</span>
             <span className="detail-value mono">
-              {graph.inRing ? graph.ringScore : '\u2014'}
+              {inRing ? graph.ringScore : '\u2014'}
             </span>
           </div>
           <div className="detail-card">
             <span className="detail-label">Member Count</span>
             <span className="detail-value mono">
-              {graph.inRing ? (graph.members || []).length : '\u2014'}
+              {inRing ? (graph.members || []).length : '\u2014'}
             </span>
+          </div>
+          <div className="detail-card">
+            <span className="detail-label">Ring Summary</span>
+            <span className="detail-value">{inRing ? ringSummary : '\u2014'}</span>
           </div>
         </div>
 
         <div className="detail-panel">
           <span className="detail-label">Evidence</span>
-          {graph.inRing ? (
+          {inRing ? (
             <ul className="evidence-list">
               {(graph.evidence || []).map((evidenceItem, index) => (
                 <li key={index} className="evidence-item">
@@ -234,12 +271,24 @@ function InvestigationBody({ investigation }) {
         </div>
       </Section>
 
+      {/* 8. Refund Ring Network */}
       <Section title="Refund Ring Network">
         <RefundRingGraph investigation={investigation} />
       </Section>
 
-      <Section title="Summary">
-        <p className="summary-text">{summary.explanation}</p>
+      {/* 9. Investigation Evidence Summary */}
+      <Section title="Investigation Evidence Summary">
+        <p className="summary-text">{explanation}</p>
+      </Section>
+
+      {/* 10. Recommended Action */}
+      <Section title="Recommended Action">
+        <p className="summary-text summary-text--recommendation">{recommendation}</p>
+      </Section>
+
+      {/* 11. Analyst Decision */}
+      <Section title="Analyst Decision">
+        <InvestigationDecision value={decision} onChange={setDecision} />
       </Section>
     </>
   );
