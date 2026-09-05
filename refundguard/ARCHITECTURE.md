@@ -108,7 +108,7 @@ Synthetic development data (`data/generate.js`) produces ~100 normal customers p
 1. **Ingest:** Raw refund/transaction/complaint data is collected into `data/raw`.
 2. **Process:** Data is normalized and written to `data/processed`.
 3. **Store:** Processed data is persisted to MongoDB via Mongoose models.
-4. **Analyze:** The risk engine computes features, builds graphs, and detects rings.
+4. **Analyze:** The risk signal engine evaluates individual customer refund behavior (frequency, rate, velocity, repeated reasons, shared IP/device) into explainable scores. Graph/ring construction is a later layer.
 5. **Serve:** The backend exposes results via the versioned REST API (`/api/v1`).
 6. **Investigate:** The frontend dashboard fetches and visualizes rings, members, evidence, and metrics.
 
@@ -124,11 +124,63 @@ All endpoints are prefixed with `/api/v1` to allow future breaking changes witho
 
 ---
 
+## Risk Signal Engine
+
+The first intelligence layer is a deterministic, rule-based risk signal engine.
+
+**Principles:**
+
+- **Explainable, never a black box.** Every risk score ships with its reasons: each signal carries a type, severity, numerical contribution, human-readable description, and supporting evidence, so an analyst can always understand *why* a customer was flagged.
+- **Deterministic.** No random values, no ML, no LLM calls. Given the same input records, the engine always produces the same scores, levels, and ordering.
+- **Rule-based at this stage.** Signals use configurable thresholds from `risk-engine/config.js` (no magic numbers).
+- **Independent of the frontend.** The engine consumes plain structured data and exposes plain functions.
+- **Independent of MongoDB persistence.** The engine runs on JSON data (`data/raw/*.json`); risk results are not yet written to the database.
+
+**Output contract — every signal:**
+
+```text
+{ type, severity: low|medium|high|critical, contribution: Number, description: "...", evidence: { ... } }
+```
+
+**Signals evaluated (max contributions):**
+
+| # | Signal                | What it detects                                    | Max |
+| - | --------------------- | -------------------------------------------------- | --- |
+| 1 | `refund_frequency`    | High count of refunds in the observed period       | 20  |
+| 2 | `refund_rate`         | Refunds / completed transactions                   | 20  |
+| 3 | `refund_velocity`     | Refunds requested inside a recent rolling window   | 15  |
+| 4 | `repeated_refund_reason` | One reason dominating a customer's refunds      | 10  |
+| 5 | `shared_ip`           | IP shared with other customer accounts             | 20  |
+| 6 | `shared_device`       | Device reused across accounts (from transactions)  | 15  |
+
+Score = sum of triggered contributions, clamped to 0–100. Risk level bands: 0–24 `low`, 25–49 `medium`, 50–74 `high`, 75–100 `critical`.
+
+**Structure:**
+
+```text
+risk-engine/
+├── index.js          # analyzeCustomerRisk / analyzeAllCustomers / summarize
+├── config.js         # every threshold, contribution, and risk-level tier
+├── run.js            # CLI: load data/raw/*.json, analyze, print report
+├── signals/          # one file per signal
+└── utils/
+    ├── dates.js      # deterministic date parsing
+    └── scoring.js    # classify, contribution lookups, clamp, risk levels
+```
+
+**Shared IP / shared device lookup** is built from the full transaction dataset (`ipAddress -> customers`, `deviceId -> customers`). Shared-device detection deliberately uses transaction `deviceId` references rather than the Device collection's single-owner `customerId`, because the synthetic dataset represents shared devices through transaction references.
+
+**Ground truth is validation-only.** `data/raw/clusters.json` (persisted by the generator) records the intended cluster membership. `run.js` reads it solely to compare suspicious-cluster vs normal-customer scores in its report. The engine itself never reads it — suspicious behavior must be discovered from the actual records.
+
+**Run it:** `npm run risk:analyze` · Test it: `npm run risk:test` (Node's built-in runner, no MongoDB required).
+
+---
+
 ## Non-Goals (current foundation)
 
 - No payment processing.
-- No risk engine implementation yet.
-- No graph / ring detection / scoring / metrics yet.
-- No risk values assigned to synthetic data (by design).
+- No graph / ring detection / metrics yet.
+- No complaint NLP similarity yet.
+- No risk values assigned to synthetic data (by design; risk values are only *computed at analysis time* by the engine, never stored).
 
-Risk scoring, graph construction, ring detection, similarity scoring, and metrics are intentionally deferred and will be built on top of this data foundation.
+Graph construction, ring detection, complaint similarity, connection metrics, API exposure of risk results, and dashboard integration are intentionally deferred and will be built on top of the risk signal engine.

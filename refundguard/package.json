@@ -9,7 +9,9 @@
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
     "data:generate": "set NODE_PATH=backend/node_modules&& node data/generate.js",
     "db:seed": "node backend/seed.js",
-    "data:validate": "node data/validate.js"
+    "data:validate": "node data/validate.js",
+    "risk:analyze": "node risk-engine/run.js",
+    "risk:test": "node --test \"risk-engine/tests/*.test.js\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

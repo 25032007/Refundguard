@@ -9,7 +9,7 @@
 
 > **Note:** RefundGuard is **not** a payment gateway. It is an investigation dashboard for risk analysts to surface and explore suspected refund-abuse rings.
 
-> **Status:** Data foundation is in place: Mongoose models and a deterministic synthetic dataset generator are implemented. The risk engine, graph, ring detection, scoring, and metrics are intentionally **not** implemented yet and will be added in later phases.
+> **Status:** Data foundation and an explainable, deterministic **Risk Signal Engine** are in place. The engine evaluates six per-customer risk signals with full explainability. Graph construction, ring detection, complaint NLP similarity, scoring/metrics exposure, and dashboard integration are intentionally **not** implemented yet and will be added in later phases.
 
 ---
 
@@ -29,7 +29,13 @@ refundguard/
 │   ├── raw/            # Generated JSON datasets
 │   └── processed/      # Processed/normalized data (to be added later)
 │
-├── risk-engine/        # Risk engine (to be implemented later)
+├── risk-engine/       # Explainable, deterministic risk signal engine
+│   ├── index.js       # analyzeCustomerRisk / analyzeAllCustomers
+│   ├── config.js      # All thresholds, contributions, and risk-level tiers
+│   ├── run.js         # CLI runner (npm run risk:analyze)
+│   ├── signals/       # One module per signal (frequency, rate, velocity, reason, IP, device)
+│   ├── tests/         # Unit tests (node --test, no MongoDB required)
+│   └── utils/         # dates + scoring helpers
 │
 ├── backend/
 │   ├── server.js       # Express entry point
@@ -121,11 +127,42 @@ byte-identical output. It creates ~100 customers, ~180 devices, ~520
 transactions, ~240 refunds, and ~150 complaints. Six of the generated customer
 clusters deliberately share IP addresses, devices, similar complaint wording,
 and refund behavior so the future risk engine has structure to find. **No risk
-scores are assigned.**
+scores are assigned.** The generator also writes `data/raw/clusters.json` —
+the intended cluster membership, used **only** for validation reporting; the
+risk engine never reads it.
 
 The app itself does **not** require MongoDB to run: the API server starts
 (and `/api/v1/health` responds) even when MongoDB is unavailable. Only
 `db:seed` and future database-backed features need a running MongoDB.
+
+---
+
+## Risk Analysis
+
+Run the explainable risk signal engine over the generated dataset:
+
+```bash
+npm run risk:analyze
+```
+
+This analyzes all 100 customers, prints the score distribution, the top-risk
+customers, a ground-truth validation comparison (suspicious clusters vs normal
+customers), and a full explainability breakdown for the highest-risk customers
+(severity, contribution, and evidence per signal).
+
+Run the engine's unit tests (no MongoDB required):
+
+```bash
+npm run risk:test
+```
+
+The engine is deterministic: repeated runs over the same data produce
+identical output. It is also deliberately explainable — every score is the sum
+of six interpretable signals (`refund_frequency`, `refund_rate`,
+`refund_velocity`, `repeated_refund_reason`, `shared_ip`, `shared_device`),
+each with a severity, contribution, description, and evidence. See
+[ARCHITECTURE.md](./ARCHITECTURE.md) for the signal definitions and
+thresholds.
 
 ---
 
@@ -168,12 +205,13 @@ Implemented so far:
 2. Backend foundation (Express API, `/api/v1/health`, error handling, nonfatal Mongo connect)
 3. Frontend investigation-console UI (Layout / Sidebar / Header + placeholder pages)
 4. Data foundation (Mongoose models + deterministic synthetic generator + seed script)
+5. Risk Signal Engine (explainable, deterministic per-customer risk scoring)
 
 Planned future work (not yet implemented):
 
-1. Risk engine (identity / behavioral signals, complaint similarity via `natural`)
-2. Graph construction & ring detection (`graphlib`)
-3. Risk scoring & metrics
-4. Investigation dashboard features (API integration, visualization via `react-force-graph-2d`)
+1. Graph construction & ring detection (`graphlib`)
+2. Complaint text similarity scoring (`natural`)
+3. Ring risk scoring & metrics
+4. API exposure of risk results & investigation dashboard features (visualization via `react-force-graph-2d`)
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the system design.

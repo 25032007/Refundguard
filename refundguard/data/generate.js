@@ -434,6 +434,16 @@ function main() {
   fs.writeFileSync(path.join(OUTPUT_DIR, 'refunds.json'), JSON.stringify(refunds, null, 2));
   fs.writeFileSync(path.join(OUTPUT_DIR, 'complaints.json'), JSON.stringify(complaints, null, 2));
 
+  // Ground-truth cluster membership. VALIDATION ONLY: the risk engine must
+  // discover suspicious behavior from the actual records and must never read
+  // this file. Keeping it lets validation tooling compare engine output
+  // against the generator's intended clusters.
+  const clusters = clusterMembership.map((members, i) => ({
+    clusterId: `cluster_${String(i).padStart(2, '0')}`,
+    members,
+  }));
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'clusters.json'), JSON.stringify(clusters, null, 2));
+
   console.log(`RefundGuard synthetic data generated (seed=${SEED})`);
   console.log('----------------------------------------------');
   console.log(`Customers: ${customers.length}`);
