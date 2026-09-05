@@ -9,19 +9,13 @@ export default function Metrics() {
       </div>
 
       <section className="section">
-        <h2 className="section-title">Risk Overview</h2>
-        <div className="empty-state">
+        <h2 className="section-title">Risk Analysis</h2>
+        <div className="empty-state empty-state-large">
+          <span className="empty-state-mark" aria-hidden="true" />
+          <p className="empty-state-title">Risk intelligence unavailable</p>
           <p className="empty-state-text">
-            Risk metrics will appear here once the risk engine is connected.
-          </p>
-        </div>
-      </section>
-
-      <section className="section">
-        <h2 className="section-title">Detection Performance</h2>
-        <div className="empty-state">
-          <p className="empty-state-text">
-            Detection performance metrics will appear here.
+            Metrics will appear once RefundGuard begins processing refund
+            behavior and investigation signals.
           </p>
         </div>
       </section>

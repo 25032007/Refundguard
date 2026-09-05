@@ -9,11 +9,15 @@ export default function RingList() {
       </div>
 
       <section className="section">
+        <h2 className="section-title">Investigation Queue</h2>
         <div className="empty-state empty-state-large">
-          <p className="empty-state-title">No investigations loaded</p>
+          <span className="empty-state-mark" aria-hidden="true" />
+          <p className="empty-state-title">
+            No coordinated refund rings detected yet
+          </p>
           <p className="empty-state-text">
-            Refund-abuse ring investigations will appear here when risk data is
-            connected.
+            RefundGuard will surface connected accounts, devices, complaints,
+            and refund behavior here.
           </p>
         </div>
       </section>

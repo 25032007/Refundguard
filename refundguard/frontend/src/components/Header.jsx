@@ -17,10 +17,15 @@ export default function Header() {
 
   return (
     <header className="app-header">
-      <h1 className="app-header-title">{title}</h1>
+      <div className="app-header-context">
+        <h1 className="app-header-title">{title}</h1>
+        <span className="app-header-eyebrow">Investigation Console</span>
+      </div>
       <div className="app-header-user">
         <span className="app-header-analyst">Analyst</span>
-        <span className="app-header-avatar" aria-hidden="true" />
+        <span className="app-header-avatar" aria-hidden="true">
+          AN
+        </span>
       </div>
     </header>
   );

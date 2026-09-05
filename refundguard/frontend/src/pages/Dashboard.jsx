@@ -42,9 +42,11 @@ export default function Dashboard() {
         <section className="section">
           <h2 className="section-title">Investigation Activity</h2>
           <div className="empty-state">
+            <span className="empty-state-mark" aria-hidden="true" />
+            <p className="empty-state-title">No investigation activity yet</p>
             <p className="empty-state-text">
-              Investigation activity will appear here once risk data is
-              connected.
+              Activity from refund investigations will appear here once
+              transaction and case data are connected.
             </p>
           </div>
         </section>
@@ -52,9 +54,11 @@ export default function Dashboard() {
         <section className="section">
           <h2 className="section-title">Risk Distribution</h2>
           <div className="empty-state">
+            <span className="empty-state-mark" aria-hidden="true" />
+            <p className="empty-state-title">Awaiting risk intelligence</p>
             <p className="empty-state-text">
-              Risk distribution will appear here once the risk engine is
-              connected.
+              Risk distribution will populate when the RefundGuard risk engine
+              begins processing refund behavior.
             </p>
           </div>
         </section>

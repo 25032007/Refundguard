@@ -7,28 +7,13 @@ export default function RingDetail() {
       </div>
 
       <section className="section">
-        <h2 className="section-title">Investigation Overview</h2>
-        <div className="empty-state">
+        <h2 className="section-title">Investigation</h2>
+        <div className="empty-state empty-state-large">
+          <span className="empty-state-mark" aria-hidden="true" />
+          <p className="empty-state-title">No investigation selected</p>
           <p className="empty-state-text">
-            Investigation details will appear here.
-          </p>
-        </div>
-      </section>
-
-      <section className="section">
-        <h2 className="section-title">Connected Entities</h2>
-        <div className="empty-state">
-          <p className="empty-state-text">
-            Entity relationships will appear here once graph data is connected.
-          </p>
-        </div>
-      </section>
-
-      <section className="section">
-        <h2 className="section-title">Evidence</h2>
-        <div className="empty-state">
-          <p className="empty-state-text">
-            Evidence and explainability signals will appear here.
+            Select a detected refund ring to inspect its entities, behavioral
+            connections, evidence, and risk signals.
           </p>
         </div>
       </section>
