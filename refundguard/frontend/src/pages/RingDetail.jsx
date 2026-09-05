@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getInvestigation } from '../services/api.js';
 import RiskBadge from '../components/RiskBadge.jsx';
+import RefundRingGraph from '../components/RefundRingGraph.jsx';
 
 export default function RingDetail() {
   const { id } = useParams();
@@ -84,10 +85,6 @@ function InvestigationBody({ investigation }) {
             <span className="detail-value">{summary.recommendation}</span>
           </div>
         </div>
-      </Section>
-
-      <Section title="Summary">
-        <p className="summary-text">{summary.explanation}</p>
       </Section>
 
       <Section title="Risk Engine">
@@ -235,6 +232,14 @@ function InvestigationBody({ investigation }) {
             </div>
           )}
         </div>
+      </Section>
+
+      <Section title="Refund Ring Network">
+        <RefundRingGraph investigation={investigation} />
+      </Section>
+
+      <Section title="Summary">
+        <p className="summary-text">{summary.explanation}</p>
       </Section>
     </>
   );
