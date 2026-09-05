@@ -515,6 +515,291 @@ body {
 }
 
 /* ------------------------------------------------------------
+   State messages (loading / error)
+------------------------------------------------------------ */
+
+.state-message {
+  padding: var(--space-7) var(--space-6);
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.state-message--error {
+  color: var(--status-danger);
+  border-color: rgba(196, 87, 63, 0.4);
+}
+
+/* ------------------------------------------------------------
+   Risk badges
+------------------------------------------------------------ */
+
+.risk-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.risk-badge--low {
+  color: var(--status-success);
+  background: rgba(107, 155, 110, 0.12);
+  border-color: rgba(107, 155, 110, 0.35);
+}
+
+.risk-badge--medium {
+  color: var(--status-warning);
+  background: rgba(212, 162, 76, 0.12);
+  border-color: rgba(212, 162, 76, 0.35);
+}
+
+.risk-badge--high {
+  color: var(--accent);
+  background: var(--accent-muted);
+  border-color: rgba(224, 138, 62, 0.4);
+}
+
+.risk-badge--critical {
+  color: #F2D1C8;
+  background: rgba(196, 87, 63, 0.18);
+  border-color: rgba(196, 87, 63, 0.5);
+}
+
+/* ------------------------------------------------------------
+   Tables
+------------------------------------------------------------ */
+
+.table-wrap {
+  overflow-x: auto;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th {
+  padding: var(--space-3) var(--space-4);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 13px;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr {
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.data-table tbody tr:hover {
+  background: var(--bg-panel-raised);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* ------------------------------------------------------------
+   Detail layout (investigation page)
+------------------------------------------------------------ */
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.detail-card,
+.detail-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+}
+
+.detail-panel {
+  margin-bottom: var(--space-4);
+}
+
+.detail-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-2);
+}
+
+.detail-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.detail-muted {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.summary-text {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+.list-item {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.evidence-list {
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.evidence-item {
+  padding: var(--space-1) 0;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+/* ------------------------------------------------------------
+   Signal cards (risk engine)
+------------------------------------------------------------ */
+
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.signal-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+}
+
+.signal-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.signal-type {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.signal-contribution {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.signal-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-3);
+}
+
+.signal-evidence-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-1);
+}
+
+.signal-evidence-json {
+  margin: 0;
+  max-height: 180px;
+  overflow: auto;
+  padding: var(--space-2);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--bg-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Stat value color states (metrics) */
+
+.stat-value--accent {
+  color: var(--accent);
+}
+
+.stat-value--critical {
+  color: #E0755E;
+}
+
+.stat-value--high {
+  color: var(--accent);
+}
+
+.stat-value--medium {
+  color: var(--status-warning);
+}
+
+.stat-value--low {
+  color: var(--status-success);
+}
+
+/* ------------------------------------------------------------
    Buttons (design-system baseline)
 ------------------------------------------------------------ */
 
