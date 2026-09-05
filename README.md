@@ -1,376 +1,260 @@
 # RefundGuard
 
-**RefundGuard** is an explainable AI Risk Manager that detects coordinated refund-abuse rings using a combination of:
+RefundGuard is an **explainable AI-assisted refund fraud investigation platform** for payment and fraud analysts. It helps analysts detect suspicious refund behavior, identify coordinated refund rings, review complaint evidence, and make investigation decisions.
 
-- **Identity signals** – e.g., shared account/device/payment attributes
-- **Behavioral signals** – e.g., refund request patterns over time
-- **Complaint text similarity** – semantic closeness of complaint narratives
-- **Graph-based ring detection** – discovering clusters of linked entities
+RefundGuard is a **decision-support system for investigations** — not a generic metrics dashboard. Every score it produces is decomposable into visible, explainable signals and supporting evidence, and the workflow is built around a human analyst reviewing a case and deciding what to do next.
 
-> **Note:** RefundGuard is **not** a payment gateway. It is an investigation dashboard for risk analysts to surface and explore suspected refund-abuse rings.
-
-> **Status:** Data foundation, an explainable deterministic **Risk Signal Engine**, a deterministic **Complaint NLP & Evidence Extraction** layer, a **Graph-Based Refund Ring Detection** engine, and an **Investigation API** are in place. The engine evaluates six per-customer risk signals; the NLP layer detects similar complaint wording, reused templates, and per-customer text-based risk; the graph engine builds a heterogeneous entity graph, projects customer relationships, finds connected components, and scores refund rings — all explainable and deterministic. The Investigation Engine combines these three analyses into a single per-customer investigation exposed via the REST API. **The frontend integration, interactive graph visualization, and investigation dashboard have been successfully implemented** to provide a polished investigation console for risk analysts.
+All analysis is **deterministic and offline** — the engines use rule-based, weighted signal scoring, lexical text analysis, and graph traversal over the input data. There are no LLMs, no embeddings, and no trained models in the analysis pipeline. Claims in this document describe only what is currently implemented.
 
 ---
 
-## Folder Structure
+## What RefundGuard Does
 
+RefundGuard takes refund, transaction, and complaint records and runs them through an analysis pipeline that ends in a per-customer investigation for an analyst:
+
+```text
+Refund / Transaction / Complaint Data
+              ↓
+      Risk Signal Engine
+              ↓
+        Complaint NLP
+              ↓
+      Graph Ring Detection
+              ↓
+     Investigation API
+              ↓
+      Analyst Dashboard
+              ↓
+     Analyst Decision
 ```
-refundguard/
-│
-├── README.md
-├── ARCHITECTURE.md
-├── package.json
-├── .gitignore
-│
-├── data/
-│   ├── generate.js     # Deterministic synthetic data generator
-│   ├── validate.js     # Cross-reference validation of generated data
-│   ├── raw/            # Generated JSON datasets
-│   └── processed/      # Processed/normalized data (to be added later)
-│
-├── risk-engine/       # Explainable, deterministic risk signal engine
-│   ├── index.js       # analyzeCustomerRisk / analyzeAllCustomers
-│   ├── config.js      # All thresholds, contributions, and risk-level tiers
-│   ├── run.js         # CLI runner (npm run risk:analyze)
-│   ├── signals/       # One module per signal (frequency, rate, velocity, reason, IP, device)
-│   ├── tests/         # Unit tests (node --test, no MongoDB required)
-│   └── utils/         # dates + scoring helpers
-│
-├── nlp/              # Complaint NLP & evidence extraction (deterministic lexical NLP)
-│   ├── index.js      # Public API (normalize / similarity / evidence / analyze)
-│   ├── config.js     # Stopwords, protected tokens, thresholds, evidence vocabulary
-│   ├── normalize.js  # Text normalization + tokenization
-│   ├── similarity.js # Jaccard similarity + similar-pair detection
-│   ├── evidence.js   # Evidence category/phrase extraction
-│   ├── analyze.js    # Repeated templates + per-customer NLP contribution
-│   ├── run.js        # CLI runner (npm run nlp:analyze)
-│   └── tests/        # Unit tests (node --test, no MongoDB required)
-│
-├── graph/            # Graph-based refund ring detection (relationship intelligence)
-│   ├── index.js      # analyzeRefundRings pipeline + public API
-│   ├── config.js     # Node/edge/relationship types, candidate rules, score budget, bands
-│   ├── buildGraph.js # Heterogeneous graph construction (nodes/edges/adjacency)
-│   ├── components.js # findConnectedComponents (BFS on the customer graph)
-│   ├── detectRings.js# buildCustomerGraph + detectRingCandidates
-│   ├── evidence.js   # extractRingEvidence (shared resources + refund/complaint behavior)
-│   ├── scoreRing.js  # scoreRing (deterministic explainable 0-100 score + signals)
-│   ├── run.js        # CLI runner (npm run graph:analyze)
-│   └── tests/        # Unit tests (node --test, no MongoDB required)
-│
-├── backend/
-│   ├── server.js       # Express entry point
-│   ├── seed.js         # Mongoose database seeding script
-│   ├── config/         # Connection/config modules
-│   ├── routes/         # API route definitions
-│   ├── controllers/    # Request handlers
-│   ├── models/         # Mongoose models (Customer, Device, Transaction, Refund, Complaint, RefundRing)
-│   └── services/       # Business/service logic
-│
-├── frontend/
-│   ├── package.json
-│   ├── vite.config.js
-│   └── src/
-│       ├── main.jsx
-│       ├── App.jsx
-│       ├── components/ # Sidebar, Header, Layout
-│       └── pages/      # Dashboard, RingList, RingDetail, Metrics
-│
-└── docs/               # Additional documentation
-```
+
+Each stage:
+
+- **Risk Signal Engine** — scores every customer's refund behavior using six explicit, weighted signals (frequency, rate, velocity, repeated reason, shared IP, shared device) and produces a 0–100 score with a risk level.
+- **Complaint NLP** — deterministically normalizes complaint text, finds similar complaint wording between customers, detects reused wording templates, and extracts text-based evidence.
+- **Graph Ring Detection** — builds an entity graph of customers, devices, and IPs, finds connected customer groups, and scores which groups form coordinated refund rings.
+- **Investigation API** — merges the three engine results into a single explainable per-customer investigation: risk, signals, complaint evidence, ring membership, ring score, recommendation, and plain-language explanation.
+- **Analyst Dashboard** — surfaces high-risk customers, their scores, ring status, and recommended action.
+- **Analyst Decision** — the analyst reviews the case and marks it **UNREVIEWED**, **MONITOR**, **ESCALATED**, or **CLEARED**.
 
 ---
 
-## Installation
+## Key Features
 
-### Prerequisites
+- Explainable customer risk scoring
+- Six risk signals:
+  - Refund frequency
+  - Refund rate
+  - Refund velocity
+  - Repeated refund reason
+  - Shared IP detection
+  - Shared device detection
+- Complaint normalization and lexical similarity
+- Reused complaint wording detection
+- Complaint evidence extraction
+- Refund ring detection using customer / device / IP relationships
+- Ring scoring and ring evidence
+- Investigation API
+- Live analyst dashboard
+- Interactive refund-ring graph
+- Customer / device / IP node exploration in the graph
+- Key evidence prioritization per investigation
+- Recommended analyst action
+- Local analyst decision workflow:
+  - UNREVIEWED
+  - MONITOR
+  - ESCALATED
+  - CLEARED
+- Responsive investigation console
 
-- **Node.js** (v18 or later recommended)
-- **MongoDB** (local instance or Atlas connection string)
-
-### 1. Install all dependencies
-
-From the repository root:
-
-```bash
-npm run setup
-```
-
-This installs dependencies for the root, `backend/`, and `frontend/` workspaces.
-
-> Alternatively, run `npm run install-all` for the same effect.
-
-### 2. Configure environment variables
-
-Backend expects a `.env` file in `backend/`. Create one:
-
-```bash
-cp backend/.env.example backend/.env
-```
-
-Then set `MONGO_URI` (and optionally `PORT`) to your MongoDB connection string.
-
-### 3. Run the whole stack
-
-```bash
-npm run dev
-```
-
-This starts both the backend (Express, default `http://localhost:5000`) and the frontend (Vite, default `http://localhost:5173`) concurrently.
-
-### Run individually
-
-```bash
-npm run dev --prefix backend    # Express API
-npm run dev --prefix frontend   # Vite dev server
-```
+Analyst decisions are **local UI state**: they exist for the current browser session and are not persisted to a backend. Any set state resets when the page is refreshed.
 
 ---
 
-## Local Development Data
+## Why It Is Explainable
 
-RefundGuard ships a deterministic synthetic dataset generator plus a Mongoose
-seed script. Use the root-level commands:
+The system does **not** output a single black-box "fraud/not fraud" label. An investigation surfaces exactly why a customer was flagged:
 
-```bash
-# Generate reproducible synthetic data into data/raw/
-npm run data:generate
+- **score** — the overall risk score (0–100)
+- **risk level** — the corresponding severity band (LOW / MEDIUM / HIGH / CRITICAL)
+- **individual signal contributions** — how much each signal contributed to the score
+- **evidence** — the concrete records behind each signal
+- **complaint evidence** — similar wording, reused templates, and extracted complaint facts
+- **graph relationships** — which shared devices/IPs link the customer to others
+- **ring score** — how strongly the customer's ring qualifies as a refund ring
+- **recommendation** — a suggested analyst action with a plain-language explanation
 
-# Validate cross-references between generated entities
-npm run data:validate
-
-# Load the generated data into MongoDB (requires backend/.env with MONGO_URI)
-npm run db:seed
-```
-
-The generator is seeded with a fixed value, so repeated executions produce
-byte-identical output. It creates ~100 customers, ~180 devices, ~520
-transactions, ~240 refunds, and ~150 complaints. Six of the generated customer
-clusters deliberately share IP addresses, devices, similar complaint wording,
-and refund behavior so the analysis layers (risk engine + complaint NLP) have
-structure to find. **No risk scores are assigned.** The generator also writes Implement status: the data foundation is used by both the risk engine and the
-NLP layer; the generator writes `data/raw/clusters.json` — the intended cluster
-membership, used **only** for validation reporting; the analysis layers never
-read it.
-
-The app itself does **not** require MongoDB to run: the API server starts
-(and `/api/v1/health` responds) even when MongoDB is unavailable. Only
-`db:seed` and future database-backed features need a running MongoDB.
+Every score is the sum of explicit, weighted components, and every component is backed by traceable evidence from the dataset.
 
 ---
 
-## Risk Analysis
+## Detection Layers
 
-Run the explainable risk signal engine over the generated dataset:
+### Risk Engine
 
-```bash
-npm run risk:analyze
-```
+Customer-level behavioral risk scoring. Compares each customer's refund behavior (frequency, rate, velocity, reuse of the same refund reason) and their footprint (shared IPs and shared devices with other customers) against deterministic thresholds. Each of the six signals contributes a bounded amount to a 0–100 score with a severity, description, and evidence list.
 
-This analyzes all 100 customers, prints the score distribution, the top-risk
-customers, a ground-truth validation comparison (suspicious clusters vs normal
-customers), and a full explainability breakdown for the highest-risk customers
-(severity, contribution, and evidence per signal).
+### Complaint NLP
 
-Run the engine's unit tests (no MongoDB required):
+Deterministic, offline lexical analysis of complaint narratives. Normalizes text, computes Jaccard similarity over normalized tokens, detects repeatedly reused wording across customers, extracts evidence phrases by category, and produces a bounded, explained text-based risk contribution. No semantic embeddings and no LLM analysis.
 
-```bash
-npm run risk:test
-```
+### Graph Analysis
 
-The engine is deterministic: repeated runs over the same data produce
-identical output. It is also deliberately explainable — every score is the sum
-of six interpretable signals (`refund_frequency`, `refund_rate`,
-`refund_velocity`, `repeated_refund_reason`, `shared_ip`, `shared_device`),
-each with a severity, contribution, description, and evidence. See
-[ARCHITECTURE.md](./ARCHITECTURE.md) for the signal definitions and
-thresholds.
+Relationship intelligence over customers, devices, and IPs. Builds a heterogeneous entity graph, projects it onto connected customer pairs, finds connected components, and detects candidate refund rings from shared-resource relationships. Rings are scored deterministically (0–100) with per-signal explanations and evidence for every shared device, shared IP, and refund/complaint pattern. Fraud analysts use described claims like "seven customers connected through one shared IP and two shared devices" to understand the ring at a glance.
 
 ---
 
-## Complaint NLP & Evidence Extraction
+## Investigation Workflow
 
-A second, independent analysis layer analyzes the free-text complaints with a
-deterministic lexical NLP pipeline (no embeddings, LLMs, or ML — plain
-JavaScript, fully offline):
+An analyst moves through the investigation console as follows:
 
-```bash
-# Analyze complaints: similar pairs, reused wording templates, evidence, per-customer risk
-npm run nlp:analyze
-
-# Run the NLP unit tests (no MongoDB required)
-npm run nlp:test
-
-# Run ALL analysis tests (risk engine + NLP)
-npm test
+```text
+Dashboard
+→ Select high-risk customer
+→ Review risk signals
+→ Review key evidence
+→ Inspect complaint evidence
+→ Investigate refund-ring graph
+→ Review recommended action
+→ Mark case
 ```
 
-What `npm run nlp:analyze` reports:
-
-- **Similar complaint pairs** — cross-customer texts that closely match (Jaccard
-  similarity over normalized tokens) with their shared tokens shown.
-- **Reused wording templates** — complaint phrasings filed verbatim (or
-  near-verbatim) by multiple customers, with an example text and member count.
-- **Evidence-category distribution** — per-category counts (refund, delivery,
-  damage, duplicate charge, quality, etc.) derived from keyword + phrase
-  matching.
-- **Top customers by text-based risk** — a bounded, explained 0–15 contribution
-  built from template reuse and matching complaints (e.g. "3 of the customer's
-  complaints closely match complaint(s) from other customers").
-- **Ground-truth comparison** — like the risk engine, `data/raw/clusters.json`
-  is read **only** for validation reporting; the analysis modules never use it.
-
-The similarity threshold and every other tunable live in `nlp/config.js`.
-
----
-
-## Graph-Based Refund Ring Detection
-
-The relationship-intelligence layer builds a heterogeneous in-memory graph
-(customer, device, ip, transaction, refund, complaint nodes), projects it onto
-connected customers, and detects explainable refund rings:
-
-```bash
-# Build the graph, detect rings, score them, print a report
-npm run graph:analyze
-
-# Run the graph engine unit tests (no MongoDB required)
-npm run graph:test
-
-# Run ALL analysis tests (risk engine + NLP + graph)
-npm test
-```
-
-Pipeline: raw records → `buildGraph` (typed nodes/edges) →
-`buildCustomerGraph` (shared-IP / shared-device relationship edges, indexed
-per resource so there is no O(n²) entity-pair scan) → `findConnectedComponents`
-(BFS) → `detectRingCandidates` (configurable minimums) → `extractRingEvidence`
-→ `scoreRing` (0-100, every point traceable to evidence).
-
-What `npm run graph:analyze` reports:
-
-- **Graph statistics** — node counts per type and edge counts. On the synthetic
-  dataset: 2,608 edges = 1,054 primary edges (`customer_transaction` 518,
-  `transaction_refund` 243, `customer_complaint` 151, `complaint_refund` 142)
-  + 1,554 derived edges (`customer_ip` 518, `customer_device` 518,
-  `transaction_device` 518).
-- **Connected components** — 70 on the synthetic dataset (6 multi-member
-  components; the rest are isolated normal customers).
-- **Ring candidates** — 6 on the synthetic dataset, each scored **80-90**,
-  all **CRITICAL**.
-- **Evidence** — every shared IP and shared device with its customer lists,
-  plus per-ring refund/complaint/transaction behavior.
-- **Score breakdown** — six explained signals (`shared_ip`, `shared_device`,
-  `graph_density`, `refund_concentration`, `multi_member_refund_activity`,
-  `complaint_concentration`) with per-signal severity and description.
-- **Ground-truth comparison** — `data/raw/clusters.json` is read **only** for
-  this final evaluation line, never during analysis.
-
-Design notes:
-
-- **No external graph libraries** — plain JavaScript Maps and arrays only.
-- **Density** counts unique customer pairs connected under any relationship
-  (not each relationship type as a separate edge).
-- **`shared_transaction_context`** is implemented but disabled by default:
-  in the synthetic dataset order IDs are drawn from a shared pool, so same-order
-  reuse between unrelated customers is coincidental (120 accidental groups).
-- Ground truth (`clusters.json`) is never read by any core graph module — a
-  source-guard test enforces this.
+The final "Mark case" step sets a local analyst decision (UNREVIEWED / MONITOR / ESCALATED / CLEARED). As noted above, these decisions are currently **local UI state** and reset on refresh; they are not persisted.
 
 ---
 
 ## Tech Stack
 
-| Layer     | Technology                                   |
-| --------- | -------------------------------------------- |
-| Frontend  | React, Vite, React Router                    |
-| Backend   | Node.js, Express                             |
-| Database  | MongoDB, Mongoose                            |
-| Language  | JavaScript                                   |
-| Supporting| cors, dotenv, nodemon, natural, graphlib, axios, react-force-graph-2d |
+| Layer       | Technology                                            |
+| ----------- | ----------------------------------------------------- |
+| Frontend    | React, Vite, React Router, Axios, react-force-graph-2d |
+| Backend     | Node.js, Express                                      |
+| Database    | MongoDB / Mongoose integration (optional)             |
+| Language    | JavaScript                                            |
+| Engines     | Deterministic, offline JavaScript risk / NLP / graph engines |
+| Supporting  | cors, dotenv, nodemon, concurrently                   |
 
 ---
 
-## Backend API
+## Project Structure
 
-Base path: **`/api/v1`**
-
-| Method | Endpoint                            | Description                                |
-| ------ | ----------------------------------- | ------------------------------------------ |
-| GET    | `/api/v1/health`                    | Health check, returns service status       |
-| GET    | `/api/v1/investigations`            | All customer investigations, by overall risk |
-| GET    | `/api/v1/investigations/:customerId`| Merged investigation for one customer      |
-
-Example:
-
-```json
-{
-  "status": "ok",
-  "project": "RefundGuard"
-}
+```text
+RefundGuard/
+├── backend/
+├── frontend/
+├── risk-engine/
+├── nlp/
+├── graph/
+├── data/
+├── docs/
+├── README.md
+├── ARCHITECTURE.md
+├── package.json
+└── package-lock.json
 ```
 
+- **`backend/`** — Express API (health + investigation endpoints), Mongoose models, routing, controllers, and the investigation orchestration service.
+- **`frontend/`** — React + Vite investigation console: dashboard, ring list, per-customer investigation detail, interactive refund-ring graph, risk metrics, and the analyst decision workflow.
+- **`risk-engine/`** — explainable, deterministic per-customer risk scoring (six signals, 0–100).
+- **`nlp/`** — deterministic complaint NLP: normalization, similarity, reused templates, evidence extraction.
+- **`graph/`** — graph-based refund ring detection: graph construction, connected components, ring detection, evidence, and ring scoring.
+- **`data/`** — deterministic synthetic dataset generator and cross-reference validator (`generate.js`, `validate.js`) plus generated `raw/` and `processed/` data.
+- **`docs/`** — additional documentation.
+- **`ARCHITECTURE.md`** — system design and engine internals.
+
 ---
 
-## Investigation Engine
+## Getting Started
 
-RefundGuard now exposes investigation APIs that combine the three analysis
-layers into a single, explainable per-customer view:
+### Prerequisites
 
-- **Risk Engine** — per-customer refund-behavior risk scores & signals
-- **Complaint NLP** — similar complaint wording, reused templates, and text evidence
-- **Graph Detection** — refund-ring membership, ring score, and shared-resource evidence
+- Node.js (v18 or later)
 
-The Investigation Engine is an **orchestration layer** — it does **not** contain
-fraud-detection logic itself. It runs the three engines against the same dataset,
-merges their results, and computes the investigation's overall risk,
-recommendation, and explanation. All analysis is deterministic and performed
-in-memory; no results are persisted at this stage and no ground-truth data is
-read during analysis.
+MongoDB is **optional** for the deterministic investigation/demo flow (see below).
 
-Available endpoints:
+### Install
 
-| Method | Endpoint                              | Description                                            |
-| ------ | ------------------------------------- | ------------------------------------------------------ |
-| GET    | `/api/v1/investigations`              | All customers as investigations, sorted by overall risk |
-| GET    | `/api/v1/investigations/:customerId`  | Merged investigation for a single customer (404 if unknown) |
+From the repository root:
 
-Example single investigation response:
-
-```json
-{
-  "customer": { "customerId": "cust_00064" },
-  "risk": { "score": 83, "level": "critical", "signals": [] },
-  "nlp": { "complaintCount": 2, "repeatedTemplates": [], "similarComplaints": [], "evidence": [] },
-  "graph": { "inRing": true, "ringId": "ring_cust_00064", "ringScore": 89.1, "members": [], "evidence": [] },
-  "summary": {
-    "overallRisk": "critical",
-    "recommendation": "Escalate to fraud analyst.",
-    "explanation": "Overall risk CRITICAL: ..."
-  }
-}
+```bash
+npm install
 ```
 
+To install the root, `backend/`, and `frontend/` dependencies in one step:
+
+```bash
+npm run setup      # equivalent to: npm run install-all
+```
+
+### Validate data and run tests
+
+```bash
+npm run data:validate   # checks cross-references in the deterministic dataset
+npm test                # runs the risk-engine, NLP, and graph test suites
+```
+
+### Build the frontend
+
+```bash
+npm run build --prefix frontend
+# or from the frontend/ directory:
+# npm run build
+```
+
+### Run the stack
+
+Start both API and dev UI together:
+
+```bash
+npm run dev        # backend on http://localhost:5000, frontend on http://localhost:5173
+```
+
+or individually:
+
+```bash
+npm run dev --prefix backend
+npm run dev --prefix frontend
+```
+
+Health check:
+
+```bash
+curl http://localhost:5000/api/v1/health
+# {"status":"ok","project":"RefundGuard"}
+```
+
+### MongoDB note
+
+The backend starts and `/api/v1/health` responds even when MongoDB is unavailable — all investigation analysis runs deterministically in memory over the included dataset. MongoDB is only needed for `db:seed`. To seed, copy `backend/.env.example` to `backend/.env`, set `MONGO_URI`, then run `npm run db:seed`.
+
 ---
 
-## Contributing / Next Steps
+## Validation
 
-Implemented so far:
+The following is verified in the current state of the repository:
 
-1. Project foundation (frontend + backend + data scaffolding)
-2. Backend foundation (Express API, `/api/v1/health`, error handling, nonfatal Mongo connect)
-3. Frontend investigation-console UI (Layout / Sidebar / Header + placeholder pages)
-4. Data foundation (Mongoose models + deterministic synthetic generator + seed script)
-5. Risk Signal Engine (explainable, deterministic per-customer risk scoring)
-6. Complaint NLP & Evidence Extraction (deterministic lexical normalization, similarity, reused-template detection, evidence extraction, per-customer contribution)
-7. Graph-Based Refund Ring Detection (heterogeneous graph, customer projection, connected components, ring detection, evidence, explainable scoring)
-8. Investigation API (orchestration of risk-engine + NLP + graph into per-customer investigations)
+- deterministic dataset validation passes
+- risk / NLP / graph test suite passes
+- frontend production build passes
+- backend health endpoint works
+- interactive refund-ring graph verified (click, hover, zoom, pan, drag)
+- responsive layouts verified at desktop, tablet, and mobile widths
+- no fabricated investigation values in the frontend (all UI data comes from the live API)
+- no nested `refundguard/` directory — the project sits directly in the repository root
 
-Planned future work (not yet implemented):
+This describes the current checked-in state; it is not a production certification.
 
-1. Frontend integration
-2. Interactive graph visualization
-3. Investigation dashboard
-4. Production polish
+---
+
+## Future Enhancements
+
+The following are **not currently implemented** and are listed only as possible future work:
+
+- persistent analyst decisions (backend-backed case state)
+- production authentication and authorization
+- real-time event ingestion
+- model-assisted semantic complaint analysis
+- production monitoring and observability
+- larger-scale distributed graph processing
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the system design.
