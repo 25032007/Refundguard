@@ -9,7 +9,7 @@
 
 > **Note:** RefundGuard is **not** a payment gateway. It is an investigation dashboard for risk analysts to surface and explore suspected refund-abuse rings.
 
-> **Status:** Data foundation and an explainable, deterministic **Risk Signal Engine** are in place. The engine evaluates six per-customer risk signals with full explainability. Graph construction, ring detection, complaint NLP similarity, scoring/metrics exposure, and dashboard integration are intentionally **not** implemented yet and will be added in later phases.
+> **Status:** Data foundation, an explainable deterministic **Risk Signal Engine**, and a deterministic **Complaint NLP & Evidence Extraction** layer are in place. The engine evaluates six per-customer risk signals; the NLP layer detects similar complaint wording, reused templates, evidence categories, and per-customer text-based risk, all fully explainable. Graph construction, ring detection, composition of the two analyses into one score, metrics exposure, and dashboard integration are intentionally **not** implemented yet and will be added in later phases.
 
 ---
 
@@ -36,6 +36,16 @@ refundguard/
 │   ├── signals/       # One module per signal (frequency, rate, velocity, reason, IP, device)
 │   ├── tests/         # Unit tests (node --test, no MongoDB required)
 │   └── utils/         # dates + scoring helpers
+│
+├── nlp/              # Complaint NLP & evidence extraction (deterministic lexical NLP)
+│   ├── index.js      # Public API (normalize / similarity / evidence / analyze)
+│   ├── config.js     # Stopwords, protected tokens, thresholds, evidence vocabulary
+│   ├── normalize.js  # Text normalization + tokenization
+│   ├── similarity.js # Jaccard similarity + similar-pair detection
+│   ├── evidence.js   # Evidence category/phrase extraction
+│   ├── analyze.js    # Repeated templates + per-customer NLP contribution
+│   ├── run.js        # CLI runner (npm run nlp:analyze)
+│   └── tests/        # Unit tests (node --test, no MongoDB required)
 │
 ├── backend/
 │   ├── server.js       # Express entry point
@@ -126,10 +136,11 @@ The generator is seeded with a fixed value, so repeated executions produce
 byte-identical output. It creates ~100 customers, ~180 devices, ~520
 transactions, ~240 refunds, and ~150 complaints. Six of the generated customer
 clusters deliberately share IP addresses, devices, similar complaint wording,
-and refund behavior so the future risk engine has structure to find. **No risk
-scores are assigned.** The generator also writes `data/raw/clusters.json` —
-the intended cluster membership, used **only** for validation reporting; the
-risk engine never reads it.
+and refund behavior so the analysis layers (risk engine + complaint NLP) have
+structure to find. **No risk scores are assigned.** The generator also writes Implement status: the data foundation is used by both the risk engine and the
+NLP layer; the generator writes `data/raw/clusters.json` — the intended cluster
+membership, used **only** for validation reporting; the analysis layers never
+read it.
 
 The app itself does **not** require MongoDB to run: the API server starts
 (and `/api/v1/health` responds) even when MongoDB is unavailable. Only
@@ -163,6 +174,42 @@ of six interpretable signals (`refund_frequency`, `refund_rate`,
 each with a severity, contribution, description, and evidence. See
 [ARCHITECTURE.md](./ARCHITECTURE.md) for the signal definitions and
 thresholds.
+
+---
+
+## Complaint NLP & Evidence Extraction
+
+A second, independent analysis layer analyzes the free-text complaints with a
+deterministic lexical NLP pipeline (no embeddings, LLMs, or ML — plain
+JavaScript, fully offline):
+
+```bash
+# Analyze complaints: similar pairs, reused wording templates, evidence, per-customer risk
+npm run nlp:analyze
+
+# Run the NLP unit tests (no MongoDB required)
+npm run nlp:test
+
+# Run ALL analysis tests (risk engine + NLP)
+npm test
+```
+
+What `npm run nlp:analyze` reports:
+
+- **Similar complaint pairs** — cross-customer texts that closely match (Jaccard
+  similarity over normalized tokens) with their shared tokens shown.
+- **Reused wording templates** — complaint phrasings filed verbatim (or
+  near-verbatim) by multiple customers, with an example text and member count.
+- **Evidence-category distribution** — per-category counts (refund, delivery,
+  damage, duplicate charge, quality, etc.) derived from keyword + phrase
+  matching.
+- **Top customers by text-based risk** — a bounded, explained 0–15 contribution
+  built from template reuse and matching complaints (e.g. "3 of the customer's
+  complaints closely match complaint(s) from other customers").
+- **Ground-truth comparison** — like the risk engine, `data/raw/clusters.json`
+  is read **only** for validation reporting; the analysis modules never use it.
+
+The similarity threshold and every other tunable live in `nlp/config.js`.
 
 ---
 
@@ -206,12 +253,13 @@ Implemented so far:
 3. Frontend investigation-console UI (Layout / Sidebar / Header + placeholder pages)
 4. Data foundation (Mongoose models + deterministic synthetic generator + seed script)
 5. Risk Signal Engine (explainable, deterministic per-customer risk scoring)
+6. Complaint NLP & Evidence Extraction (deterministic lexical normalization, similarity, reused-template detection, evidence extraction, per-customer contribution)
 
 Planned future work (not yet implemented):
 
-1. Graph construction & ring detection (`graphlib`)
-2. Complaint text similarity scoring (`natural`)
+1. Compose the risk-engine and NLP analyses into a single per-customer risk score
+2. Graph construction & ring detection (`graphlib`)
 3. Ring risk scoring & metrics
-4. API exposure of risk results & investigation dashboard features (visualization via `react-force-graph-2d`)
+4. API exposure of analysis results & investigation dashboard features (visualization via `react-force-graph-2d`)
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the system design.

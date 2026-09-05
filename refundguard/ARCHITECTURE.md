@@ -18,9 +18,12 @@ RefundGuard is a web application that helps risk analysts investigate **coordina
 ┌────────────▼───────────────┐
 │        Backend             │   Node.js + Express (REST API, /api/v1)
 └────────────┬───────────────┘
-             │
+             │  in-process modules
 ┌────────────▼───────────────┐
-│      Risk Engine           │   Detection & scoring logic (future)
+│      Risk Engine           │   Detection & scoring logic (rule-based)
+│   ┌────────────────────┐   │
+│   │  Complaint NLP     │   │   Lexical similarity & evidence extraction
+│   └────────────────────┘   │
 └────────────┬───────────────┘
              │
 ┌────────────▼───────────────┐
@@ -58,10 +61,10 @@ RefundGuard is a web application that helps risk analysts investigate **coordina
 ## Risk Engine
 
 - **Location:** `risk-engine/` directory.
-- **Status:** Not yet implemented.
-- **Intended responsibilities (future):**
-  - Compose **identity signal**, **behavioral signal**, and **complaint text similarity** features.
-  - Build graphs of related entities and run **ring detection**.
+- **Status:** Implemented (signal scoring engine); graph/ring detection is a later layer.
+- **Responsibilities:**
+  - Compose **behavioral signals** (refund frequency/rate/velocity, repeated reasons, shared IP/device) and consume **complaint NLP similarity** as an independent, parallel analysis.
+  - Build graphs of related entities and run **ring detection** (future).
   - Produce **risk scores** and **explanations** for analysts.
 - **Relation to backend:** The backend is expected to invoke the risk engine to obtain detection/scoring results; the exact interface (in-process module vs. wrapped service) is to be decided.
 
@@ -99,7 +102,7 @@ Customers
 - **Complaint** — free-text complaint (`complaintId`, `customerId`, `orderId`, optional `refundId`, text, category, status). Text serves the future NLP similarity layer.
 - **RefundRing** — future investigation container (`ringId`, member ID arrays, `riskScore`, `riskLevel`, `status`). Fields exist but are **not** populated by the data foundation.
 
-Synthetic development data (`data/generate.js`) produces ~100 normal customers plus 6 coordinated clusters that share IPs, devices, similar complaint wording, and refund behavior — giving the future risk engine realistic structure to discover. No risk values are assigned.
+Synthetic development data (`data/generate.js`) produces ~100 normal customers plus 6 coordinated clusters that share IPs, devices, similar complaint wording, and refund behavior — giving the analysis layers realistic structure to discover. No risk values are assigned.
 
 ---
 
@@ -108,7 +111,7 @@ Synthetic development data (`data/generate.js`) produces ~100 normal customers p
 1. **Ingest:** Raw refund/transaction/complaint data is collected into `data/raw`.
 2. **Process:** Data is normalized and written to `data/processed`.
 3. **Store:** Processed data is persisted to MongoDB via Mongoose models.
-4. **Analyze:** The risk signal engine evaluates individual customer refund behavior (frequency, rate, velocity, repeated reasons, shared IP/device) into explainable scores. Graph/ring construction is a later layer.
+4. **Analyze:** The risk signal engine evaluates individual customer refund behavior (frequency, rate, velocity, repeated reasons, shared IP/device) into explainable scores. In parallel, the complaint NLP layer analyzes free-text complaints into similarity pairs, repeated wording templates, and per-customer evidence. Graph/ring construction is a later layer.
 5. **Serve:** The backend exposes results via the versioned REST API (`/api/v1`).
 6. **Investigate:** The frontend dashboard fetches and visualizes rings, members, evidence, and metrics.
 
@@ -176,11 +179,62 @@ risk-engine/
 
 ---
 
+## Complaint NLP & Evidence Extraction
+
+The second intelligence layer is a deterministic, explainable lexical NLP module that analyzes free-text complaints.
+
+**Principles:**
+
+- **Same contract as the risk engine.** Deterministic given the same input; no embeddings, no LLMs, no ML, no external calls — plain JavaScript over `data/raw/complaints.json`, fully offline.
+- **Explainable.** Every finding is a concrete, human-readable fact: *which complaint matches which*, *which wording templates are reused across customers*, and *which evidence categories/phrases appear in a text*.
+- **Independent of the risk engine and the database.** The NLP layer never reads risk-engine score files, never persists results, and never touches the ground-truth dataset during analysis.
+
+**Pipeline (each stage deterministic):**
+
+```text
+Raw complaint text
+   │  1. normalize()  — lowercase, strip non-alphanumerics, collapse whitespace
+   ▼
+Normalized text + token list (stopwords dropped; negation + refund words kept)
+   ├── 2. similarity() — Jaccard score over unique tokens; binary compare complaints
+   ├── 3. evidence()   — category detection (keywords + word-boundary phrases + text length)
+   └── 4. analyze()    — repeated wording templates (canonical token key) + per-customer
+                         contribution, bounded 0–15 and explained line-by-line
+```
+
+- **Similarity:** `calculateSimilarity` compares two texts via Jaccard over unique token sets and returns `{ score, sharedTokens, sharedTokenCount, tokenCountA, tokenCountB }`. `findSimilarComplaints` scans all cross-customers pairs, keeps those at/above the configurable threshold, and canonicalizes each pair so output does not depend on input order.
+- **Evidence:** `extractComplaintEvidence` detects category keywords plus multi-word *phrases* (contiguous, word-boundary matched over the normalized text, so stopwords inside a phrase such as "refund the full amount" survive) and records `textLength`. Categories cover refund, delivery, damage, wrong-item, duplicate-charge, quality, product, payment, and service issues.
+- **Repeated templates:** `findRepeatedTemplates` groups complaints whose normalized token sets are identical (count ≥ `minCount`, default 2), reporting `templateKey` (sorted tokens), `representativeText`, member complaint/customer IDs, and count. Reuse is only scored **across different customers**.
+- **Per-customer contribution:** `analyzeCustomerComplaints` combines `min(reusedTemplates × 3, 9)` + `min(similarComplaints × 2, 6)`, clamped to `nlp.maxContribution` (15). Deterministic ordering: contribution desc, then `customerId` asc.
+- **Thresholds and vocabulary** all live in `nlp/config.js` (no magic numbers). The similarity threshold is 0.5, tuned so that every reported pair is same-theme (identical texts score 1.0; unrelated texts score 0).
+
+**Structure:**
+
+```text
+nlp/
+├── index.js      # public API (normalize, similarity, evidence, analyze, config)
+├── config.js     # stopwords, protected tokens, thresholds, evidence vocabulary
+├── normalize.js  # normalizeComplaintText / tokenize / tokensOf
+├── similarity.js # calculateSimilarity / findSimilarComplaints
+├── evidence.js   # extractComplaintEvidence
+├── analyze.js    # findRepeatedTemplates / analyzeCustomerComplaints / analyzeComplaints
+├── run.js        # CLI: load data/raw/complaints.json, analyze, print report
+└── tests/        # normalize / similarity / evidence / analyze suites (node:test)
+```
+
+**Ground truth is validation-only.** `run.js` reads `data/raw/clusters.json` solely to compare suspicious-cluster vs normal-customer NLP contributions in its report; the analysis modules never load it. The NLP source is guarded by tests against referencing `clusters.json` or any nondeterministic primitive.
+
+**Run it:** `npm run nlp:analyze` · Test everything: `npm test` (risk-engine + NLP suites).
+
+---
+
 ## Non-Goals (current foundation)
 
 - No payment processing.
 - No graph / ring detection / metrics yet.
-- No complaint NLP similarity yet.
 - No risk values assigned to synthetic data (by design; risk values are only *computed at analysis time* by the engine, never stored).
+- No API exposure of risk-engine or NLP results yet.
+- No NLP contribution merged into risk-engine scores (the signal engine and NLP layer are independent analyses, to be composed by later phases).
+- No LLM/embedding/ML-based analysis anywhere — all intelligence layers are deterministic lexical/rule-based by design.
 
-Graph construction, ring detection, complaint similarity, connection metrics, API exposure of risk results, and dashboard integration are intentionally deferred and will be built on top of the risk signal engine.
+Graph construction, ring detection, metrics, API exposure of analysis results, and dashboard integration are intentionally deferred and will be built on top of the risk signal engine and the complaint NLP layer.
