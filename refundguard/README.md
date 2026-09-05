@@ -9,7 +9,7 @@
 
 > **Note:** RefundGuard is **not** a payment gateway. It is an investigation dashboard for risk analysts to surface and explore suspected refund-abuse rings.
 
-> **Status:** Data foundation, an explainable deterministic **Risk Signal Engine**, a deterministic **Complaint NLP & Evidence Extraction** layer, and a **Graph-Based Refund Ring Detection** engine are in place. The engine evaluates six per-customer risk signals; the NLP layer detects similar complaint wording, reused templates, and per-customer text-based risk; the graph engine builds a heterogeneous entity graph, projects customer relationships, finds connected components, and scores refund rings — all explainable and deterministic. Composing the three analyses into one investigation experience, API/metrics exposure, and dashboard integration are intentionally **not** implemented yet and will be added in later phases.
+> **Status:** Data foundation, an explainable deterministic **Risk Signal Engine**, a deterministic **Complaint NLP & Evidence Extraction** layer, a **Graph-Based Refund Ring Detection** engine, and an **Investigation API** are in place. The engine evaluates six per-customer risk signals; the NLP layer detects similar complaint wording, reused templates, and per-customer text-based risk; the graph engine builds a heterogeneous entity graph, projects customer relationships, finds connected components, and scores refund rings — all explainable and deterministic. The Investigation Engine combines these three analyses into a single per-customer investigation exposed via the REST API. Frontend integration, interactive graph visualization, an investigation dashboard, and production polish are intentionally **not** implemented yet and will be added in later phases.
 
 ---
 
@@ -295,9 +295,11 @@ Design notes:
 
 Base path: **`/api/v1`**
 
-| Method | Endpoint              | Description                          |
-| ------ | --------------------- | ------------------------------------ |
-| GET    | `/api/v1/health`      | Health check, returns service status |
+| Method | Endpoint                            | Description                                |
+| ------ | ----------------------------------- | ------------------------------------------ |
+| GET    | `/api/v1/health`                    | Health check, returns service status       |
+| GET    | `/api/v1/investigations`            | All customer investigations, by overall risk |
+| GET    | `/api/v1/investigations/:customerId`| Merged investigation for one customer      |
 
 Example:
 
@@ -305,6 +307,47 @@ Example:
 {
   "status": "ok",
   "project": "RefundGuard"
+}
+```
+
+---
+
+## Investigation Engine
+
+RefundGuard now exposes investigation APIs that combine the three analysis
+layers into a single, explainable per-customer view:
+
+- **Risk Engine** — per-customer refund-behavior risk scores & signals
+- **Complaint NLP** — similar complaint wording, reused templates, and text evidence
+- **Graph Detection** — refund-ring membership, ring score, and shared-resource evidence
+
+The Investigation Engine is an **orchestration layer** — it does **not** contain
+fraud-detection logic itself. It runs the three engines against the same dataset,
+merges their results, and computes the investigation's overall risk,
+recommendation, and explanation. All analysis is deterministic and performed
+in-memory; no results are persisted at this stage and no ground-truth data is
+read during analysis.
+
+Available endpoints:
+
+| Method | Endpoint                              | Description                                            |
+| ------ | ------------------------------------- | ------------------------------------------------------ |
+| GET    | `/api/v1/investigations`              | All customers as investigations, sorted by overall risk |
+| GET    | `/api/v1/investigations/:customerId`  | Merged investigation for a single customer (404 if unknown) |
+
+Example single investigation response:
+
+```json
+{
+  "customer": { "customerId": "cust_00064" },
+  "risk": { "score": 83, "level": "critical", "signals": [] },
+  "nlp": { "complaintCount": 2, "repeatedTemplates": [], "similarComplaints": [], "evidence": [] },
+  "graph": { "inRing": true, "ringId": "ring_cust_00064", "ringScore": 89.1, "members": [], "evidence": [] },
+  "summary": {
+    "overallRisk": "critical",
+    "recommendation": "Escalate to fraud analyst.",
+    "explanation": "Overall risk CRITICAL: ..."
+  }
 }
 ```
 
@@ -321,12 +364,13 @@ Implemented so far:
 5. Risk Signal Engine (explainable, deterministic per-customer risk scoring)
 6. Complaint NLP & Evidence Extraction (deterministic lexical normalization, similarity, reused-template detection, evidence extraction, per-customer contribution)
 7. Graph-Based Refund Ring Detection (heterogeneous graph, customer projection, connected components, ring detection, evidence, explainable scoring)
+8. Investigation API (orchestration of risk-engine + NLP + graph into per-customer investigations)
 
 Planned future work (not yet implemented):
 
-1. Compose the risk-engine, NLP, and graph analyses into a single investigation experience
-2. Ring risk scoring cross-metrics & refined metrics
-3. API exposure of analysis results & investigation dashboard features (visualization via `react-force-graph-2d`)
-4. Production streaming detection / external graph databases (e.g. Neo4j)
+1. Frontend integration
+2. Interactive graph visualization
+3. Investigation dashboard
+4. Production polish
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the system design.

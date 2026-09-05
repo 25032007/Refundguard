@@ -17,6 +17,10 @@ RefundGuard is a web application that helps risk analysts investigate **coordina
              │  HTTP / JSON
 ┌────────────▼───────────────┐
 │        Backend             │   Node.js + Express (REST API, /api/v1)
+│   ┌────────────────────┐   │
+│   │ Investigation      │   │   Orchestration layer (merges engines)
+│   │ Service            │   │
+│   └────────┬───────────┘   │
 └────────────┬───────────────┘
              │  in-process modules
 ┌────────────▼───────────────┐
@@ -55,9 +59,9 @@ RefundGuard is a web application that helps risk analysts investigate **coordina
 - **Layering (per directory):**
   - `routes/` – URL-to-handler mapping.
   - `controllers/` – Request handling and response shaping.
-  - `services/` – Business logic and orchestration.
+  - `services/` – Business logic and orchestration. The **Investigation Service** (`services/investigationService.js`) orchestrates the three engines.
   - `models/` – Mongoose schemas (to be added later).
-- **Purpose:** Expose a stable, versioned API that the frontend consumes and that wraps the risk engine and database.
+- **Purpose:** Expose a stable, versioned API that the frontend consumes and that wraps the investigation service and the analysis engines.
 
 ---
 
@@ -114,9 +118,22 @@ Synthetic development data (`data/generate.js`) produces ~100 normal customers p
 1. **Ingest:** Raw refund/transaction/complaint data is collected into `data/raw`.
 2. **Process:** Data is normalized and written to `data/processed`.
 3. **Store:** Processed data is persisted to MongoDB via Mongoose models.
-4. **Analyze:** The risk signal engine evaluates individual customer refund behavior (frequency, rate, velocity, repeated reasons, shared IP/device) into explainable scores. In parallel, the complaint NLP layer analyzes free-text complaints into similarity pairs, repeated wording templates, and per-customer evidence, while the graph engine builds the entity graph, projects customer relationships, and detects/scored refund rings.
-5. **Serve:** The backend exposes results via the versioned REST API (`/api/v1`).
-6. **Investigate:** The frontend dashboard fetches and visualizes rings, members, evidence, and metrics.
+4. **Analyze:** The risk signal engine evaluates individual customer refund behavior (frequency, rate, velocity, repeated reasons, shared IP/device) into explainable scores. In parallel, the complaint NLP layer analyzes free-text complaints into similarity pairs, repeated wording templates, and per-customer evidence, while the graph engine builds the entity graph, projects customer relationships, and detects/scores refund rings.
+5. **Orchestrate:** The Investigation Service runs the three engines against the same dataset and merges their results into a single per-customer investigation (overall risk, recommendation, explanation).
+6. **Serve:** The backend exposes the merged investigations via the versioned REST API (`/api/v1/investigations`, `/api/v1/investigations/:customerId`).
+7. **Investigate:** The frontend dashboard fetches and visualizes rings, members, evidence, and metrics.
+
+```text
+Request
+   ↓
+Investigation Service      (orchestration layer)
+   ↓
+Risk Engine ── Complaint NLP ── Graph Engine     (three independent engines)
+   ↓
+Merged Investigation       (overallRisk, recommendation, explanation)
+   ↓
+API Response              (GET /api/v1/investigations[/:customerId])
+```
 
 ---
 
@@ -124,9 +141,11 @@ Synthetic development data (`data/generate.js`) produces ~100 normal customers p
 
 All endpoints are prefixed with `/api/v1` to allow future breaking changes without disrupting clients.
 
-| Method | Endpoint            | Purpose                |
-| ------ | ------------------- | ---------------------- |
-| GET    | `/api/v1/health`    | Service health check   |
+| Method | Endpoint                              | Purpose                                    |
+| ------ | ------------------------------------- | ------------------------------------------ |
+| GET    | `/api/v1/health`                      | Service health check                       |
+| GET    | `/api/v1/investigations`              | All customer investigations, by overall risk |
+| GET    | `/api/v1/investigations/:customerId`  | Merged investigation for one customer      |
 
 ---
 
@@ -179,6 +198,48 @@ risk-engine/
 **Ground truth is validation-only.** `data/raw/clusters.json` (persisted by the generator) records the intended cluster membership. `run.js` reads it solely to compare suspicious-cluster vs normal-customer scores in its report. The engine itself never reads it — suspicious behavior must be discovered from the actual records.
 
 **Run it:** `npm run risk:analyze` · Test it: `npm run risk:test` (Node's built-in runner, no MongoDB required).
+
+---
+
+## Investigation Service
+
+The Investigation Service is the orchestration layer that composes the three
+independent analysis engines — Risk Engine, Complaint NLP, and Graph Engine —
+into a single, explainable per-customer investigation. It contains **no
+fraud-detection logic itself**; all detection and scoring lives inside the
+engines, which are consumed through their public APIs and never modified.
+
+**Flow:**
+
+```text
+Request
+   ↓
+Investigation Service       (orchestrates engines)
+   ↓
+Risk Engine ── Complaint NLP ── Graph Engine
+   ↓
+Merged Investigation
+   ↓
+API Response
+```
+
+**Responsibility of the service:**
+
+- **Orchestrates engines** — runs the risk, NLP, and graph analyses over the same dataset (computed lazily and reused in-memory, so results are deterministic per process).
+- **Merges results** — combines each engine's output into one per-customer investigation (`risk`, `nlp`, `graph` sections).
+- **Computes overallRisk** — the customer's overall risk tier, derived by combining the engine results.
+- **Generates recommendation** — the action an analyst should take for the customer's risk tier.
+- **Generates explanation** — a concise, human-readable summary of why the customer was flagged.
+
+**Exposed via the API:**
+
+| Method | Endpoint                              | Purpose                                     |
+| ------ | ------------------------------------- | ------------------------------------------- |
+| GET    | `/api/v1/investigations`              | All customer investigations, sorted by overall risk |
+| GET    | `/api/v1/investigations/:customerId`  | Merged investigation for one customer (404 if unknown) |
+
+The service performs the analysis **in-memory**; at this stage results are not
+persisted to the database and no ground-truth data is read during analysis.
 
 ---
 
@@ -280,9 +341,9 @@ Explainable Ring Scoring (0-100, six traceable signals)
 - No payment processing.
 - No metrics beyond the per-ring explainable score (ring cross-metrics deferred).
 - No risk values assigned to synthetic data (by design; risk values are only *computed at analysis time* by the engine, never stored).
-- No API exposure of risk-engine, NLP, or graph results yet.
-- No composition of the three analyses (risk-engine + NLP + graph) into a combined investigation experience yet — they run as independent engines by design.
+- No persistence of investigation results — the Investigation Service runs in-memory.
+- No frontend integration of the investigation API yet, no dashboard/graph visualization, no production polymorphism.
 - No LLM/embedding/ML analysis anywhere — all intelligence layers are deterministic lexical/rule-based by design.
-- No MongoDB persistence of analysis results, no external graph databases (Neo4j), no production streaming detection.
+- No external graph databases (Neo4j), no production streaming detection.
 
-API exposure of analysis results, dashboard/graph visualization, and the composition layer are intentionally deferred and will be built on top of the three engines.
+Frontend integration, interactive graph visualization, the investigation dashboard, and production polish are intentionally deferred and will be built on top of the Investigation Service.
