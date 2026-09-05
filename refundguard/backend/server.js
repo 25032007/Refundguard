@@ -1,57 +1,48 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
+
+const connectDB = require('./config/database');
+const apiRoutes = require('./routes');
 
 const app = express();
 
-// CORS
+// Global middleware
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
   })
 );
-
-// JSON body parsing
 app.use(express.json());
 
 // API versioning
-const apiRouter = express.Router();
+app.use('/api/v1', apiRoutes);
 
-// Health route
-apiRouter.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'ok',
-    project: 'RefundGuard',
+// 404 handler for unknown routes
+app.use((req, res) => {
+  res.status(404).json({
+    error: `Route not found: ${req.method} ${req.originalUrl}`,
   });
 });
 
-// Mount versioned API
-app.use('/api/v1', apiRouter);
-
-// Mongo connection placeholder
-// TODO: Enable when database models are implemented.
-// const connectDB = async () => {
-//   try {
-//     await mongoose.connect(process.env.MONGODB_URI, {
-//       useNewUrlParser: true,
-//       useUnifiedTopology: true,
-//     });
-//     console.log('MongoDB connected');
-//   } catch (error) {
-//     console.error('MongoDB connection error:', error.message);
-//   }
-// };
-
-const PORT = process.env.PORT || 4000;
-
-// Start server (no DB dependency yet - foundation only)
-app.listen(PORT, () => {
-  console.log(`RefundGuard backend running on http://localhost:${PORT}`);
-  console.log(`API base path: /api/v1`);
+// Centralized error handler
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error('[server]', err.message);
+  res.status(err.status || 500).json({
+    error: err.message || 'Internal server error',
+  });
 });
 
-// Export for potential testing
+const PORT = process.env.PORT || 5000;
+
+// Attempt DB connection; failure is non-fatal by design.
+connectDB();
+
+app.listen(PORT, () => {
+  console.log(`RefundGuard backend running on http://localhost:${PORT}`);
+  console.log('API base path: /api/v1');
+});
+
 module.exports = app;

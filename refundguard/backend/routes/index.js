@@ -1,3 +1,9 @@
-// RefundGuard - Express route definitions.
-// Placeholder route module. API routes are namespaced under /api/v1 in server.js.
-// Future routes (rings, metrics, etc.) will be added here.
+const express = require('express');
+
+const router = express.Router();
+
+const healthController = require('../controllers/healthController');
+
+router.get('/health', healthController.getHealth);
+
+module.exports = router;
