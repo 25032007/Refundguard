@@ -1,3 +1,3 @@
 export default function RingDetail() {
-  return <h1>Ring Detail - RefundGuard</h1>;
+  return <h1>Ring Details</h1>;
 }

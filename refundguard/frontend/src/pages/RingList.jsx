@@ -1,3 +1,3 @@
 export default function RingList() {
-  return <h1>Ring List - RefundGuard</h1>;
+  return <h1>Refund Rings</h1>;
 }

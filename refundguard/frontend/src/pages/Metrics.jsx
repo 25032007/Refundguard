@@ -1,3 +1,3 @@
 export default function Metrics() {
-  return <h1>Metrics - RefundGuard</h1>;
+  return <h1>Risk Metrics</h1>;
 }

@@ -1,3 +1,3 @@
 export default function Dashboard() {
-  return <h1>Dashboard - RefundGuard</h1>;
+  return <h1>RefundGuard Dashboard</h1>;
 }
