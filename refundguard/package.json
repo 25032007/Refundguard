@@ -1,0 +1,14 @@
+{
+  "name": "refundguard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Explainable AI Risk Manager for detecting coordinated refund-abuse rings",
+  "scripts": {
+    "setup": "npm run install-all",
+    "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
