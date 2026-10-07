@@ -22,6 +22,11 @@ module.exports = {
 
   refundRate: {
     max: 20,
+    // Activity guard: minimum completed transactions required before the
+    // refund-rate signal fires. Default = 1 (current behavior: fires whenever
+    // completedCount >= 1). Set to a higher value to require more activity
+    // evidence before computing the rate — see Phase 2E experiment.
+    minCompletedTransactions: 1,
     tiers: [
       { from: 0.4, level: 'critical', contribution: 20 },
       { from: 0.2, level: 'high', contribution: 15 },
