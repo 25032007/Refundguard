@@ -271,4 +271,38 @@ function analyzeAllCustomers() {
     });
 }
 
-module.exports = { analyzeCustomer, analyzeAllCustomers };
+function analyzeTemporal(asOfDate) {
+  const cache = buildAnalysisCache();
+  const graphLifecycle = require('../../graph/lifecycle');
+  
+  const asOf = new Date(asOfDate);
+  
+  // 4 weekly snapshots ending at asOf
+  const snapshotTimes = [];
+  for (let i = 3; i >= 0; i--) {
+    const d = new Date(asOf.getTime() - i * 7 * 24 * 60 * 60 * 1000);
+    snapshotTimes.push(d.toISOString());
+  }
+
+  const lifecycle = graphLifecycle.analyzeRingLifecycle(cache.dataset, snapshotTimes);
+  
+  // Overall dataset activity for the hero chart (e.g. 60 days before asOf)
+  const chartStart = new Date(asOf.getTime() - 60 * 24 * 60 * 60 * 1000).getTime();
+  const activityData = {};
+  cache.dataset.refunds.forEach(r => {
+    const ts = new Date(r.timestamp).getTime();
+    if (ts >= chartStart && ts <= asOf.getTime()) {
+      const day = new Date(ts).toISOString().split('T')[0];
+      activityData[day] = (activityData[day] || 0) + 1;
+    }
+  });
+
+  return {
+    asOf: asOf.toISOString(),
+    snapshots: snapshotTimes,
+    lifecycle,
+    activity: Object.entries(activityData).map(([date, count]) => ({ date, count })).sort((a,b) => a.date.localeCompare(b.date))
+  };
+}
+
+module.exports = { analyzeCustomer, analyzeAllCustomers, analyzeTemporal };

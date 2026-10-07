@@ -14,4 +14,10 @@ export async function getInvestigation(customerId) {
   return data;
 }
 
+export async function getTemporalData(asOf) {
+  const params = asOf ? { asOf } : {};
+  const { data } = await api.get('/investigations/temporal', { params });
+  return data;
+}
+
 export default api;

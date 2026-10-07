@@ -1485,3 +1485,319 @@ body {
     display: none;
   }
 }
+
+.temporal-view {
+  --bg: #F5F1E8;
+  --surface: #FBF9F4;
+  --ink: #171717;
+  --muted: #6B655E;
+  --line: #D9D1C3;
+  --brand: #421719;
+  --brand-deep: #2B0F11;
+  --on-brand: #FBF9F4;
+  --accent: #BFAE96;
+  --btn: #DDD2BE;
+  --risk-low: #4F6B57;
+  --risk-med: #8A6620;
+  --risk-high: #A8481A;
+  --risk-crit: #B3261E;
+  --font-display: 'Inter Tight', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --radius: 2px;
+  --border: 1px solid var(--line);
+
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  padding: var(--space-6);
+  box-sizing: border-box;
+}
+
+.temporal-view * {
+  box-sizing: border-box;
+}
+
+.temporal-hero {
+  background-color: var(--brand-deep);
+  color: var(--on-brand);
+  padding: var(--space-8);
+  margin-bottom: var(--space-6);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.temporal-hero h1 {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  margin: 0 0 var(--space-2) 0;
+  font-weight: 400;
+}
+
+.temporal-hero .hero-accent {
+  color: var(--accent);
+}
+
+.temporal-hero p {
+  font-size: 1.125rem;
+  margin: 0;
+  opacity: 0.9;
+  max-width: 600px;
+}
+
+.hero-activity-chart {
+  position: absolute;
+  right: var(--space-8);
+  bottom: 0;
+  height: 80px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  opacity: 0.3;
+}
+
+.hero-activity-bar {
+  width: 4px;
+  background-color: var(--accent);
+  border-radius: 1px 1px 0 0;
+}
+
+.temporal-section {
+  background: var(--surface);
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.temporal-section-header {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin: 0 0 var(--space-4) 0;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--line);
+  color: var(--brand);
+}
+
+.temporal-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-4);
+}
+
+.temporal-stat-card {
+  border: var(--border);
+  padding: var(--space-4);
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+
+.temporal-stat-value {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  margin-bottom: var(--space-1);
+}
+
+.temporal-stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.temporal-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.temporal-controls label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.temporal-date-input {
+  background: var(--surface);
+  border: var(--border);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  color: var(--ink);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+}
+
+.temporal-button {
+  background: var(--btn);
+  border: 1px solid var(--muted);
+  color: var(--ink);
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-body);
+  font-weight: 500;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.temporal-timeline-container {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: var(--space-4) 0;
+  margin: var(--space-4) 0;
+}
+
+.temporal-timeline-line {
+  position: absolute;
+  top: 36px;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background: var(--line);
+  z-index: 1;
+}
+
+.temporal-snapshot-node {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100px;
+}
+
+.temporal-snapshot-date {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.temporal-snapshot-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--brand);
+}
+
+.temporal-snapshot-marker.active {
+  background: var(--brand);
+}
+.temporal-snapshot-marker.dormant {
+  background: repeating-linear-gradient(45deg, var(--surface), var(--surface) 2px, var(--muted) 2px, var(--muted) 4px);
+  border-color: var(--muted);
+}
+.temporal-snapshot-marker.disbanded {
+  border: 2px dashed var(--muted);
+  background: var(--surface);
+}
+
+.temporal-snapshot-state {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.temporal-snapshot-meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.temporal-rings-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.temporal-ring-item {
+  border: var(--border);
+  padding: var(--space-4);
+  background: var(--surface);
+  border-radius: var(--radius);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.temporal-ring-item:hover {
+  background: var(--bg);
+}
+
+.temporal-ring-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.temporal-ring-id {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--brand);
+}
+
+.temporal-ring-state {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.temporal-ring-meta {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.temporal-ring-changes {
+  font-size: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.temporal-ring-changes span {
+  font-variant-numeric: tabular-nums;
+}
+
+.temporal-state-emerging {
+  color: var(--risk-high);
+  border-color: var(--risk-high);
+}
+.temporal-state-active {
+  color: var(--risk-crit);
+  border-color: var(--risk-crit);
+}
+
+.temporal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.temporal-table th, .temporal-table td {
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.temporal-table th {
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+.temporal-table td {
+  font-variant-numeric: tabular-nums;
+}
+.temporal-table .mono {
+  font-family: var(--font-mono);
+}

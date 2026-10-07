@@ -5,6 +5,12 @@
  */
 const investigationService = require('../services/investigationService');
 
+exports.getTemporalInvestigation = (req, res) => {
+  const asOf = req.query.asOf || '2011-12-09T00:00:00.000Z';
+  const data = investigationService.analyzeTemporal(asOf);
+  res.status(200).json(data);
+};
+
 /**
  * GET /api/v1/investigations — all customers as investigations, sorted by
  * overall risk (highest first).
