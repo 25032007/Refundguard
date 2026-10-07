@@ -6,10 +6,10 @@ module.exports = function noisyRing(context) {
     scenarioId: 'scene_noisy_01',
     family: 'noisy_ring',
     memberCount: 7,
-    generateMembers: (members, { faker, makeTxn, makeRefund }) => {
+    generateMembers: (members, { faker, makeTxn, makeRefund, refDate }) => {
       const sharedIp = faker.internet.ipv4();
       const sharedDevice = 'dev_' + faker.string.alphanumeric(8);
-      const baseDate = faker.date.recent({ days: 60 });
+      const baseDate = faker.date.recent({ days: 60, refDate });
       
       members.forEach((cid, i) => {
         const isCore = i < 3; // some core members are more suspicious

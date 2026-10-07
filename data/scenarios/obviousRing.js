@@ -6,12 +6,12 @@ module.exports = function obviousRing(context) {
     scenarioId: 'scene_obvious_01',
     family: 'obvious_ring',
     memberCount: 6,
-    generateMembers: (members, { faker, makeTxn, makeRefund }) => {
+    generateMembers: (members, { faker, makeTxn, makeRefund, refDate }) => {
       // 100% shared IP and Device
       const sharedIp = faker.internet.ipv4();
       const sharedDevice = 'dev_' + faker.string.alphanumeric(8);
       
-      const baseDate = faker.date.recent({ days: 30 });
+      const baseDate = faker.date.recent({ days: 30, refDate });
       
       members.forEach((cid, i) => {
         // 4 transactions, 4 refunds each

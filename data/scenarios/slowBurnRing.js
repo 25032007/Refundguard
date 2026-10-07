@@ -6,10 +6,10 @@ module.exports = function slowBurnRing(context) {
     scenarioId: 'scene_slowburn_01',
     family: 'slow_burn_ring',
     memberCount: 4,
-    generateMembers: (members, { faker, makeTxn, makeRefund }) => {
+    generateMembers: (members, { faker, makeTxn, makeRefund, refDate }) => {
       const sharedIp = faker.internet.ipv4();
       const sharedDevice = 'dev_' + faker.string.alphanumeric(8);
-      const startDate = faker.date.recent({ days: 150 }); // starts 5 months ago
+      const startDate = faker.date.recent({ days: 150, refDate }); // starts 5 months ago
       
       members.forEach((cid, i) => {
         // Phase 1: Legitimate looking history

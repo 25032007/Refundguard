@@ -6,8 +6,8 @@ module.exports = function burstRefund(context) {
     scenarioId: 'scene_burst_01',
     family: 'burst_refund',
     memberCount: 2,
-    generateMembers: (members, { faker, makeTxn, makeRefund }) => {
-      const burstDate = faker.date.recent({ days: 10 });
+    generateMembers: (members, { faker, makeTxn, makeRefund, refDate }) => {
+      const burstDate = faker.date.recent({ days: 10, refDate });
       
       members.forEach((cid, i) => {
         // Accumulate transactions over a short window

@@ -57,7 +57,7 @@ function injectScenario({ data, faker, calibration, scenarioId, family, memberCo
       email: faker.internet.email().toLowerCase(),
       phone: faker.phone.number(),
       status: 'active',
-      createdAt: faker.date.past({ years: 1 }).toISOString()
+      createdAt: faker.date.past({ years: 1, refDate: new Date('2011-12-09T00:00:00Z') }).toISOString()
     };
     
     data.customers.push(cust);
@@ -82,7 +82,7 @@ function injectScenario({ data, faker, calibration, scenarioId, family, memberCo
     faker, 
     calibration,
     makeTxn: (cid, opts) => {
-      const ts = opts.timestamp || faker.date.recent({ days: 100 });
+      const ts = opts.timestamp || faker.date.recent({ days: 100, refDate: new Date('2011-12-09T00:00:00Z') });
       const tx = {
         transactionId: makeId('txn', data.transactions.length + 100000), // ensure no collision
         customerId: cid,

@@ -6,9 +6,9 @@ module.exports = function rotatingIpRing(context) {
     scenarioId: 'scene_rotating_01',
     family: 'rotating_ip_ring',
     memberCount: 5,
-    generateMembers: (members, { faker, makeTxn, makeRefund }) => {
+    generateMembers: (members, { faker, makeTxn, makeRefund, refDate }) => {
       const sharedDevice = 'dev_' + faker.string.alphanumeric(8);
-      const baseDate = faker.date.recent({ days: 45 });
+      const baseDate = faker.date.recent({ days: 45, refDate });
       
       members.forEach((cid, i) => {
         // IP changes over time (rotation)

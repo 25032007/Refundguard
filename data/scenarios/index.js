@@ -19,7 +19,8 @@ function injectScenarios(data, seed) {
   faker.seed(seed + 9999);
 
   const calibration = getCalibration(data);
-  const context = { data, faker, calibration, seed };
+  const refDate = new Date('2011-12-09T00:00:00Z');
+  const context = { data, faker, calibration, seed, refDate };
 
   const bgCount = data.customers.length;
 
