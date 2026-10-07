@@ -119,7 +119,7 @@ function calculateBreakdowns(predictions) {
     'obvious_ring',
     'noisy_ring',
     'rotating_ip_ring',
-    'slow_burn',
+    'slow_burn_ring',
     'burst_refund'
   ];
 
@@ -184,7 +184,9 @@ function aggregateMetrics(seedResults) {
     const values = extract(key);
     return {
       mean: mean(values),
-      std: std(values)
+      std: std(values),
+      min: Math.min(...values),
+      max: Math.max(...values)
     };
   };
 

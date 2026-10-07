@@ -26,13 +26,13 @@ function loadJson(filename) {
 }
 
 async function generateBenchmark(seed) {
-  execSync(`npm run data:uci -- --seed ${seed}`, {
+  execSync(`node data/adapters/onlineRetail.js --seed ${seed}`, {
     cwd: path.join(__dirname, '..'),
     stdio: 'ignore'
   });
 }
 
-async function evaluateSeed(seed, generate = true) {
+async function evaluateSeed(seed, generate = false) {
   if (generate) {
     await generateBenchmark(seed);
   }
@@ -141,7 +141,7 @@ async function main() {
       console.error(`Invalid seed provided.`);
       process.exit(1);
     }
-    const result = await evaluateSeed(seed);
+    const result = await evaluateSeed(seed, true);
     results.push(result);
   }
 
@@ -151,9 +151,28 @@ async function main() {
   } else {
     const { aggregateMetrics } = require('./metrics');
     const aggregate = aggregateMetrics(results);
+    
+    // Stability summary
+    const f1s = results.map(r => ({ seed: r.seed, f1: r.metrics.f1 }));
+    f1s.sort((a, b) => a.f1 - b.f1);
+    const worstSeed = f1s[0].seed;
+    const bestSeed = f1s[f1s.length - 1].seed;
+    const f1Range = f1s[f1s.length - 1].f1 - f1s[0].f1;
+    const materiallyDifferent = f1Range > 0.05; // deterministic heuristic
+    
+    const stabilitySummary = {
+      bestSeed,
+      worstSeed,
+      metricRanges: {
+        f1: f1Range
+      },
+      materiallyDifferentResult: materiallyDifferent
+    };
+
     const finalResult = {
       perSeed: results,
-      aggregate
+      aggregate,
+      stabilitySummary
     };
     console.log(JSON.stringify(finalResult, null, 2));
   }

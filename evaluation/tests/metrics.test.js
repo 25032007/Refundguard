@@ -111,6 +111,10 @@ test('Evaluation Metrics', async (t) => {
     // mean = 0.85, var = ((0.8-0.85)^2 + (0.9-0.85)^2)/1 = 2 * 0.0025 = 0.005
     // std = sqrt(0.005) ≈ 0.0707
     assert.ok(Math.abs(agg.precision.std - Math.sqrt(0.005)) < 0.0001);
+    
+    // min and max
+    assert.strictEqual(agg.precision.min, 0.8);
+    assert.strictEqual(agg.precision.max, 0.9);
 
     // Std with length 1 should be 0
     const agg1 = aggregateMetrics([seedResults[0]]);
