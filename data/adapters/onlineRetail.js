@@ -422,8 +422,33 @@ function processData(rawLines, selectedCustomerIds, targetCount) {
 
   finalTransactions.forEach(tx => delete tx._itemsRaw);
   
+  const groundTruth = {
+    seed: process.env.CURRENT_SEED || 1, // handled in main
+    customers: {},
+    scenarios: []
+  };
+  
+  for (const cid of selectedCustomerIds) {
+    let baseCategory = customerGroupType[cid] || 'LEGITIMATE_NORMAL';
+    let categories = [baseCategory];
+    
+    // Check if high refund rate
+    const txCount = customerTxList[cid] ? customerTxList[cid].length : 0;
+    const refCount = refunds.filter(r => r.customerId === cid).length;
+    if (txCount > 0 && refCount >= 3 && (refCount / txCount) > 0.3) {
+      categories.push('LEGITIMATE_HIGH_REFUND_RATE');
+    }
+    
+    groundTruth.customers[cid] = {
+      label: 'LEGITIMATE',
+      categories,
+      scenarioIds: [],
+      memberJoinDate: null
+    };
+  }
+
   return {
-    customers, transactions: finalTransactions, refunds, complaints, devices,
+    customers, transactions: finalTransactions, refunds, complaints, devices, groundTruth,
     stats: {
       fullyLinked, anyLinked, unlinked, ambiguous, totalRefunds: refunds.length, totalRefundAmount
     }
@@ -461,8 +486,23 @@ async function main() {
   fs.writeFileSync(path.join(OUTPUT_DIR, 'refunds.json'), JSON.stringify(data.refunds, null, 2));
   fs.writeFileSync(path.join(OUTPUT_DIR, 'complaints.json'), JSON.stringify(data.complaints, null, 2));
   fs.writeFileSync(path.join(OUTPUT_DIR, 'devices.json'), JSON.stringify(data.devices, null, 2));
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'ground-truth.json'), JSON.stringify(data.groundTruth, null, 2));
   
-  const metadata = {
+
+    const groupCounts = {
+      individual: 0, household: 0, office: 0, hostel: 0, wholesaler: 0, legitimateHighRefund: 0
+    };
+    for (const c of Object.values(data.groundTruth.customers)) {
+      if (c.categories.includes('LEGITIMATE_NORMAL')) groupCounts.individual++;
+      if (c.categories.includes('LEGITIMATE_HOUSEHOLD')) groupCounts.household++;
+      if (c.categories.includes('LEGITIMATE_OFFICE')) groupCounts.office++;
+      if (c.categories.includes('LEGITIMATE_HOSTEL')) groupCounts.hostel++;
+      if (c.categories.includes('LEGITIMATE_WHOLESALER')) groupCounts.wholesaler++;
+      if (c.categories.includes('LEGITIMATE_HIGH_REFUND_RATE')) groupCounts.legitimateHighRefund++;
+    }
+    data.groundTruth.seed = SEED;
+
+    const metadata = {
     source: "UCI Online Retail II",
     seed: SEED,
     currency: "GBP",
@@ -489,6 +529,26 @@ async function main() {
     linkingMethod: "Deterministic heuristic (same customer, prior, same StockCode, sufficient original quantity)",
     excludedCodes: Array.from(EXCLUDED_CODES),
     negativeNonCRows: "Ignored during parsing",
+    groups: (function() {
+      const counts = { individual: 0, household: 0, office: 0, hostel: 0, wholesaler: 0, legitimateHighRefund: 0 };
+      for (const c of Object.values(data.groundTruth.customers)) {
+        if (c.categories.includes('LEGITIMATE_NORMAL')) counts.individual++;
+        if (c.categories.includes('LEGITIMATE_HOUSEHOLD')) counts.household++;
+        if (c.categories.includes('LEGITIMATE_OFFICE')) counts.office++;
+        if (c.categories.includes('LEGITIMATE_HOSTEL')) counts.hostel++;
+        if (c.categories.includes('LEGITIMATE_WHOLESALER')) counts.wholesaler++;
+        if (c.categories.includes('LEGITIMATE_HIGH_REFUND_RATE')) counts.legitimateHighRefund++;
+      }
+      return {
+        legitimateIndividual: counts.individual,
+        legitimateHousehold: counts.household,
+        legitimateOffice: counts.office,
+        legitimateHostel: counts.hostel,
+        legitimateWholesaler: counts.wholesaler,
+        legitimateHighRefundRate: counts.legitimateHighRefund,
+        totalSharedResource: counts.household + counts.office + counts.hostel + counts.wholesaler
+      };
+    })()
   };
   fs.writeFileSync(path.join(OUTPUT_DIR, 'metadata.json'), JSON.stringify(metadata, null, 2));
   
