@@ -274,13 +274,17 @@ function analyzeAllCustomers() {
 function analyzeTemporal(asOfDate) {
   const cache = buildAnalysisCache();
   const graphLifecycle = require('../../graph/lifecycle');
+  const graphConfig = require('../../graph/config');
   
   const asOf = new Date(asOfDate);
   
-  // 4 weekly snapshots ending at asOf
+  const count = graphConfig.lifecycle.defaultSnapshotCount;
+  const intervalDays = graphConfig.lifecycle.defaultSnapshotIntervalDays;
+  const intervalMs = intervalDays * 24 * 60 * 60 * 1000;
+  
   const snapshotTimes = [];
-  for (let i = 3; i >= 0; i--) {
-    const d = new Date(asOf.getTime() - i * 7 * 24 * 60 * 60 * 1000);
+  for (let i = count - 1; i >= 0; i--) {
+    const d = new Date(asOf.getTime() - i * intervalMs);
     snapshotTimes.push(d.toISOString());
   }
 

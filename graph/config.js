@@ -110,5 +110,11 @@ module.exports = {
     disbandedSnapshots: 2,
     emergingGrowthThreshold: 1,
     overlapThreshold: 0.4,
+
+    // Phase 3C Temporal Investigation Window
+    // By default, temporal analysis generates 4 weekly snapshots ending at the asOf date
+    // to provide a stable, deterministic investigation window without arbitrary UI rules.
+    defaultSnapshotIntervalDays: 7,
+    defaultSnapshotCount: 4,
   },
 };

@@ -96,7 +96,7 @@ export default function RingList() {
             </thead>
             <tbody>
               {ringHist.map(h => (
-                <tr key={h.firstSeenAt + h.memberCount + Math.random()}>
+                <tr key={`${h.ringId}-${h.firstSeenAt}-${h.memberCount}`}>
                   <td>{formatDate(h.firstSeenAt)}</td>
                   <td>{h.memberCount}</td>
                   <td>{h.score || 0}</td>
