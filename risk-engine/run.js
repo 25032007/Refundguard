@@ -16,10 +16,18 @@ const fs = require('fs');
 const path = require('path');
 const engine = require('./index');
 
-const RAW_DIR = path.join(__dirname, '..', 'data', 'raw');
+let dataDir = path.join(__dirname, '..', 'data', 'raw');
+
+const args = process.argv.slice(2);
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === '--data-dir' && args[i + 1]) {
+    dataDir = path.resolve(args[i + 1]);
+    i++;
+  }
+}
 
 function load(name) {
-  const file = path.join(RAW_DIR, name);
+  const file = path.join(dataDir, name);
   if (!fs.existsSync(file)) {
     console.error(`[run] Missing file: ${name}`);
     process.exit(1);
@@ -28,7 +36,7 @@ function load(name) {
 }
 
 function loadGroundTruth() {
-  const file = path.join(RAW_DIR, 'clusters.json');
+  const file = path.join(dataDir, 'clusters.json');
   if (!fs.existsSync(file)) return null;
   return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
@@ -76,7 +84,6 @@ function detailLine(signal) {
 function main() {
   const dataset = {
     customers: load('customers.json'),
-    orders: load('orders.json'),
     devices: load('devices.json'),
     transactions: load('transactions.json'),
     refunds: load('refunds.json'),
