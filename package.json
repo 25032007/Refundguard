@@ -19,7 +19,9 @@
     "nlp:test": "node --test \"nlp/tests/*.test.js\"",
     "graph:analyze": "node graph/run.js",
     "graph:test": "node --test \"graph/tests/*.test.js\"",
-    "test": "npm run risk:test && npm run nlp:test && npm run graph:test && npm run data:test"
+    "eval:run": "node evaluation/run.js",
+    "eval:test": "node --test \"evaluation/tests/*.test.js\"",
+    "test": "npm run risk:test && npm run nlp:test && npm run graph:test && npm run data:test && npm run eval:test"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
