@@ -158,9 +158,52 @@ RefundGuard/
 - **`risk-engine/`** — explainable, deterministic per-customer risk scoring (six signals, 0–100).
 - **`nlp/`** — deterministic complaint NLP: normalization, similarity, reused templates, evidence extraction.
 - **`graph/`** — graph-based refund ring detection: graph construction, connected components, ring detection, evidence, and ring scoring.
-- **`data/`** — deterministic synthetic dataset generator and cross-reference validator (`generate.js`, `validate.js`) plus generated `raw/` and `processed/` data.
+- **`data/`** — Phase 1B dataset generator (`data:generate`), deterministic adapters, tests, and metadata.
 - **`docs/`** — additional documentation.
 - **`ARCHITECTURE.md`** — system design and engine internals.
+
+---
+
+## Dataset (Phase 1B)
+
+RefundGuard includes a deterministic legitimate background dataset derived from **UCI Online Retail II**.
+
+### Source
+* **Source:** UCI Online Retail II ([Link](https://archive.ics.uci.edu/dataset/502/online+retail+ii))
+* **Attribution:** The dataset is used as a realistic retail background population.
+* **Limitations:** The dataset does **NOT** contain refund-fraud ground truth. All derived refunds are legitimate cancellations; they are not verified fraud labels.
+
+### Mapping & Filtering
+* **Mapping:** UCI customers map to RefundGuard customers. UCI normal invoices map to transactions. UCI cancellation invoices (prefixed with `C`) map to refund events.
+* **Filtering:** 
+  * Excluded codes: `POST, M, D, S, BANK CHARGES, ADJUST, AMAZONFEE, PADS, CRUK`. 
+  * Negative quantity rows lacking a `C` prefix (3,457 rows) are ignored (assumed to be manual write-offs or bad data).
+  * Note: This interpretation is based on dataset semantics, not verified ground truth. The exclusion list may not be exhaustive.
+
+### Sampling
+* **Target:** 2,000 customers.
+* **Method:** Deterministic, seeded stratified sampling by customer activity level.
+* **Seed:** Configurable via CLI (e.g., `npm run data:generate -- --seed 1`). Different seeds produce different deterministically sampled background populations.
+
+### Refund Derivation & Linking
+* **Derivation:** Refunds are strictly derived from `C` cancellation invoices. 
+* **Linking:** Deterministic source-linking heuristic matches refunds to original transactions (requires same customer, prior timestamp, same StockCode, sufficient remaining original quantity).
+* **Ambiguity:** ~40% of refund events may contain multiple valid candidate originals, so transaction linkage is useful but inherently ambiguous. Unlinked refunds retain `transactionId: null`.
+
+### Outliers
+* **Extreme Outlier:** One calibration event involved a £168,469.60 refund (15.4% of total dataset refunds). 
+* **Policy:** The customer containing this outlier (ID `16446`) is excluded from the 2,000-customer sampling pool to prevent one extreme event from dominating benchmark conclusions. Future reporting should support both with-outlier and without-outlier metrics.
+
+### Synthetic Enrichment
+* **Account Age:** Since true account creation dates are unknown, early-window customers receive deterministic pre-observation dates (`accountAgeSource = synthetic_left_censoring`).
+* **Synthetic Fields:** IP address, device ID, payment method, refund reason, and complaint text are deterministically synthesized based on the seed to provide realistic signals without injecting fraud.
+
+### Limitations
+* UCI has no refund-fraud ground truth.
+* Cancellation-derived refunds are not verified refund labels.
+* Original transaction linking is heuristic.
+* Account age is partially synthetic.
+* IP/device/payment/reason/complaint fields are synthetic.
 
 ---
 
