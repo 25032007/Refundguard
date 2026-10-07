@@ -29,5 +29,6 @@ Thumbs.db
 # Data - generated artifacts (reproducible via npm run data:generate)
 data/raw/*
 data/processed/*
+data/generated/uci/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
