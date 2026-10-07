@@ -144,16 +144,48 @@ function processData(rawLines, selectedCustomerIds, targetCount) {
   
   const customerIPs = {};
   const customerDevices = {};
+  const customerGroupType = {};
   
+  // Configurable Synthetic Benchmark Proportions
+  const LEGITIMATE_DISTRIBUTION = {
+    INDIVIDUAL: 0.82,  // 82%
+    HOUSEHOLD: 0.08,   // 8%
+    OFFICE: 0.05,      // 5%
+    HOSTEL: 0.02,      // 2%
+    WHOLESALER: 0.03   // 3%
+  };
+
+  const targetCounts = {
+    HOUSEHOLD: Math.floor(cIdList.length * LEGITIMATE_DISTRIBUTION.HOUSEHOLD),
+    OFFICE: Math.floor(cIdList.length * LEGITIMATE_DISTRIBUTION.OFFICE),
+    HOSTEL: Math.floor(cIdList.length * LEGITIMATE_DISTRIBUTION.HOSTEL),
+    WHOLESALER: Math.floor(cIdList.length * LEGITIMATE_DISTRIBUTION.WHOLESALER)
+  };
+  
+  let currentCounts = { HOUSEHOLD: 0, OFFICE: 0, HOSTEL: 0, WHOLESALER: 0 };
+
   let cIdx = 0;
   while (cIdx < cIdList.length) {
-    const roll = faker.number.int({ min: 1, max: 100 });
     let groupSize = 1;
-    let groupType = 'individual';
+    let groupType = 'LEGITIMATE_NORMAL';
     
-    if (roll <= 5) { groupSize = faker.number.int({ min: 2, max: 5 }); groupType = 'household'; }
-    else if (roll <= 8) { groupSize = faker.number.int({ min: 5, max: 15 }); groupType = 'office'; }
-    else if (roll <= 10) { groupSize = faker.number.int({ min: 10, max: 30 }); groupType = 'hostel'; }
+    if (currentCounts.HOUSEHOLD < targetCounts.HOUSEHOLD) {
+      groupSize = faker.number.int({ min: 2, max: 5 });
+      groupType = 'LEGITIMATE_HOUSEHOLD';
+      currentCounts.HOUSEHOLD += groupSize;
+    } else if (currentCounts.OFFICE < targetCounts.OFFICE) {
+      groupSize = faker.number.int({ min: 5, max: 15 });
+      groupType = 'LEGITIMATE_OFFICE';
+      currentCounts.OFFICE += groupSize;
+    } else if (currentCounts.HOSTEL < targetCounts.HOSTEL) {
+      groupSize = faker.number.int({ min: 10, max: 30 });
+      groupType = 'LEGITIMATE_HOSTEL';
+      currentCounts.HOSTEL += groupSize;
+    } else if (currentCounts.WHOLESALER < targetCounts.WHOLESALER) {
+      groupSize = faker.number.int({ min: 3, max: 8 });
+      groupType = 'LEGITIMATE_WHOLESALER';
+      currentCounts.WHOLESALER += groupSize;
+    }
     
     const sharedIp = faker.internet.ipv4();
     const sharedDevice = makeId('dev', faker.string.alphanumeric(8));
@@ -161,11 +193,12 @@ function processData(rawLines, selectedCustomerIds, targetCount) {
     for (let i = 0; i < groupSize && cIdx < cIdList.length; i++) {
       const cid = cIdList[cIdx];
       customerIPs[cid] = sharedIp;
+      customerGroupType[cid] = groupType;
       
       const personalDevice = makeId('dev', faker.string.alphanumeric(8));
       customerDevices[cid] = [personalDevice];
       
-      if (groupType === 'household' && faker.datatype.boolean()) {
+      if (groupType === 'LEGITIMATE_HOUSEHOLD' && faker.datatype.boolean()) {
         customerDevices[cid].push(sharedDevice);
       }
       
@@ -177,7 +210,7 @@ function processData(rawLines, selectedCustomerIds, targetCount) {
         browser: faker.helpers.arrayElement(['Chrome', 'Safari', 'Firefox', 'Edge'])
       });
       
-      if (groupType === 'household' && i === 0) {
+      if (groupType === 'LEGITIMATE_HOUSEHOLD' && i === 0) {
          devices.push({
           deviceId: sharedDevice,
           customerId: cid,
