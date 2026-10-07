@@ -279,13 +279,69 @@ function processData(rawLines, selectedCustomerIds, targetCount) {
   let ambiguous = 0;
   let totalRefundAmount = 0;
 
-  const REASONS = ['damaged', 'wrong item', 'not as expected', 'quantity issue', 'delivery issue'];
-  const NORMAL_COMPLAINT_TEMPLATES = [
-    'Received my order but the delivery was several days late.',
-    'The product does not perform as described.',
-    'The package arrived with the box crushed.',
-    'Order never reached my address.'
-  ];
+  const COMPLAINT_TEMPLATES = {
+    'damaged': [
+      'The item arrived damaged and I would like a refund.',
+      'The product was damaged when it arrived.',
+      'I received the item with visible damage.',
+      'The box was crushed and the item inside is broken.',
+      'This arrived in pieces. Please refund.',
+      'Item has scratches and dents all over.',
+      'Arrived shattered, completely unusable.',
+      'The packaging was fine but the product is damaged.',
+      'Broken upon arrival. I need my money back.',
+      'It looks like it was dropped during shipping, damaged.'
+    ],
+    'wrong item': [
+      'I received the wrong item in my order.',
+      'This is not what I ordered.',
+      'You sent me the incorrect product.',
+      'Wrong color and wrong size delivered.',
+      'I ordered something else, please refund this wrong item.',
+      'The item in the box does not match the invoice.',
+      'Sent the wrong model entirely.',
+      'Incorrect item shipped to me.',
+      'I got someone else\'s order instead of mine.',
+      'This isn\'t what was pictured on the site.'
+    ],
+    'not as expected': [
+      'The product does not perform as described.',
+      'Quality is much lower than expected.',
+      'The material feels cheap, not as expected.',
+      'It doesn\'t look like the photos online.',
+      'Very disappointed with the item quality.',
+      'Does not fit the description provided.',
+      'Not what I was hoping for, requesting a refund.',
+      'The features described are missing.',
+      'Poorly made and not up to standard.',
+      'I expected better based on the reviews.'
+    ],
+    'quantity issue': [
+      'I ordered multiple but only received one.',
+      'Missing parts from the package.',
+      'The quantity delivered is incorrect.',
+      'Short shipped. I did not get everything I paid for.',
+      'Half the order is missing from the box.',
+      'Only partial delivery received.',
+      'Box says 10 but there are only 8 inside.',
+      'Did not receive the full quantity requested.',
+      'Missing items in the shipment.',
+      'Incomplete order arrived, missing pieces.'
+    ],
+    'delivery issue': [
+      'Received my order but the delivery was several days late.',
+      'Order never reached my address.',
+      'The delivery was delayed past the promised date.',
+      'Tracking said delivered but it arrived a week later.',
+      'Terrible shipping experience, very late.',
+      'I had to go pick it up myself from the depot.',
+      'The courier left it in the rain.',
+      'Package was lost for weeks before arriving.',
+      'Arrived too late for the event I needed it for.',
+      'Delivery took much longer than estimated.'
+    ]
+  };
+  const REASONS = Object.keys(COMPLAINT_TEMPLATES);
 
   for (const invoice of Object.keys(customerRefundGroups)) {
     const group = customerRefundGroups[invoice];
@@ -350,12 +406,13 @@ function processData(rawLines, selectedCustomerIds, targetCount) {
     });
     
     if (faker.number.int({ min: 1, max: 100 }) <= 40) {
-       complaints.push({
+        const reason = refunds[refunds.length - 1].reason;
+        complaints.push({
           complaintId: makeId('comp', complaints.length),
           customerId: meta.customerId,
           orderId: isAnyLinked ? bestTxnId.replace('txn_', 'ord_') : null,
           refundId,
-          text: faker.helpers.arrayElement(NORMAL_COMPLAINT_TEMPLATES),
+          text: faker.helpers.arrayElement(COMPLAINT_TEMPLATES[reason]),
           category: 'refund',
           status: 'resolved',
           createdAt: ts.toISOString(),
