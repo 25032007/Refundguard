@@ -28,7 +28,6 @@ function load(name) {
 
 function main() {
   const customers = load('customers.json');
-  const orders = load('orders.json');
   const devices = load('devices.json');
   const transactions = load('transactions.json');
   const refunds = load('refunds.json');
@@ -149,7 +148,6 @@ function main() {
   console.log('RefundGuard data validation');
   console.log('==============================================');
   console.log(`Customers: ${customers.length}`);
-  console.log(`Orders: ${orders.length}`);
   console.log(`Devices: ${devices.length}`);
   console.log(`Transactions: ${transactions.length}`);
   console.log(`Refunds: ${refunds.length}`);
