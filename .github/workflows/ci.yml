@@ -1,0 +1,38 @@
+name: RefundGuard CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm ci --prefix backend
+          npm ci --prefix frontend
+
+      - name: Run setup script (if any post-install logic exists)
+        run: npm run setup
+
+      - name: Generate deterministic data
+        run: npm run data:generate
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build frontend
+        run: npm run build --prefix frontend

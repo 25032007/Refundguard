@@ -1,56 +1,26 @@
 # RefundGuard Architecture
 
-This document describes the high-level architecture of RefundGuard. It focuses on the *layers* and *system boundaries* and intentionally does **not** invent implementation details. The exact algorithms, schemas, and data pipelines will be defined in later phases.
+This document distinguishes **CURRENT IMPLEMENTATION** from **PLANNED / FUTURE V1 work**.
+
+The current foundation is a deterministic, offline, rule-based system with no ML, LLM, embeddings, or external data dependencies. All analysis runs in-process over included synthetic datasets.
 
 ---
 
-## Overview
+## CURRENT IMPLEMENTATION (Phase 0)
 
-RefundGuard is a web application that helps risk analysts investigate **coordinated refund-abuse rings**. It is composed of three primary runtime components plus a database:
+RefundGuard is a deterministic, explainable risk-analysis platform composed of three independent analysis engines composed by an Investigation Service, all running over included synthetic data.
 
-![Component overview]
-
-```
-┌────────────────────────────┐
-│        Frontend            │   React + Vite (investigation dashboard)
-└────────────┬───────────────┘
-             │  HTTP / JSON
-┌────────────▼───────────────┐
-│        Backend             │   Node.js + Express (REST API, /api/v1)
-│   ┌────────────────────┐   │
-│   │ Investigation      │   │   Orchestration layer (merges engines)
-│   │ Service            │   │
-│   └────────┬───────────┘   │
-└────────────┬───────────────┘
-             │  in-process modules
-┌────────────▼───────────────┐
-│      Risk Engine           │   Detection & scoring logic (rule-based)
-│   ┌────────────────────┐   │
-│   │  Complaint NLP     │   │   Lexical similarity & evidence extraction
-│   └────────────────────┘   │
-│   ┌────────────────────┐   │
-│   │  Graph / Ring      │   │   Relationship graph, components, ring scoring
-│   └────────────────────┘   │
-└────────────┬───────────────┘
-             │
-┌────────────▼───────────────┐
-│        Database            │   MongoDB (Mongoose) - raw & processed data
-└────────────────────────────┘
-```
-
----
-
-## Frontend
+### Frontend
 
 - **Framework:** React, built with Vite.
 - **Routing:** React Router (client-side routes for Dashboard, Ring List, Ring Detail, and Metrics).
 - **Data access:** HTTP client (`axios`) to call the backend REST API.
-- **Visualization:** `react-force-graph-2d` is a dependency intended for graph/ring visualization in later phases.
+- **Visualization:** `react-force-graph-2d` is a runtime dependency — interactive ring graph is functional in the dashboard.
 - **Role:** The investigation dashboard for risk analysts. It surfaces rings, their members, evidence, and supporting metrics.
+- **Current routes:** `/dashboard`, `/rings`, `/rings/:id`, `/metrics`.
+- **Analyst decision workflow:** Local UI state (UNREVIEWED / MONITOR / ESCALATED / CLEARED), resets on refresh; not persisted.
 
----
-
-## Backend
+### Backend
 
 - **Runtime:** Node.js + Express.
 - **API versioning:** Routes are namespaced under `/api/v1`.
@@ -60,156 +30,58 @@ RefundGuard is a web application that helps risk analysts investigate **coordina
   - `routes/` – URL-to-handler mapping.
   - `controllers/` – Request handling and response shaping.
   - `services/` – Business logic and orchestration. The **Investigation Service** (`services/investigationService.js`) orchestrates the three engines.
-  - `models/` – Mongoose schemas (to be added later).
+  - `models/` – Mongoose schemas for `Customer`, `Device`, `Transaction`, `Refund`, `Complaint`, and `RefundRing`.
 - **Purpose:** Expose a stable, versioned API that the frontend consumes and that wraps the investigation service and the analysis engines.
 
----
-
-## Risk Engine
+### Risk Engine
 
 - **Location:** `risk-engine/` directory.
-- **Status:** Implemented (signal scoring engine); ring detection lives in the separate `graph/` engine.
+- **Status:** Implemented (deterministic rule-based signal scoring engine).
 - **Responsibilities:**
-  - Compose **behavioral signals** (refund frequency/rate/velocity, repeated reasons, shared IP/device) into explainable per-customer risk scores.
-  - Remain independent: risk-engine, complaint NLP, and the graph/ring engine are three parallel analyses composed later by an integration layer.
-  - Produce **risk scores** and **explanations** for analysts.
-- **Relation to backend:** The backend is expected to invoke the analysis engines to obtain detection/scoring results; the exact interface (in-process module vs. wrapped service) is to be decided.
-
----
-
-## Database
-
-- **Engine:** MongoDB.
-- **ODM:** Mongoose for schema definition and querying.
-- **Storage areas:**
-  - Raw input data (ingested into `data/raw`).
-  - Processed / normalized data (written to `data/processed`).
-- **Status:** Mongoose models are implemented for `Customer`, `Device`, `Transaction`, `Refund`, `Complaint`, and `RefundRing`. The `RefundRing` model exists as the future investigation container (risk fields present, not yet computed).
-
-### Data Layer
-
-The data foundation models the core entities the risk engine will analyze. Relationships use string IDs/references rather than embedded duplicate objects, so the future graph layer can link across entities by shared identifiers.
+  - Compose **behavioral signals** (refund frequency, refund rate, refund velocity, repeated refund reason, shared IP, shared device) into explainable per-customer risk scores.
+  - **Remain independent**: parallel to Complaint NLP and Graph/ring engine; results composed later by the Investigation Service.
+  - **Produce risk scores and explanations** for analysts.
+- **Output contract** — every signal:
 
 ```text
-Customers
-   │
-   ├── Transactions ──┐
-   │                  ├── Refunds
-   │                  │
-   ├── Devices        │
-   ├── Complaints ────┘  (refundId → Refund; orderId → Order)
-   │
-   └── Order metadata (orders.json)
+{ type, severity: low|medium|high|critical, contribution: Number,
+  description: "...", evidence: { ... } }
 ```
 
-- **Customer** — identity anchor (`customerId`, name, email, phone, status). Can own many transactions, refunds, devices, and complaints.
-- **Device** — device profile (`deviceId`, primary owning `customerId`, type/os/browser, seen timestamps). A device may be referenced from transactions across customers, enabling shared-device signals.
-- **Transaction** — payment event (`transactionId`, `customerId`, `orderId`, amount, currency, payment method, `deviceId`, `ipAddress`, status). IP addresses and device IDs are deliberately repeated across records so shared-`ipAddress`/`deviceId` signals are discoverable.
-- **Refund** — refund case (`refundId`, `transactionId`, `customerId`, `orderId`, amount, reason, status, request/process times).
-- **Complaint** — free-text complaint (`complaintId`, `customerId`, `orderId`, optional `refundId`, text, category, status). Text serves the future NLP similarity layer.
-- **RefundRing** — future investigation container (`ringId`, member ID arrays, `riskScore`, `riskLevel`, `status`). Fields exist but are **not** populated by the data foundation.
+- **Signals evaluated** (max contributions):
 
-Synthetic development data (`data/generate.js`) produces ~100 normal customers plus 6 coordinated clusters that share IPs, devices, similar complaint wording, and refund behavior — giving the analysis layers realistic structure to discover. No risk values are assigned.
+| Signal                | What it detects                                    | Max |
+| --------------------- | -------------------------------------------------- | --- |
+| `refund_frequency`    | High count of refunds in the observed period       | 20  |
+| `refund_rate`         | Refunds / completed transactions                   | 20  |
+| `refund_velocity`     | Refunds requested inside a recent rolling window   | 15  |
+| `repeated_refund_reason` | One reason dominating a customer's refunds      | 10  |
+| `shared_ip`           | IP shared with other customer accounts             | 20  |
+| `shared_device`       | Device reused across accounts (from transactions)  | 15  |
 
----
-
-## Data Flow
-
-1. **Ingest:** Raw refund/transaction/complaint data is collected into `data/raw`.
-2. **Process:** Data is normalized and written to `data/processed`.
-3. **Store:** Processed data is persisted to MongoDB via Mongoose models.
-4. **Analyze:** The risk signal engine evaluates individual customer refund behavior (frequency, rate, velocity, repeated reasons, shared IP/device) into explainable scores. In parallel, the complaint NLP layer analyzes free-text complaints into similarity pairs, repeated wording templates, and per-customer evidence, while the graph engine builds the entity graph, projects customer relationships, and detects/scores refund rings.
-5. **Orchestrate:** The Investigation Service runs the three engines against the same dataset and merges their results into a single per-customer investigation (overall risk, recommendation, explanation).
-6. **Serve:** The backend exposes the merged investigations via the versioned REST API (`/api/v1/investigations`, `/api/v1/investigations/:customerId`).
-7. **Investigate:** The frontend dashboard fetches and visualizes rings, members, evidence, and metrics.
-
-```text
-Request
-   ↓
-Investigation Service      (orchestration layer)
-   ↓
-Risk Engine ── Complaint NLP ── Graph Engine     (three independent engines)
-   ↓
-Merged Investigation       (overallRisk, recommendation, explanation)
-   ↓
-API Response              (GET /api/v1/investigations[/:customerId])
-```
-
----
-
-## API Versioning
-
-All endpoints are prefixed with `/api/v1` to allow future breaking changes without disrupting clients.
-
-| Method | Endpoint                              | Purpose                                    |
-| ------ | ------------------------------------- | ------------------------------------------ |
-| GET    | `/api/v1/health`                      | Service health check                       |
-| GET    | `/api/v1/investigations`              | All customer investigations, by overall risk |
-| GET    | `/api/v1/investigations/:customerId`  | Merged investigation for one customer      |
-
----
-
-## Risk Signal Engine
-
-The first intelligence layer is a deterministic, rule-based risk signal engine.
-
-**Principles:**
-
-- **Explainable, never a black box.** Every risk score ships with its reasons: each signal carries a type, severity, numerical contribution, human-readable description, and supporting evidence, so an analyst can always understand *why* a customer was flagged.
-- **Deterministic.** No random values, no ML, no LLM calls. Given the same input records, the engine always produces the same scores, levels, and ordering.
-- **Rule-based at this stage.** Signals use configurable thresholds from `risk-engine/config.js` (no magic numbers).
-- **Independent of the frontend.** The engine consumes plain structured data and exposes plain functions.
-- **Independent of MongoDB persistence.** The engine runs on JSON data (`data/raw/*.json`); risk results are not yet written to the database.
-
-**Output contract — every signal:**
-
-```text
-{ type, severity: low|medium|high|critical, contribution: Number, description: "...", evidence: { ... } }
-```
-
-**Signals evaluated (max contributions):**
-
-| # | Signal                | What it detects                                    | Max |
-| - | --------------------- | -------------------------------------------------- | --- |
-| 1 | `refund_frequency`    | High count of refunds in the observed period       | 20  |
-| 2 | `refund_rate`         | Refunds / completed transactions                   | 20  |
-| 3 | `refund_velocity`     | Refunds requested inside a recent rolling window   | 15  |
-| 4 | `repeated_refund_reason` | One reason dominating a customer's refunds      | 10  |
-| 5 | `shared_ip`           | IP shared with other customer accounts             | 20  |
-| 6 | `shared_device`       | Device reused across accounts (from transactions)  | 15  |
-
-Score = sum of triggered contributions, clamped to 0–100. Risk level bands: 0–24 `low`, 25–49 `medium`, 50–74 `high`, 75–100 `critical`.
-
-**Structure:**
+- Score = sum of triggered contributions, clamped to 0–100. Risk level bands: 0–24 `low`, 25–49 `medium`, 50–74 `high`, 75–100 `critical`.
+- **Structure:**
 
 ```text
 risk-engine/
-├── index.js          # analyzeCustomerRisk / analyzeAllCustomers / summarize
-├── config.js         # every threshold, contribution, and risk-level tier
-├── run.js            # CLI: load data/raw/*.json, analyze, print report
-├── signals/          # one file per signal
-└── utils/
-    ├── dates.js      # deterministic date parsing
-    └── scoring.js    # classify, contribution lookups, clamp, risk levels
+├ index.js          # analyzeCustomerRisk / analyzeAllCustomers / summarize
+├ config.js         # every threshold, contribution, and risk-level tier
+├ run.js            # CLI: load data/raw/*.json, analyze, print report
+├ signals/          # one file per signal
+└ utils/
+    ├── dates.js    # deterministic date parsing
+    └── scoring.js  # classify, contribution lookups, clamp, risk levels
 ```
 
-**Shared IP / shared device lookup** is built from the full transaction dataset (`ipAddress -> customers`, `deviceId -> customers`). Shared-device detection deliberately uses transaction `deviceId` references rather than the Device collection's single-owner `customerId`, because the synthetic dataset represents shared devices through transaction references.
+- **Shared IP / shared device lookup** is built from the full transaction dataset (`ipAddress → customers`, `deviceId → customers`). Shared-device detection deliberately uses transaction `deviceId` references rather than the Device collection's single-owner `customerId`.
+- **Ground truth is validation-only.** `data/raw/clusters.json` records the intended cluster membership. The engine itself never reads it — suspicious behavior must be discovered from the actual records.
+- **Run it:** `npm run risk:analyze` · **Test it:** `npm run risk:test` (Node's built-in test runner, no MongoDB required).
 
-**Ground truth is validation-only.** `data/raw/clusters.json` (persisted by the generator) records the intended cluster membership. `run.js` reads it solely to compare suspicious-cluster vs normal-customer scores in its report. The engine itself never reads it — suspicious behavior must be discovered from the actual records.
+### Investigation Service
 
-**Run it:** `npm run risk:analyze` · Test it: `npm run risk:test` (Node's built-in runner, no MongoDB required).
-
----
-
-## Investigation Service
-
-The Investigation Service is the orchestration layer that composes the three
-independent analysis engines — Risk Engine, Complaint NLP, and Graph Engine —
-into a single, explainable per-customer investigation. It contains **no
-fraud-detection logic itself**; all detection and scoring lives inside the
-engines, which are consumed through their public APIs and never modified.
-
-**Flow:**
+- **Orchestrates** the three independent analysis engines (Risk Engine, Complaint NLP, Graph Engine) into a single, explainable per-customer investigation.
+- **Contains no fraud-detection logic itself**; all detection and scoring lives inside the engines, which are consumed through their public APIs and never modified.
+- **Flow:**
 
 ```text
 Request
@@ -223,35 +95,28 @@ Merged Investigation
 API Response
 ```
 
-**Responsibility of the service:**
-
-- **Orchestrates engines** — runs the risk, NLP, and graph analyses over the same dataset (computed lazily and reused in-memory, so results are deterministic per process).
-- **Merges results** — combines each engine's output into one per-customer investigation (`risk`, `nlp`, `graph` sections).
-- **Computes overallRisk** — the customer's overall risk tier, derived by combining the engine results.
-- **Generates recommendation** — the action an analyst should take for the customer's risk tier.
-- **Generates explanation** — a concise, human-readable summary of why the customer was flagged.
-
-**Exposed via the API:**
+- **Responsibility of the service:**
+  - **Orchestrates engines** — runs the risk, NLP, and graph analyses over the same dataset (computed lazily and reused in-memory, so results are deterministic per process).
+  - **Merges results** — combines each engine's output into one per-customer investigation (`risk`, `nlp`, `graph` sections).
+  - **Computes overallRisk** — the customer's overall risk tier, derived by combining the engine results.
+  - **Generates recommendation** — the action an analyst should take for the customer's risk tier.
+  - **Generates explanation** — a concise, human-readable summary of why the customer was flagged.
+- **Exposed via the API:**
 
 | Method | Endpoint                              | Purpose                                     |
 | ------ | ------------------------------------- | ------------------------------------------- |
+| GET    | `/api/v1/health`                      | Service health check                        |
 | GET    | `/api/v1/investigations`              | All customer investigations, sorted by overall risk |
 | GET    | `/api/v1/investigations/:customerId`  | Merged investigation for one customer (404 if unknown) |
 
-The service performs the analysis **in-memory**; at this stage results are not
-persisted to the database and no ground-truth data is read during analysis.
+- **Analysis is in-memory**; results are not persisted to the database and no ground-truth data is read during analysis.
 
----
+### Complaint NLP & Evidence Extraction
 
-## Complaint NLP & Evidence Extraction
-
-The second intelligence layer is a deterministic, explainable lexical NLP module that analyzes free-text complaints.
-
-**Principles:**
-
-- **Same contract as the risk engine.** Deterministic given the same input; no embeddings, no LLMs, no ML, no external calls — plain JavaScript over `data/raw/complaints.json`, fully offline.
-- **Explainable.** Every finding is a concrete, human-readable fact: *which complaint matches which*, *which wording templates are reused across customers*, and *which evidence categories/phrases appear in a text*.
-- **Independent of the risk engine and the database.** The NLP layer never reads risk-engine score files, never persists results, and never touches the ground-truth dataset during analysis.
+- **Second intelligence layer**: deterministic, explainable lexical NLP module that analyzes free-text complaints.
+- **Deterministic given the same input**; no embeddings, no LLMs, no ML, no external calls — plain JavaScript over `data/raw/complaints.json`, fully offline.
+- **Explainable**: every finding is a concrete, human-readable fact: *which complaint matches which*, *which wording templates are reused across customers*, and *which evidence categories/phrases appear in a text*.
+- **Independent of the risk engine and the database**: the NLP layer never reads risk-engine score files, never persists results, and never touches the ground-truth dataset during analysis.
 
 **Pipeline (each stage deterministic):**
 
@@ -276,25 +141,22 @@ Normalized text + token list (stopwords dropped; negation + refund words kept)
 
 ```text
 nlp/
-├── index.js      # public API (normalize, similarity, evidence, analyze, config)
-├── config.js     # stopwords, protected tokens, thresholds, evidence vocabulary
-├── normalize.js  # normalizeComplaintText / tokenize / tokensOf
-├── similarity.js # calculateSimilarity / findSimilarComplaints
-├── evidence.js   # extractComplaintEvidence
-├── analyze.js    # findRepeatedTemplates / analyzeCustomerComplaints / analyzeComplaints
-├── run.js        # CLI: load data/raw/complaints.json, analyze, print report
-└── tests/        # normalize / similarity / evidence / analyze suites (node:test)
+├ index.js      # public API (normalize, similarity, evidence, analyze, config)
+├ config.js     # stopwords, protected tokens, thresholds, evidence vocabulary
+├ normalize.js  # normalizeComplaintText / tokenize / tokensOf
+├ similarity.js # calculateSimilarity / findSimilarComplaints
+├ evidence.js   # extractComplaintEvidence
+├ analyze.js    # findRepeatedTemplates / analyzeCustomerComplaints / analyzeComplaints
+├ run.js        # CLI: load data/raw/complaints.json, analyze, print report
+└── tests/      # normalize / similarity / evidence / analyze suites (node:test)
 ```
 
-**Ground truth is validation-only.** `run.js` reads `data/raw/clusters.json` solely to compare suspicious-cluster vs normal-customer NLP contributions in its report; the analysis modules never load it. The NLP source is guarded by tests against referencing `clusters.json` or any nondeterministic primitive.
+- **Ground truth is validation-only.** `run.js` reads `data/raw/clusters.json` solely to compare suspicious-cluster vs normal-customer NLP contributions in its report; the analysis modules never load it. The NLP source is guarded by tests against referencing `clusters.json` or any nondeterministic primitive.
+- **Run it:** `npm run nlp:analyze` · **Test everything:** `npm test` (risk-engine + NLP suites).
 
-**Run it:** `npm run nlp:analyze` · Test everything: `npm test` (risk-engine + NLP suites).
+### Graph-Based Refund Ring Detection
 
----
-
-## Graph-Based Refund Ring Detection
-
-The third intelligence layer detects coordinated refund rings from *relationships*, not per-customer scores. `graph/` uses plain-JavaScript in-memory structures (no external graph libraries, no graph database).
+- **Third intelligence layer**: detects coordinated refund rings from *relationships*, not per-customer scores. `graph/` uses plain-JavaScript in-memory structures (no external graph libraries, no graph database).
 
 **Pipeline (each stage deterministic):**
 
@@ -316,23 +178,32 @@ Refund Ring Detection (configurable minimum members / relationship edges)
 Explainable Ring Scoring (0-100, six traceable signals)
 ```
 
-**Heterogeneous graph.** Nodes carry a stable, explicit type and prefixed ID (`customer:cust_00001`, `device:dev_001`, `ip:192.168.1.10`, `transaction:txn_001`, `refund:ref_001`, `complaint:cmp_001`). Edges are typed (`customer→transaction`, `transaction→refund`, `customer→complaint`, `transaction→device`, `customer→ip`, `customer→device`, `complaint→refund`) and sorted so output never depends on input array order.
+- **Heterogeneous graph.** Nodes carry a stable, explicit type and prefixed ID (`customer:cust_00001`, `device:dev_001`, `ip:192.168.1.10`, `transaction:txn_001`, `refund:ref_001`, `complaint:cmp_001`). Edges are typed (`customer→transaction`, `transaction→refund`, `customer→complaint`, `transaction→device`, `customer→ip`, `customer→device`, `complaint→refund`) and sorted so output never depends on input array order.
+- **Customer projection.** `buildCustomerGraph` derives shared-resource relationships using indexes (`ip → customers`, `device → customers`) built once from the full graph — no O(n²) entity-pair scan. Each resource group with ≥2 customers yields one typed relationship edge per customer pair, e.g. `{ customerA, customerB, relationship: "shared_ip", sharedValue, weight: 1 }`. When a pair shares several things, every relationship type is preserved as its own edge (evidence is never collapsed); density, however, counts *unique customer pairs* (this choice is documented in `graph/config.js`). `shared_transaction_context` (same-order reuse) is implemented but **disabled by default** because order IDs are drawn from a shared pool in the synthetic dataset, making same-order reuse coincidental among normal customers (120 accidental groups).
+- **Connected components.** `findConnectedComponents` runs BFS over the customer adjacency map and returns components with sorted member IDs, ordered by size desc then first member asc. Single-customer components are handled (and later excluded by candidate rules).
+- **Ring candidates.** `detectRingCandidates` requires `minimumMembers` (3) and `minimumRelationshipEdges` (2) from `graph/config.js`. Ring IDs are deterministic (`ring_<first-sorted-customer-id>`).
+- **Density.** `density = unique connected member pairs / (n·(n−1)/2)`, counting each customer pair once regardless of how many relationship types connect it.
+- **Evidence.** `extractRingEvidence` emits only what is observed: shared IPs and devices (with their customer lists), per-member refund/complaint/transaction counts, ring totals, refund rate, and member participation counts.
+- **Score.** `scoreRing` budgets are configurable maxima that must be *earned*: shared IP 25, shared device 25, graph density 15, refund concentration 15, multi-member refund activity 10, complaint concentration 10. IP/device contributions scale with pair coverage and ring size; refund concentration is measured against a 30% baseline rate. The total is clamped to 100 and mapped to `low` 0–24 / `medium` 25–49 / `high` 50–74 / `critical` 75–100. Every signal carries `{ type, severity, contribution, description, evidence }`, so no point is unexplained.
+- **Ground truth is validation-only.** `graph/run.js` reads `data/raw/clusters.json` solely to report suspicious-member coverage and false positives. Core modules never read it — a source-guard test enforces this (along with a ban on `Math.random`/`Date.now`/`crypto.randomUUID`).
+- **Run it:** `npm run graph:analyze` · **Test it:** `npm run graph:test` · **Test everything:** `npm test`.
 
-**Customer projection.** `buildCustomerGraph` derives shared-resource relationships using indexes (`ip → customers`, `device → customers`) built once from the full graph — no O(n²) entity-pair scan. Each resource group with ≥2 customers yields one typed relationship edge per customer pair, e.g. `{ customerA, customerB, relationship: "shared_ip", sharedValue, weight: 1 }`. When a pair shares several things, every relationship type is preserved as its own edge (evidence is never collapsed); density, however, counts *unique customer pairs* (this choice is documented in `graph/config.js`). `shared_transaction_context` (same-order reuse) is implemented but **disabled by default** because order IDs are drawn from a shared pool in the synthetic dataset, making same-order reuse coincidental among normal customers (120 accidental groups).
+---
 
-**Connected components.** `findConnectedComponents` runs BFS over the customer adjacency map and returns components with sorted member IDs, ordered by size desc then first member asc. Single-customer components are handled (and later excluded by candidate rules).
+## PLANNED / FUTURE V1 WORK
 
-**Ring candidates.** `detectRingCandidates` requires `minimumMembers` (3) and `minimumRelationshipEdges` (2) from `graph/config.js`. Ring IDs are deterministic (`ring_<first-sorted-customer-id>`).
+The following are explicitly **future V1 phases**. They are NOT implemented and must not be claimed as existing:
 
-**Density.** `density = unique connected member pairs / (n·(n−1)/2)`, counting each customer pair once regardless of how many relationship types connect it.
+- **Hybrid data pipeline** — combining synthetic generation with real-world ingestion
+- **Multi-seed evaluation** — running multiple generator seeds to assess robustness
+- **Held-out adversarial scenarios** — evaluating against adversarially constructed data
+- **Abatement testing** — systematic removal of signals to measure impact
+- **`analyzeAsOf()`** — time-windowed analysis over historical data
+- **Ring lifecycle** — ring creation, evolution, and dissolution over time
+- **Anomaly detection** — statistical deviation from expected behavior patterns
+- **Persistent analyst decisions** — backend-backed case state persistence
 
-**Evidence.** `extractRingEvidence` emits only what is observed: shared IPs and devices (with their customer lists), per-member refund/complaint/transaction counts, ring totals, refund rate, and member participation counts.
-
-**Score.** `scoreRing` budgets are configurable maxima that must be *earned*: shared IP 25, shared device 25, graph density 15, refund concentration 15, multi-member refund activity 10, complaint concentration 10. IP/device contributions scale with pair coverage and ring size; refund concentration is measured against a 30% baseline rate. The total is clamped to 100 and mapped to `low` 0–24 / `medium` 25–49 / `high` 50–74 / `critical` 75–100. Every signal carries `{ type, severity, contribution, description, evidence }`, so no point is unexplained.
-
-**Ground truth is validation-only.** `graph/run.js` reads `data/raw/clusters.json` solely to report suspicious-member coverage and false positives. Core modules never read it — a source-guard test enforces this (along with a ban on `Math.random`/`Date.now`/`crypto.randomUUID`).
-
-**Run it:** `npm run graph:analyze` · Test it: `npm run graph:test` · Test everything: `npm test`.
+These features may be explored in later phases beyond V1 but are not part of the current foundation.
 
 ---
 
@@ -342,8 +213,20 @@ Explainable Ring Scoring (0-100, six traceable signals)
 - No metrics beyond the per-ring explainable score (ring cross-metrics deferred).
 - No risk values assigned to synthetic data (by design; risk values are only *computed at analysis time* by the engine, never stored).
 - No persistence of investigation results — the Investigation Service runs in-memory.
-- No frontend integration of the investigation API yet, no dashboard/graph visualization, no production polymorphism.
-- No LLM/embedding/ML analysis anywhere — all intelligence layers are deterministic lexical/rule-based by design.
+- No production authentication and authorization.
+- No real-time event ingestion.
+- No model-assisted semantic complaint analysis (LLM/embedding/ML of any kind).
 - No external graph databases (Neo4j), no production streaming detection.
+- No hybrid data pipeline, multi-seed evaluation, held-out adversarial scenarios, or ablation testing.
 
 Frontend integration, interactive graph visualization, the investigation dashboard, and production polish are intentionally deferred and will be built on top of the Investigation Service.
+
+---
+
+## Engine Sign Summary
+
+| Engine | Signals | Score range | Key behavior |
+| ------ | ------- | ----------- | ------------ |
+| Risk Engine | 6 signals (frequency, rate, velocity, repeated reason, shared IP, shared device) | 0–100, risk levels low/medium/high/critical | Deterministic rule-based; CLI: `npm run risk:analyze` |
+| Complaint NLP | Jaccard similarity, repeated templates, evidence categories | 0–15 per-customer contribution | Deterministic lexical analysis; CLI: `npm run nlp:analyze` |
+| Graph Engine | shared IP, shared device, density, refund concentration, multi-member activity, complaint concentration | 0–100, ring severity low/medium/high/critical | Deterministic graph + BFS; CLI: `npm run graph:analyze` |
