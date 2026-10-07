@@ -101,4 +101,14 @@ module.exports = {
   output: {
     topRings: 5,
   },
+
+  lifecycle: {
+    minMembers: 3,
+    minRelationshipEdges: 2,
+    minScoreForActive: 20,
+    dormantSnapshots: 2,
+    disbandedSnapshots: 2,
+    emergingGrowthThreshold: 1,
+    overlapThreshold: 0.4,
+  },
 };

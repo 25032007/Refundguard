@@ -57,6 +57,13 @@ function analyzeRefundRings(dataset) {
   };
 }
 
+const {
+  RING_LIFECYCLE_CONFIG,
+  getRingSnapshots,
+  detectEmergingRings,
+  analyzeRingLifecycle,
+} = require('./lifecycle');
+
 module.exports = {
   config,
   analyzeRefundRings,
@@ -66,4 +73,8 @@ module.exports = {
   detectRingCandidates,
   extractRingEvidence,
   scoreRing,
+  RING_LIFECYCLE_CONFIG,
+  getRingSnapshots,
+  detectEmergingRings,
+  analyzeRingLifecycle,
 };
