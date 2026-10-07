@@ -7,16 +7,19 @@
     "setup": "npm run install-all",
     "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
-    "data:generate": "node data/adapters/onlineRetail.js",
+    "data:generate": "node data/generate.js",
+    "data:uci:preprocess": "node data/preprocess-uci.js",
+    "data:uci": "node data/adapters/onlineRetail.js --seed 1",
     "db:seed": "node backend/seed.js",
     "data:validate": "node data/validate.js",
+    "data:test": "node --test \"data/tests/*.test.js\"",
     "risk:analyze": "node risk-engine/run.js",
     "risk:test": "node --test \"risk-engine/tests/*.test.js\"",
     "nlp:analyze": "node nlp/run.js",
     "nlp:test": "node --test \"nlp/tests/*.test.js\"",
     "graph:analyze": "node graph/run.js",
     "graph:test": "node --test \"graph/tests/*.test.js\"",
-    "test": "npm run risk:test && npm run nlp:test && npm run graph:test"
+    "test": "npm run risk:test && npm run nlp:test && npm run graph:test && npm run data:test"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
