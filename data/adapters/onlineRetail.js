@@ -226,7 +226,7 @@ function processData(rawLines, selectedCustomerIds, targetCount) {
   const accountCreationMap = {};
   
   for (const cid of selectedCustomerIds) {
-    const ts = rawLines.find(r => r.customerId === cid)?.timestamp || Date.now();
+    const ts = rawLines.find(r => r.customerId === cid)?.timestamp || new Date('2011-12-09T00:00:00Z').getTime();
     const accountCreatedAt = faker.date.past({ years: 1, refDate: new Date(ts) }).toISOString();
     accountCreationMap[cid] = accountCreatedAt;
     
