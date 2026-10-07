@@ -481,6 +481,9 @@ async function main() {
   const selectedCustomerIds = sampleCustomers(customerStats, TARGET_CUSTOMERS);
   const data = processData(rawLines, selectedCustomerIds, TARGET_CUSTOMERS);
 
+  const { injectScenarios } = require('../scenarios/index');
+  const scenarioStats = injectScenarios(data, SEED);
+
   fs.writeFileSync(path.join(OUTPUT_DIR, 'customers.json'), JSON.stringify(data.customers, null, 2));
   fs.writeFileSync(path.join(OUTPUT_DIR, 'transactions.json'), JSON.stringify(data.transactions, null, 2));
   fs.writeFileSync(path.join(OUTPUT_DIR, 'refunds.json'), JSON.stringify(data.refunds, null, 2));
@@ -506,9 +509,11 @@ async function main() {
     source: "UCI Online Retail II",
     seed: SEED,
     currency: "GBP",
-    customerCount: data.customers.length,
+    backgroundCustomerCount: scenarioStats.bgCount,
+    injectedFraudCustomerCount: scenarioStats.injectedCount,
+    totalCustomerCount: data.customers.length,
     transactionCount: data.transactions.length,
-    refundCount: data.stats.totalRefunds,
+    refundCount: data.refunds.length,
     sourceAccounting: {
       totalSourceRows,
       missingCustomerIdRows,
@@ -524,6 +529,14 @@ async function main() {
       ambiguous: data.stats.ambiguous
     },
     samplingMethod: "Stratified deterministic seeded sampling by activity",
+    deterministicGenerationMethod: "Phase 1B+1C synthetic generator",
+    scenarioCounts: {
+      obvious_ring: 1,
+      noisy_ring: 1,
+      rotating_ip_ring: 1,
+      slow_burn_ring: 1,
+      burst_refund: 1
+    },
     accountAgeSource: "synthetic_left_censoring",
     refundDerivation: "cancellation_invoice",
     linkingMethod: "Deterministic heuristic (same customer, prior, same StockCode, sufficient original quantity)",
