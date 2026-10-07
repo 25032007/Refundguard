@@ -20,6 +20,7 @@
     "graph:analyze": "node graph/run.js",
     "graph:test": "node --test \"graph/tests/*.test.js\"",
     "eval:run": "node evaluation/run.js",
+    "eval:ablation": "node evaluation/ablation.js --seeds 1,2,3,4,5",
     "eval:test": "node --test \"evaluation/tests/*.test.js\"",
     "test": "npm run risk:test && npm run nlp:test && npm run graph:test && npm run data:test && npm run eval:test"
   },

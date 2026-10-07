@@ -79,16 +79,27 @@ function collectCustomerRecords(customerId, dataset) {
 /**
  * Evaluates every enabled signal for one customer and returns the matching
  * signal objects (each fully explainable).
+ *
+ * @param {object} base - Customer records collected by collectCustomerRecords.
+ * @param {object} ctx  - Shared dataset context (ipCustomers, deviceCustomers, now).
+ * @param {Set<string>} [disabledSignals] - Optional set of signal names to suppress
+ *   for ablation experiments. Does NOT affect production defaults.
+ *   Signal names: 'refundFrequency', 'refundRate', 'refundVelocity',
+ *                 'repeatedReason', 'sharedIp', 'sharedDevice'.
  */
-function evaluateSignals(base, ctx) {
-  const results = [
-    signals.refundFrequency.evaluate(base, ctx),
-    signals.refundRate.evaluate(base, ctx),
-    signals.refundVelocity.evaluate(base, ctx),
-    signals.repeatedReason.evaluate(base, ctx),
-    signals.sharedIp.evaluate(base, ctx),
-    signals.sharedDevice.evaluate(base, ctx),
+function evaluateSignals(base, ctx, disabledSignals) {
+  const disabled = disabledSignals || new Set();
+  const candidates = [
+    { name: 'refundFrequency', fn: () => signals.refundFrequency.evaluate(base, ctx) },
+    { name: 'refundRate',      fn: () => signals.refundRate.evaluate(base, ctx) },
+    { name: 'refundVelocity',  fn: () => signals.refundVelocity.evaluate(base, ctx) },
+    { name: 'repeatedReason',  fn: () => signals.repeatedReason.evaluate(base, ctx) },
+    { name: 'sharedIp',        fn: () => signals.sharedIp.evaluate(base, ctx) },
+    { name: 'sharedDevice',    fn: () => signals.sharedDevice.evaluate(base, ctx) },
   ];
+  const results = candidates
+    .filter(c => !disabled.has(c.name))
+    .map(c => c.fn());
   return results.filter((signal) => signal !== null);
 }
 
@@ -101,20 +112,26 @@ function evaluateSignals(base, ctx) {
  *
  * Returns null when the customer does not exist in the dataset.
  */
-function analyzeCustomerRisk(customerId, dataset, context) {
+/**
+ * @param {string} customerId
+ * @param {object} dataset
+ * @param {object} [context] - Pre-built context; built lazily if omitted.
+ * @param {Set<string>} [disabledSignals] - Forwarded to evaluateSignals for ablation.
+ */
+function analyzeCustomerRisk(customerId, dataset, context, disabledSignals) {
   const base = collectCustomerRecords(customerId, dataset);
   if (!base.customer) return null;
 
   const ctx = context || buildContext(dataset);
-  const signals = evaluateSignals(base, ctx);
+  const activeSignals = evaluateSignals(base, ctx, disabledSignals);
   const score = clamp(
-    signals.reduce((sum, s) => sum + s.contribution, 0),
+    activeSignals.reduce((sum, s) => sum + s.contribution, 0),
     0,
     config.maxScore
   );
   const level = riskLevel(score, config);
 
-  return { customerId, score, level, signals };
+  return { customerId, score, level, signals: activeSignals };
 }
 
 /**
@@ -122,9 +139,15 @@ function analyzeCustomerRisk(customerId, dataset, context) {
  * descending score (ties broken by ascending customerId), so the order is
  * fully deterministic.
  */
-function analyzeAllCustomers(dataset) {
+/**
+ * @param {object} dataset
+ * @param {Set<string>} [disabledSignals] - Optional; forwarded through for ablation.
+ */
+function analyzeAllCustomers(dataset, disabledSignals) {
   const ctx = buildContext(dataset);
-  const results = dataset.customers.map((c) => analyzeCustomerRisk(c.customerId, dataset, ctx));
+  const results = dataset.customers.map((c) =>
+    analyzeCustomerRisk(c.customerId, dataset, ctx, disabledSignals)
+  );
   results.sort(compareByScoreDesc);
   return results;
 }
