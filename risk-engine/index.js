@@ -166,9 +166,13 @@ function summarize(results) {
   return { count: results.length, average, distribution };
 }
 
+const { analyzeAsOf, filterDatasetAsOf } = require('./temporal');
+
 module.exports = {
   analyzeCustomerRisk,
   analyzeAllCustomers,
+  analyzeAsOf,
+  filterDatasetAsOf,
   buildContext,
   evaluateSignals,
   summarize,
