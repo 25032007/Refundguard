@@ -7,7 +7,7 @@
     "setup": "npm run install-all",
     "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
-    "data:generate": "node data/generate.js",
+    "data:generate": "node data/adapters/onlineRetail.js",
     "db:seed": "node backend/seed.js",
     "data:validate": "node data/validate.js",
     "risk:analyze": "node risk-engine/run.js",
@@ -19,7 +19,9 @@
     "test": "npm run risk:test && npm run nlp:test && npm run graph:test"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "concurrently": "^8.2.2",
-    "@faker-js/faker": "^8.4.1"
+    "csv-parser": "^3.2.1",
+    "xlsx": "^0.18.5"
   }
 }
