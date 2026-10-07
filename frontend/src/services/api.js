@@ -20,4 +20,19 @@ export async function getTemporalData(asOf) {
   return data;
 }
 
+export async function getDecision(entityId) {
+  const { data } = await api.get(`/decisions/${entityId}`);
+  return data;
+}
+
+export async function updateDecision(entityId, decisionData) {
+  const { data } = await api.post(`/decisions/${entityId}`, decisionData);
+  return data;
+}
+
+export async function getAuditHistory(entityId) {
+  const { data } = await api.get(`/decisions/${entityId}/audit`);
+  return data;
+}
+
 export default api;

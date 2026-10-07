@@ -32,3 +32,6 @@ data/processed/*
 data/generated/uci/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+
+# Persistence files
+data/persist/*.json

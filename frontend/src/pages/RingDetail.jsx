@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getInvestigation } from '../services/api.js';
+import { getInvestigation, getDecision, updateDecision } from '../services/api.js';
 import RiskBadge from '../components/RiskBadge.jsx';
 import CaseHeader from '../components/CaseHeader.jsx';
 import InvestigationDecision from '../components/InvestigationDecision.jsx';
+import AuditHistory from '../components/AuditHistory.jsx';
 import { buildKeyEvidence } from '../components/EvidenceList.jsx';
 import EvidenceList from '../components/EvidenceList.jsx';
 import RefundRingGraph from '../components/RefundRingGraph.jsx';
@@ -14,14 +15,18 @@ export default function RingDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [investigation, setInvestigation] = useState(null);
+  const [initialDecision, setInitialDecision] = useState('UNREVIEWED');
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setError(false);
-    getInvestigation(id)
-      .then((data) => {
-        if (!cancelled) setInvestigation(data);
+    Promise.all([getInvestigation(id), getDecision(id)])
+      .then(([invData, decData]) => {
+        if (!cancelled) {
+          setInvestigation(invData);
+          setInitialDecision(decData.decision);
+        }
       })
       .catch(() => {
         if (!cancelled) setError(true);
@@ -37,7 +42,7 @@ export default function RingDetail() {
   return (
     <div className="page">
       {!loading && !error && investigation && (
-        <InvestigationBody investigation={investigation} />
+        <InvestigationBody investigation={investigation} initialDecision={initialDecision} entityId={id} />
       )}
 
       {loading && <div className="state-message">Loading...</div>}
@@ -61,11 +66,22 @@ function Section({ title, children }) {
   );
 }
 
-function InvestigationBody({ investigation }) {
+function InvestigationBody({ investigation, initialDecision, entityId }) {
   const { customer, risk, nlp, graph, summary } = investigation;
   const inRing = !!graph && graph.inRing;
 
-  const [decision, setDecision] = useState('UNREVIEWED');
+  const [decision, setDecision] = useState(initialDecision || 'UNREVIEWED');
+  const [auditTrigger, setAuditTrigger] = useState(0);
+
+  const handleDecisionChange = async (newDecision) => {
+    try {
+      const updated = await updateDecision(entityId, { decision: newDecision, analystId: 'analyst-1' });
+      setDecision(updated.decision);
+      setAuditTrigger(t => t + 1);
+    } catch (e) {
+      console.error('Failed to save decision', e);
+    }
+  };
 
   const riskSignalCount = (risk && risk.signals ? risk.signals : []).length;
   const complaintCount = nlp && typeof nlp.complaintCount === 'number' ? nlp.complaintCount : 0;
@@ -86,7 +102,7 @@ function InvestigationBody({ investigation }) {
 
       {/* 2. Investigation Status / Analyst Decision */}
       <Section title="Investigation Status">
-        <InvestigationDecision value={decision} onChange={setDecision} />
+        <InvestigationDecision value={decision} onChange={handleDecisionChange} />
       </Section>
 
       {/* 3. Risk Overview */}
@@ -288,7 +304,12 @@ function InvestigationBody({ investigation }) {
 
       {/* 11. Analyst Decision */}
       <Section title="Analyst Decision">
-        <InvestigationDecision value={decision} onChange={setDecision} />
+        <InvestigationDecision value={decision} onChange={handleDecisionChange} />
+      </Section>
+
+      {/* 12. Audit History */}
+      <Section title="Audit History">
+        <AuditHistory entityId={entityId} refreshTrigger={auditTrigger} />
       </Section>
     </>
   );
