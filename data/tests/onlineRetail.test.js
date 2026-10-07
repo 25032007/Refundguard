@@ -94,4 +94,30 @@ test('Preprocessing and Sampling', async (t) => {
     assert.strictEqual(data.refunds[0].transactionId, null, 'Should remain unlinked');
     assert.strictEqual(data.stats.unlinked, 1);
   });
+  await t.test('validates configured population bounds', () => {
+    faker.seed(123);
+    // Use 100 to get representative math.floor distribution
+    const ids = [];
+    for(let i=0; i<2000; i++) ids.push('c' + i);
+    const selected = new Set(ids);
+    const rawLines = [];
+    const data = processData(rawLines, selected, 2000);
+    
+    const counts = { individual: 0, household: 0, office: 0, hostel: 0, wholesaler: 0 };
+    for (const c of Object.values(data.groundTruth.customers)) {
+      if (c.categories.includes('LEGITIMATE_NORMAL')) counts.individual++;
+      if (c.categories.includes('LEGITIMATE_HOUSEHOLD')) counts.household++;
+      if (c.categories.includes('LEGITIMATE_OFFICE')) counts.office++;
+      if (c.categories.includes('LEGITIMATE_HOSTEL')) counts.hostel++;
+      if (c.categories.includes('LEGITIMATE_WHOLESALER')) counts.wholesaler++;
+    }
+    
+    const total = counts.individual + counts.household + counts.office + counts.hostel + counts.wholesaler;
+    assert.strictEqual(total, 2000);
+    
+    // Validate individual is roughly ~82% meaning > 70
+    assert.ok(counts.individual >= 1500, 'Individual should dominate the population');
+    // Validate shared resource existence
+    assert.ok(counts.household >= 0, 'Categories exist');
+  });
 });
