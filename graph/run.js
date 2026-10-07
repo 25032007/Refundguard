@@ -14,10 +14,18 @@ const path = require('path');
 const { analyzeRefundRings } = require('./index');
 const config = require('./config');
 
-const RAW_DIR = path.join(__dirname, '..', 'data', 'raw');
+let dataDir = path.join(__dirname, '..', 'data', 'raw');
+
+const args = process.argv.slice(2);
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === '--data-dir' && args[i + 1]) {
+    dataDir = path.resolve(args[i + 1]);
+    i++;
+  }
+}
 
 function loadJson(name) {
-  return JSON.parse(fs.readFileSync(path.join(RAW_DIR, name), 'utf8'));
+  return JSON.parse(fs.readFileSync(path.join(dataDir, name), 'utf8'));
 }
 
 function loadDataset() {
@@ -31,7 +39,9 @@ function loadDataset() {
 }
 
 function groundTruthEvaluation(detectedRings) {
-  const clusters = loadJson('clusters.json');
+  const clustersFile = path.join(dataDir, 'clusters.json');
+  if (!fs.existsSync(clustersFile)) return;
+  const clusters = JSON.parse(fs.readFileSync(clustersFile, 'utf8'));
   const suspicious = new Set();
   for (const cluster of clusters) {
     for (const member of cluster.members) suspicious.add(member);
@@ -136,13 +146,15 @@ function printReport(result) {
 
   // -- ground-truth evaluation (honest, reporting only) -----------------
   const evalResult = groundTruthEvaluation(result.rings);
-  console.log('Ground-truth evaluation');
-  console.log('-'.repeat(24));
-  console.log(`Suspicious-cluster members covered by detected rings: ${evalResult.suspiciousCovered} / ${evalResult.suspiciousMemberTotal}`);
-  console.log(`Normal customers incorrectly included: ${evalResult.normalsIncluded} / ${evalResult.normalCustomerTotal}`);
-  console.log('Top ring overlap:');
-  for (const r of evalResult.ringOverlap.slice(0, config.output.topRings)) {
-    console.log(`  ${r.ringId}: ${r.overlap}/${r.memberCount} members match ${r.cluster}${r.cleanMatch ? ' (exact)' : ''}`);
+  if (evalResult) {
+    console.log('Ground-truth evaluation');
+    console.log('-'.repeat(24));
+    console.log(`Suspicious-cluster members covered by detected rings: ${evalResult.suspiciousCovered} / ${evalResult.suspiciousMemberTotal}`);
+    console.log(`Normal customers incorrectly included: ${evalResult.normalsIncluded} / ${evalResult.normalCustomerTotal}`);
+    console.log('Top ring overlap:');
+    for (const r of evalResult.ringOverlap.slice(0, config.output.topRings)) {
+      console.log(`  ${r.ringId}: ${r.overlap}/${r.memberCount} members match ${r.cluster}${r.cleanMatch ? ' (exact)' : ''}`);
+    }
   }
 }
 
