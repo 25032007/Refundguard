@@ -22,6 +22,7 @@
     "eval:run": "node evaluation/run.js",
     "eval:ablation": "node evaluation/ablation.js --seeds 1,2,3,4,5",
     "eval:guard": "node evaluation/guard_experiment.js",
+    "eval:final": "node evaluation/final_evaluation.js",
     "eval:test": "node --test \"evaluation/tests/*.test.js\"",
     "test": "npm run risk:test && npm run nlp:test && npm run graph:test && npm run data:test && npm run eval:test"
   },
