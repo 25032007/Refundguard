@@ -1,9 +1,5 @@
-/**
- * Handles the GET /api/v1/health request.
- */
+const investigationService = require('../services/investigationService');
+
 exports.getHealth = (req, res) => {
-  res.status(200).json({
-    status: 'ok',
-    project: 'RefundGuard',
-  });
+  res.json(investigationService.getHealth());
 };

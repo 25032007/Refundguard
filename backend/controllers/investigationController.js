@@ -1,34 +1,35 @@
-/**
- * Investigation API handlers. Thin HTTP layer over investigationService; no
- * auth, pagination, or persistence — the service is the single source of
- * results and they are computed deterministically on demand.
- */
 const investigationService = require('../services/investigationService');
 
-exports.getTemporalInvestigation = (req, res) => {
-  const asOf = req.query.asOf || '2011-12-09T00:00:00.000Z';
-  const data = investigationService.analyzeTemporal(asOf);
-  res.status(200).json(data);
+exports.getSummary = (req, res) => {
+  const summary = investigationService.getSummary();
+  res.json(summary);
 };
 
-/**
- * GET /api/v1/investigations — all customers as investigations, sorted by
- * overall risk (highest first).
- */
 exports.listInvestigations = (req, res) => {
-  const investigations = investigationService.analyzeAllCustomers();
-  res.status(200).json(investigations);
+  const result = investigationService.listInvestigations(req.query);
+  res.json(result);
 };
 
-/**
- * GET /api/v1/investigations/:customerId — merged investigation for one
- * customer. 404 when the customer is unknown.
- */
 exports.getInvestigation = (req, res) => {
-  const { customerId } = req.params;
-  const investigation = investigationService.analyzeCustomer(customerId);
-  if (!investigation) {
-    return res.status(404).json({ error: `Customer not found: ${customerId}` });
-  }
-  return res.status(200).json(investigation);
+  const result = investigationService.analyzeCustomer(req.params.customerId);
+  if (!result) return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Customer not found' }, requestId: Date.now() });
+  res.json(result);
+};
+
+exports.getRings = (req, res) => {
+  const { page, pageSize } = req.query;
+  const result = investigationService.getRings(page, pageSize);
+  res.json(result);
+};
+
+exports.getRing = (req, res) => {
+  const result = investigationService.getRing(req.params.ringId);
+  if (!result) return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Ring not found' }, requestId: Date.now() });
+  res.json(result);
+};
+
+exports.getRingLifecycle = (req, res) => {
+  const result = investigationService.getRingLifecycle(req.params.ringId);
+  if (!result) return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Ring not found' }, requestId: Date.now() });
+  res.json({ ringId: req.params.ringId, history: result });
 };

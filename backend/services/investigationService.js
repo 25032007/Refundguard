@@ -1,43 +1,50 @@
-/**
- * Investigation Engine — orchestration layer.
- *
- * Combines the three analysis engines (risk-engine/, nlp/, graph/) into a
- * single explainable per-customer investigation. This module only touches the
- * engines' public APIs; the engines themselves are never modified.
- *
- * Deterministic by construction: engine results are already deterministic and
- * re-used from a lazily built in-memory cache, so repeated requests return
- * identical output. Nothing is persisted and no ground-truth clusters.json is
- * ever read by the analysis path.
- */
-
 const fs = require('fs');
 const path = require('path');
-
 const riskEngine = require('../../risk-engine');
 const nlp = require('../../nlp');
 const graphEngine = require('../../graph');
+const decisionRepository = require('../repositories/decisionRepository');
 
-const RAW_DIR = path.join(__dirname, '..', '..', 'data', 'raw');
-
-const LEVEL_ORDER = { low: 0, medium: 1, high: 2, critical: 3 };
+const LEVEL_ORDER = { LOW: 0, MEDIUM: 1, HIGH: 2, CRITICAL: 3 };
 
 const RECOMMENDATIONS = {
-  low: 'No immediate action.',
-  medium: 'Monitor customer.',
-  high: 'Manual investigation recommended.',
-  critical: 'Escalate to fraud analyst.',
+  LOW: 'No immediate action.',
+  MEDIUM: 'Monitor customer.',
+  HIGH: 'Manual investigation recommended.',
+  CRITICAL: 'Escalate to fraud analyst.',
 };
 
 function loadDataset() {
-  const read = (name) => JSON.parse(fs.readFileSync(path.join(RAW_DIR, name), 'utf8'));
-  return {
+  const dataDir = process.env.REFUNDGUARD_DATA_DIR ? path.resolve(process.env.REFUNDGUARD_DATA_DIR) : path.join(__dirname, '..', '..', 'data', 'raw');
+
+  const read = (name) => {
+    const filePath = path.join(dataDir, name);
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Missing required dataset file: ${name} in ${dataDir}`);
+    }
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  };
+
+  const dataset = {
     customers: read('customers.json'),
     devices: read('devices.json'),
     transactions: read('transactions.json'),
     refunds: read('refunds.json'),
     complaints: read('complaints.json'),
   };
+
+  try {
+    const metaPath = path.join(dataDir, 'metadata.json');
+    dataset.metadata = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+    if (!dataset.metadata.customerCount) {
+      dataset.metadata.customerCount = dataset.metadata.totalCustomerCount || dataset.customers.length;
+    }
+  } catch (e) {
+    dataset.metadata = { source: 'default', seed: 0, customerCount: dataset.customers.length };
+  }
+
+  dataset.datasetId = `${dataset.metadata.source}_${dataset.metadata.seed}`;
+  return dataset;
 }
 
 function compareIds(a, b) {
@@ -46,32 +53,53 @@ function compareIds(a, b) {
   return 0;
 }
 
-/** Highest of two severity/risk levels; baseline defaults to 'low'. */
 function highestLevel(a, b) {
   const va = a ? LEVEL_ORDER[a] : 0;
   const vb = b ? LEVEL_ORDER[b] : 0;
   return va >= vb ? a : b;
 }
 
-/**
- * overallRisk = CRITICAL whenever the customer sits in a CRITICAL refund
- * ring; otherwise the highest of the risk-engine level and the graph level.
- */
 function computeOverallRisk(riskLevel, ring) {
-  if (ring && ring.severity === 'critical') return 'critical';
-  return highestLevel(riskLevel, ring ? ring.severity : 'low');
+  const normalizedRisk = (riskLevel || 'LOW').toUpperCase();
+  if (ring && ring.severity.toUpperCase() === 'CRITICAL') return 'CRITICAL';
+  return highestLevel(normalizedRisk, ring ? ring.severity.toUpperCase() : 'LOW');
 }
 
-// ---------------------------------------------------------------------------
-// Cache: the full analysis is computed once on first use and reused for the
-// lifetime of the process (in-memory only — no persistence).
-// ---------------------------------------------------------------------------
-
 let analysisCache = null;
+let precomputedList = [];
+let precomputedRings = [];
+let buildTimeMs = 0;
+
+function getCache() {
+  if (!analysisCache) {
+    buildAnalysisCache();
+  }
+  return analysisCache;
+}
+
+function selectSnapshotDates(transactions, maxSnapshots = 10) {
+  const validDates = transactions
+    .map(t => (t.createdAt && typeof t.createdAt === 'string' ? t.createdAt.substring(0, 10) : null))
+    .filter(d => d !== null);
+
+  const uniqueDates = Array.from(new Set(validDates)).sort();
+  if (uniqueDates.length === 0) return [];
+
+  let snapshotTimes = [];
+  if (uniqueDates.length <= maxSnapshots) {
+    snapshotTimes = uniqueDates.map(d => `${d}T23:59:59.999Z`);
+  } else {
+    for (let i = 0; i < maxSnapshots; i++) {
+      const index = Math.floor(i * (uniqueDates.length - 1) / (maxSnapshots - 1));
+      snapshotTimes.push(`${uniqueDates[index]}T23:59:59.999Z`);
+    }
+    snapshotTimes = Array.from(new Set(snapshotTimes)).sort();
+  }
+  return snapshotTimes;
+}
 
 function buildAnalysisCache() {
-  if (analysisCache) return analysisCache;
-
+  const startTime = Date.now();
   const dataset = loadDataset();
 
   const riskResults = riskEngine.analyzeAllCustomers(dataset);
@@ -90,6 +118,26 @@ function buildAnalysisCache() {
 
   const customersById = new Map(dataset.customers.map((c) => [c.customerId, c]));
 
+  const lifecycleByRingId = new Map();
+  const snapshotTimes = selectSnapshotDates(dataset.transactions);
+
+  if (snapshotTimes.length > 0) {
+    const lifecycleAnalysis = graphEngine.analyzeRingLifecycle(dataset, snapshotTimes);
+
+    for (const snap of lifecycleAnalysis.snapshots) {
+      for (const ring of snap.rings) {
+        if (!lifecycleByRingId.has(ring.ringId)) {
+          lifecycleByRingId.set(ring.ringId, []);
+        }
+        lifecycleByRingId.get(ring.ringId).push({
+          lastSeenAt: ring.lastSeenAt,
+          state: ring.state,
+          evidenceTriggers: ring.evidenceTriggers || []
+        });
+      }
+    }
+  }
+
   analysisCache = {
     dataset,
     customersById,
@@ -98,13 +146,47 @@ function buildAnalysisCache() {
     similarPairs,
     templates,
     ringByMember,
+    rings: ringReport.rings,
+    lifecycleByRingId
   };
+
+  precomputeListRows();
+  precomputedRings = ringReport.rings.sort((a, b) => b.score - a.score);
+
+  buildTimeMs = Date.now() - startTime;
   return analysisCache;
 }
 
-// ---------------------------------------------------------------------------
-// Per-customer investigation assembly.
-// ---------------------------------------------------------------------------
+function precomputeListRows() {
+  const cache = analysisCache;
+  const list = [];
+
+  for (const customer of cache.dataset.customers) {
+    const customerId = customer.customerId;
+    const risk = cache.riskById.get(customerId) || { score: 0, level: 'low', signals: [] };
+    const nlpResult = cache.nlpById.get(customerId) || null;
+    const ring = cache.ringByMember.get(customerId) || null;
+
+    const riskLevel = computeOverallRisk(risk.level, ring);
+
+    let topSignal = null;
+    if (risk.signals && risk.signals.length > 0) {
+      const sortedSignals = [...risk.signals].sort((a, b) => b.contribution - a.contribution);
+      topSignal = sortedSignals[0];
+    }
+
+    list.push({
+      customerId,
+      riskScore: risk.score,
+      riskLevel: riskLevel,
+      topSignal: topSignal ? { type: topSignal.type, label: topSignal.label, contribution: topSignal.contribution } : null,
+      complaintCount: nlpResult ? nlpResult.complaintCount : 0,
+      ring: ring ? { ringId: ring.ringId, score: ring.score } : null
+    });
+  }
+
+  precomputedList = list;
+}
 
 function buildNlpSection(customerId, cache) {
   const nlpResult = cache.nlpById.get(customerId);
@@ -193,12 +275,12 @@ function buildGraphSection(customerId, cache) {
 
 function buildSummary(risk, nlpResult, graphSection, ring, overall) {
   const parts = [];
-  if (ring && ring.severity === 'critical') {
+  if (ring && ring.severity.toUpperCase() === 'CRITICAL') {
     parts.push(
       `customer belongs to critical refund ring ${ring.ringId} (${ring.memberCount} members, ring score ${ring.score})`
     );
   } else if (risk && risk.score > 0) {
-    parts.push(`${risk.level} behavior risk score ${risk.score}`);
+    parts.push(`${risk.level.toUpperCase()} behavior risk score ${risk.score}`);
   }
   if (nlpResult) {
     if (nlpResult.complaintCount > 0) {
@@ -211,30 +293,26 @@ function buildSummary(risk, nlpResult, graphSection, ring, overall) {
       }
     }
   }
-  if (graphSection.inRing && !(ring && ring.severity === 'critical')) {
+  if (graphSection.inRing && !(ring && ring.severity.toUpperCase() === 'CRITICAL')) {
     parts.push(`connected to ${graphSection.members.length - 1} other customers through shared resources`);
   }
   if (parts.length === 0) {
     parts.push('no suspicious refund, complaint, or network behavior detected');
   }
 
-  return `Overall risk ${overall.toUpperCase()}: ${parts.join('; ')}. ${RECOMMENDATIONS[overall]}`;
+  return `Overall risk ${overall}: ${parts.join('; ')}. ${RECOMMENDATIONS[overall]}`;
 }
 
-/**
- * Merges all engine results for one customer into the public investigation
- * shape. Returns null when the customer does not exist.
- */
 function analyzeCustomer(customerId) {
-  const cache = buildAnalysisCache();
+  const cache = getCache();
   const customer = cache.customersById.get(customerId);
   if (!customer) return null;
 
-  const risk = cache.riskById.get(customerId) || { score: 0, level: 'low', signals: [] };
+  const risk = cache.riskById.get(customerId) || { score: 0, level: 'LOW', signals: [] };
   const nlpResult = cache.nlpById.get(customerId) || null;
   const ring = cache.ringByMember.get(customerId) || null;
 
-  const riskSection = { score: risk.score, level: risk.level, signals: risk.signals };
+  const riskSection = { score: risk.score, level: (risk.level || 'LOW').toUpperCase(), signals: risk.signals };
   const nlpSection = buildNlpSection(customerId, cache);
   const graphSection = buildGraphSection(customerId, cache);
 
@@ -242,8 +320,11 @@ function analyzeCustomer(customerId) {
   const summary = {
     overallRisk: overall,
     recommendation: RECOMMENDATIONS[overall],
-    explanation: buildSummary(risk, nlpResult, graphSection, ring, overall),
+    explanation: buildSummary(riskSection, nlpResult, graphSection, ring, overall),
   };
+
+  const decisionRecord = decisionRepository.getDecision(cache.dataset.datasetId, customerId);
+  const decision = decisionRecord ? { status: decisionRecord.status, updatedAt: decisionRecord.updatedAt } : { status: 'UNREVIEWED', updatedAt: null };
 
   return {
     customer,
@@ -251,62 +332,202 @@ function analyzeCustomer(customerId) {
     nlp: nlpSection,
     graph: graphSection,
     summary,
+    decision,
+    version: decisionRecord ? decisionRecord.version : 0
   };
 }
 
-/**
- * Every customer as a full investigation, sorted by overall risk (critical →
- * low), then behavior risk score desc, then customerId asc. Deterministic.
- */
-function analyzeAllCustomers() {
-  const cache = buildAnalysisCache();
-  return cache.dataset.customers
-    .map((c) => analyzeCustomer(c.customerId))
-    .sort((a, b) => {
-      const levelDiff = LEVEL_ORDER[b.summary.overallRisk] - LEVEL_ORDER[a.summary.overallRisk];
-      if (levelDiff !== 0) return levelDiff;
-      const scoreDiff = b.risk.score - a.risk.score;
-      if (scoreDiff !== 0) return scoreDiff;
-      return compareIds(a.customer.customerId, b.customer.customerId);
-    });
-}
+function listInvestigations(options) {
+  const cache = getCache();
+  const { scope = 'flagged', risk, status, ring, q, sort = '-score', page = 1, pageSize = 50 } = options;
 
-function analyzeTemporal(asOfDate) {
-  const cache = buildAnalysisCache();
-  const graphLifecycle = require('../../graph/lifecycle');
-  const graphConfig = require('../../graph/config');
-  
-  const asOf = new Date(asOfDate);
-  
-  const count = graphConfig.lifecycle.defaultSnapshotCount;
-  const intervalDays = graphConfig.lifecycle.defaultSnapshotIntervalDays;
-  const intervalMs = intervalDays * 24 * 60 * 60 * 1000;
-  
-  const snapshotTimes = [];
-  for (let i = count - 1; i >= 0; i--) {
-    const d = new Date(asOf.getTime() - i * intervalMs);
-    snapshotTimes.push(d.toISOString());
+  const dbDecisions = decisionRepository.getDecisionsForDataset(cache.dataset.datasetId);
+  const statusMap = new Map(dbDecisions.map(d => [d.customerId, d.decision]));
+
+  const validPageSize = Math.min(Math.max(1, parseInt(pageSize, 10)), 100);
+  const validPage = Math.max(1, parseInt(page, 10));
+
+  const facets = {
+    risk: { LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0 },
+    status: { UNREVIEWED: 0, MONITOR: 0, ESCALATED: 0, CLEARED: 0 },
+    ring: { inRing: 0, noRing: 0 }
+  };
+
+  let filtered = [];
+
+  for (const row of precomputedList) {
+    const rowStatus = statusMap.get(row.customerId) || 'UNREVIEWED';
+
+    // Default scope = flagged (MEDIUM or higher)
+    if (scope === 'flagged' && LEVEL_ORDER[row.riskLevel] < LEVEL_ORDER.MEDIUM) continue;
+
+    const term = (q || '').toLowerCase();
+    if (term && !row.customerId.toLowerCase().includes(term)) continue;
+
+    // Note: We compute facets respecting other active filters
+    const matchRisk = !risk || row.riskLevel === risk.toUpperCase();
+    const matchStatus = !status || rowStatus === status.toUpperCase();
+    const matchRing = !ring || ring === 'any' ? true : (ring === 'none' ? !row.ring : row.ring && row.ring.ringId === ring);
+
+    if (matchStatus && matchRing) facets.risk[row.riskLevel] = (facets.risk[row.riskLevel] || 0) + 1;
+    if (matchRisk && matchRing) facets.status[rowStatus] = (facets.status[rowStatus] || 0) + 1;
+    if (matchRisk && matchStatus) {
+      if (row.ring) facets.ring.inRing++;
+      else facets.ring.noRing++;
+    }
+
+    if (matchRisk && matchStatus && matchRing) {
+      filtered.push({
+        ...row,
+        decision: { status: rowStatus, updatedAt: null }
+      });
+    }
   }
 
-  const lifecycle = graphLifecycle.analyzeRingLifecycle(cache.dataset, snapshotTimes);
-  
-  // Overall dataset activity for the hero chart (e.g. 60 days before asOf)
-  const chartStart = new Date(asOf.getTime() - 60 * 24 * 60 * 60 * 1000).getTime();
-  const activityData = {};
-  cache.dataset.refunds.forEach(r => {
-    const ts = new Date(r.timestamp).getTime();
-    if (ts >= chartStart && ts <= asOf.getTime()) {
-      const day = new Date(ts).toISOString().split('T')[0];
-      activityData[day] = (activityData[day] || 0) + 1;
-    }
+  // Sort
+  filtered.sort((a, b) => {
+    let scoreDiff = 0;
+    if (sort === '-score') scoreDiff = b.riskScore - a.riskScore;
+    else if (sort === 'score') scoreDiff = a.riskScore - b.riskScore;
+
+    if (scoreDiff !== 0) return scoreDiff;
+
+    // then ring score desc
+    const aRing = a.ring ? a.ring.score : -1;
+    const bRing = b.ring ? b.ring.score : -1;
+    if (bRing !== aRing) return bRing - aRing;
+
+    // then customerId asc
+    return compareIds(a.customerId, b.customerId);
   });
 
+  // Also populate updatedAt from full DB fetch if needed, but the prompt says
+  // "decision:{status,updatedAt}". To be efficient we can fetch timestamps from DB
+  const pageItems = filtered.slice((validPage - 1) * validPageSize, validPage * validPageSize);
+
+  // Attach exact updatedAt for the page
+  for (const item of pageItems) {
+    const d = decisionRepository.getDecision(cache.dataset.datasetId, item.customerId);
+    if (d) {
+      item.decision.updatedAt = d.updatedAt;
+    }
+  }
+
   return {
-    asOf: asOf.toISOString(),
-    snapshots: snapshotTimes,
-    lifecycle,
-    activity: Object.entries(activityData).map(([date, count]) => ({ date, count })).sort((a,b) => a.date.localeCompare(b.date))
+    items: pageItems,
+    page: validPage,
+    pageSize: validPageSize,
+    total: filtered.length,
+    facets
   };
 }
 
-module.exports = { analyzeCustomer, analyzeAllCustomers, analyzeTemporal };
+function getSummary() {
+  const cache = getCache();
+
+  const dbDecisions = decisionRepository.getDecisionsForDataset(cache.dataset.datasetId);
+  const statusMap = new Map(dbDecisions.map(d => [d.customerId, d.decision]));
+
+  const riskCounts = { LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0 };
+  const decisionCounts = { UNREVIEWED: 0, MONITOR: 0, ESCALATED: 0, CLEARED: 0 };
+  const signalMap = new Map();
+
+  for (const row of precomputedList) {
+    riskCounts[row.riskLevel]++;
+    const status = statusMap.get(row.customerId) || 'UNREVIEWED';
+    decisionCounts[status]++;
+
+    if (row.topSignal) {
+      const key = `${row.topSignal.type}:${row.topSignal.label}`;
+      const count = (signalMap.get(key) || 0) + 1;
+      signalMap.set(key, count);
+    }
+  }
+
+  const topSignals = Array.from(signalMap.entries())
+    .map(([key, count]) => {
+      const [type, label] = key.split(':');
+      return { type, label, count };
+    })
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+
+  return {
+    dataset: cache.dataset.metadata,
+    risk: riskCounts,
+    decisions: decisionCounts,
+    rings: {
+      total: cache.rings.length,
+      byLifecycle: computeRingsLifecycleSummary(cache.rings, cache.lifecycleByRingId)
+    },
+    topSignals
+  };
+}
+
+function computeRingsLifecycleSummary(rings, lifecycleByRingId) {
+  if (!lifecycleByRingId) return null;
+  const byLifecycle = { EMERGING: 0, ACTIVE: 0, DORMANT: 0, DISBANDED: 0 };
+  for (const ring of rings) {
+    const history = lifecycleByRingId.get(ring.ringId);
+    if (history && history.length > 0) {
+      const state = history[history.length - 1].state.toUpperCase();
+      if (byLifecycle[state] !== undefined) {
+        byLifecycle[state]++;
+      } else {
+        byLifecycle[state] = 1;
+      }
+    }
+  }
+  return byLifecycle;
+}
+
+function getHealth() {
+  const cache = analysisCache;
+  return {
+    status: 'ok',
+    uptimeSec: Math.floor(process.uptime()),
+    datasetLoaded: !!cache,
+    db: 'sqlite',
+    dataset: cache ? cache.dataset.metadata : null,
+    datasetId: cache ? cache.dataset.datasetId : null,
+    coldBuildMs: buildTimeMs
+  };
+}
+
+function getRings(page = 1, pageSize = 50) {
+  const cache = getCache();
+  const validPageSize = Math.min(Math.max(1, parseInt(pageSize, 10)), 100);
+  const validPage = Math.max(1, parseInt(page, 10));
+
+  const items = precomputedRings.slice((validPage - 1) * validPageSize, validPage * validPageSize);
+
+  return {
+    items,
+    page: validPage,
+    pageSize: validPageSize,
+    total: precomputedRings.length
+  };
+}
+
+function getRing(ringId) {
+  const cache = getCache();
+  return cache.rings.find(r => r.ringId === ringId) || null;
+}
+
+function getRingLifecycle(ringId) {
+  const cache = getCache();
+  if (!cache || !cache.lifecycleByRingId) return null;
+  return cache.lifecycleByRingId.get(ringId) || null;
+}
+
+module.exports = {
+  analyzeCustomer,
+  listInvestigations,
+  getSummary,
+  getHealth,
+  getRings,
+  getRing,
+  getRingLifecycle,
+  getCache,
+  selectSnapshotDates
+};
