@@ -1,0 +1,4 @@
+[
+  {"refundId": "R001", "transactionId": "T001", "customerId": "C001", "timestamp": "2026-10-04T12:00:00Z", "requestedAt": "2026-10-04T12:00:00Z", "amount": 100},
+  {"refundId": "R002", "transactionId": "T002", "customerId": "C002", "timestamp": "2026-10-05T12:00:00Z", "requestedAt": "2026-10-05T12:00:00Z", "amount": 200}
+]

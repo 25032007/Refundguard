@@ -1,0 +1,5 @@
+[
+  {"customerId": "C001", "name": "Alice", "createdAt": "2026-10-01T10:00:00Z"},
+  {"customerId": "C002", "name": "Bob", "createdAt": "2026-10-02T10:00:00Z"},
+  {"customerId": "C003", "name": "Charlie", "createdAt": "2026-10-03T10:00:00Z"}
+]

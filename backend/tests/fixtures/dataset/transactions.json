@@ -1,0 +1,5 @@
+[
+  {"transactionId": "T001", "customerId": "C001", "amount": 100, "timestamp": "2026-10-01T12:00:00Z", "createdAt": "2026-10-01T12:00:00Z"},
+  {"transactionId": "T002", "customerId": "C002", "amount": 200, "timestamp": "2026-10-02T12:00:00Z", "createdAt": "2026-10-02T12:00:00Z"},
+  {"transactionId": "T003", "customerId": "C003", "amount": 300, "timestamp": "2026-10-03T12:00:00Z", "createdAt": "2026-10-03T12:00:00Z"}
+]
