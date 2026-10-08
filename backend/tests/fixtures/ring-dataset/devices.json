@@ -1,0 +1,23 @@
+[
+  {
+    "deviceId": "DEV_SHARED",
+    "customerId": "C101",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "DEV_ALPHA",
+    "customerId": "C105",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "DEV_BETA",
+    "customerId": "C106",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Safari"
+  }
+]

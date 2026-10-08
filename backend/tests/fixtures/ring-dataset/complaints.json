@@ -1,0 +1,32 @@
+[
+  {
+    "complaintId": "CP001",
+    "customerId": "C101",
+    "orderId": "O101_1",
+    "refundId": "R101_1",
+    "text": "The item arrived damaged and I would like a refund for the full amount.",
+    "category": "refund",
+    "status": "resolved",
+    "createdAt": "2026-09-11T12:00:00.000Z"
+  },
+  {
+    "complaintId": "CP002",
+    "customerId": "C101",
+    "orderId": "O101_2",
+    "refundId": "R101_2",
+    "text": "The product was damaged when it arrived, please refund.",
+    "category": "refund",
+    "status": "resolved",
+    "createdAt": "2026-09-14T12:00:00.000Z"
+  },
+  {
+    "complaintId": "CP003",
+    "customerId": "C102",
+    "orderId": "O102_1",
+    "refundId": "R102_1",
+    "text": "Wrong product delivered, need my money back.",
+    "category": "refund",
+    "status": "open",
+    "createdAt": "2026-09-13T12:00:00.000Z"
+  }
+]
