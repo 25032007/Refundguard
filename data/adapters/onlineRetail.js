@@ -7,7 +7,7 @@ const PROCESSED_CSV = path.join(__dirname, '..', 'processed', 'online-retail-ii.
 const OUTPUT_DIR = path.join(__dirname, '..', 'generated', 'uci');
 
 // Config
-const TARGET_CUSTOMERS = 2000;
+const TARGET_CUSTOMERS = parseInt(process.env.TARGET_CUSTOMERS || '2000', 10);
 const EXCLUDED_CODES = new Set(['POST', 'M', 'D', 'S', 'BANK CHARGES', 'ADJUST', 'AMAZONFEE', 'PADS', 'CRUK']);
 const OUTLIER_CUSTOMER = '16446'; 
 
@@ -455,45 +455,42 @@ function processData(rawLines, selectedCustomerIds, targetCount) {
   };
 }
 
-async function main() {
-  const args = process.argv.slice(2);
-  const seedIndex = args.indexOf('--seed');
-  if (seedIndex === -1) {
-    console.error("Please provide a seed using --seed <number>");
-    process.exit(1);
+function resolveMode() {
+  const isTestCommand = ['test', 'data:test', 'eval:test'].includes(process.env.npm_lifecycle_event);
+  return process.env.DATASET_MODE || ((isTestCommand || process.env.CI === 'true') ? 'CI_FIXTURE' : 'REAL_UCI');
+}
+
+async function generate(options = {}) {
+  const SEED = options.seed;
+  if (SEED === undefined || isNaN(parseInt(SEED, 10))) {
+    throw new Error('Invalid seed value.');
   }
-  const SEED = parseInt(args[seedIndex + 1], 10);
-  if (isNaN(SEED)) {
-    console.error("Invalid seed value.");
-    process.exit(1);
-  }
-  
+
+  const targetCustomers = options.targetCustomers ?? TARGET_CUSTOMERS;
+  const mode = options.mode || resolveMode();
+  const outputDir = options.outputDir ? path.resolve(options.outputDir) : OUTPUT_DIR;
+  const csvPath = options.csvPath || (mode === 'CI_FIXTURE'
+    ? path.join(__dirname, '..', 'fixtures', 'ci-online-retail.csv')
+    : PROCESSED_CSV);
+
   faker.seed(SEED);
 
-  if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-
-  const isTestCommand = ['test', 'data:test', 'eval:test'].includes(process.env.npm_lifecycle_event);
-  const mode = process.env.DATASET_MODE || ((isTestCommand || process.env.CI === 'true') ? 'CI_FIXTURE' : 'REAL_UCI');
-
-  console.log(`DATASET_MODE=${mode}`);
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
   let customerStats, rawLines, totalSourceRows, missingCustomerIdRows, outlierRows;
 
   if (mode === 'CI_FIXTURE') {
-    const fixturePath = path.join(__dirname, '..', 'fixtures', 'ci-online-retail.csv');
-    if (!fs.existsSync(fixturePath)) {
-      console.error("CI_FIXTURE mode requested but ci-online-retail.csv not found.");
-      process.exit(1);
+    if (!fs.existsSync(csvPath)) {
+      throw new Error('CI_FIXTURE mode requested but ci-online-retail.csv not found.');
     }
-    const fixtureData = await loadAndProfileCSV(fixturePath);
+    const fixtureData = await loadAndProfileCSV(csvPath);
     customerStats = fixtureData.customerStats;
     rawLines = fixtureData.rawLines;
     totalSourceRows = fixtureData.totalSourceRows;
     missingCustomerIdRows = fixtureData.missingCustomerIdRows;
     outlierRows = fixtureData.outlierRows;
   } else {
-    // REAL_UCI mode
-    const realData = await loadAndProfileCSV(PROCESSED_CSV);
+    const realData = await loadAndProfileCSV(csvPath);
     customerStats = realData.customerStats;
     rawLines = realData.rawLines;
     totalSourceRows = realData.totalSourceRows;
@@ -501,13 +498,12 @@ async function main() {
     outlierRows = realData.outlierRows;
 
     if (totalSourceRows === 0) {
-      console.error("REAL_UCI dataset requested but not found. Failing loudly.");
-      process.exit(1);
+      throw new Error('REAL_UCI dataset requested but not found. Failing loudly.');
     }
   }
 
-  const selectedCustomerIds = sampleCustomers(customerStats, TARGET_CUSTOMERS);
-  const data = processData(rawLines, selectedCustomerIds, TARGET_CUSTOMERS);
+  const selectedCustomerIds = sampleCustomers(customerStats, targetCustomers);
+  const data = processData(rawLines, selectedCustomerIds, targetCustomers);
 
   const { injectScenarios } = require('../scenarios/index');
   const scenarioStats = injectScenarios(data, SEED);
@@ -525,28 +521,27 @@ async function main() {
     }
   }
 
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'customers.json'), JSON.stringify(data.customers, null, 2));
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'transactions.json'), JSON.stringify(data.transactions, null, 2));
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'refunds.json'), JSON.stringify(data.refunds, null, 2));
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'complaints.json'), JSON.stringify(data.complaints, null, 2));
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'devices.json'), JSON.stringify(data.devices, null, 2));
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'ground-truth.json'), JSON.stringify(data.groundTruth, null, 2));
-  
+  fs.writeFileSync(path.join(outputDir, 'customers.json'), JSON.stringify(data.customers, null, 2));
+  fs.writeFileSync(path.join(outputDir, 'transactions.json'), JSON.stringify(data.transactions, null, 2));
+  fs.writeFileSync(path.join(outputDir, 'refunds.json'), JSON.stringify(data.refunds, null, 2));
+  fs.writeFileSync(path.join(outputDir, 'complaints.json'), JSON.stringify(data.complaints, null, 2));
+  fs.writeFileSync(path.join(outputDir, 'devices.json'), JSON.stringify(data.devices, null, 2));
+  fs.writeFileSync(path.join(outputDir, 'ground-truth.json'), JSON.stringify(data.groundTruth, null, 2));
 
-    const groupCounts = {
-      individual: 0, household: 0, office: 0, hostel: 0, wholesaler: 0, legitimateHighRefund: 0
-    };
-    for (const c of Object.values(data.groundTruth.customers)) {
-      if (c.categories.includes('LEGITIMATE_NORMAL')) groupCounts.individual++;
-      if (c.categories.includes('LEGITIMATE_HOUSEHOLD')) groupCounts.household++;
-      if (c.categories.includes('LEGITIMATE_OFFICE')) groupCounts.office++;
-      if (c.categories.includes('LEGITIMATE_HOSTEL')) groupCounts.hostel++;
-      if (c.categories.includes('LEGITIMATE_WHOLESALER')) groupCounts.wholesaler++;
-      if (c.categories.includes('LEGITIMATE_HIGH_REFUND_RATE')) groupCounts.legitimateHighRefund++;
-    }
-    data.groundTruth.seed = SEED;
+  const groupCounts = {
+    individual: 0, household: 0, office: 0, hostel: 0, wholesaler: 0, legitimateHighRefund: 0
+  };
+  for (const c of Object.values(data.groundTruth.customers)) {
+    if (c.categories.includes('LEGITIMATE_NORMAL')) groupCounts.individual++;
+    if (c.categories.includes('LEGITIMATE_HOUSEHOLD')) groupCounts.household++;
+    if (c.categories.includes('LEGITIMATE_OFFICE')) groupCounts.office++;
+    if (c.categories.includes('LEGITIMATE_HOSTEL')) groupCounts.hostel++;
+    if (c.categories.includes('LEGITIMATE_WHOLESALER')) groupCounts.wholesaler++;
+    if (c.categories.includes('LEGITIMATE_HIGH_REFUND_RATE')) groupCounts.legitimateHighRefund++;
+  }
+  data.groundTruth.seed = SEED;
 
-    const metadata = {
+  const metadata = {
     source: mode,
     seed: SEED,
     currency: "GBP",
@@ -604,19 +599,44 @@ async function main() {
       };
     })()
   };
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'metadata.json'), JSON.stringify(metadata, null, 2));
-  
-  console.log(`Success: Generated ${data.customers.length} customers with seed ${SEED}.`);
+  fs.writeFileSync(path.join(outputDir, 'metadata.json'), JSON.stringify(metadata, null, 2));
+
+  return { data, metadata, outputDir };
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  const seedIndex = args.indexOf('--seed');
+  if (seedIndex === -1) {
+    console.error("Please provide a seed using --seed <number>");
+    process.exit(1);
+  }
+  const SEED = parseInt(args[seedIndex + 1], 10);
+  if (isNaN(SEED)) {
+    console.error("Invalid seed value.");
+    process.exit(1);
+  }
+
+  const mode = resolveMode();
+  console.log(`DATASET_MODE=${mode}`);
+
+  const result = await generate({ seed: SEED, mode });
+  console.log(`Success: Generated ${result.data.customers.length} customers with seed ${SEED}.`);
 }
 
 if (require.main === module) {
-  main().catch(console.error);
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
 }
 
 module.exports = {
   loadAndProfileCSV,
   sampleCustomers,
   processData,
+  generate,
+  resolveMode,
   OUTLIER_CUSTOMER,
   EXCLUDED_CODES
 };

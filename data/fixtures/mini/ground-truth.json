@@ -1,0 +1,2221 @@
+{
+  "seed": 1,
+  "customers": {
+    "10004": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10005": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10006": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10007": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10009": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10013": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10014": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10015": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10016": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10021": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10022": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10025": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10027": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10028": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10029": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10030": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10031": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10035": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10036": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10038": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10039": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10040": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10041": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10042": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10046": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10047": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10052": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10053": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10054": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10055": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10056": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10057": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10059": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10060": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10061": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10063": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10069": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10071": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10076": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10077": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10078": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10080": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10081": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10082": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10084": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10085": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10088": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10089": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10090": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10091": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10093": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10097": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10098": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10100": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10101": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10102": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10103": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10104": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10108": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10111": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10112": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10116": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10118": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10122": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10123": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10124": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10129": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10135": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10136": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10138": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10139": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10142": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10144": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10145": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10146": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10148": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10149": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10153": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10155": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10156": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10160": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10163": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10164": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10166": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10167": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10172": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10176": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10177": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10179": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10181": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10183": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10185": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10186": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10192": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10194": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10198": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10203": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10204": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10205": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10208": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10211": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10215": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10217": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10218": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10221": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10222": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10223": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10224": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10225": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10226": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10228": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10229": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10233": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10234": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10237": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10238": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10239": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10248": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10255": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10259": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10261": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10263": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10264": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10266": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10268": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10270": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10271": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10274": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10276": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10278": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10280": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10281": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10284": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10285": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10286": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10288": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10289": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10290": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10292": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10293": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10294": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10297": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10299": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10301": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10302": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10303": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10307": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10310": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10311": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10317": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10320": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10321": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10324": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10326": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10328": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10329": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10332": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10333": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10334": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10337": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10340": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10341": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10345": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10346": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10350": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10352": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10353": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10355": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10360": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10363": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10366": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10368": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10369": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10370": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10372": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10373": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10375": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10376": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10378": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10379": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10381": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10382": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10383": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10386": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10387": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10391": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10392": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10395": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10396": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10398": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10399": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10400": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10401": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10402": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10406": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10412": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10414": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10416": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10419": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10420": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10421": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10422": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10425": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10427": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10429": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10430": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10434": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10436": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10438": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10439": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10441": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10443": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10445": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10447": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10448": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10449": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10450": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10451": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10457": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_OFFICE"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10459": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10460": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10462": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10465": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10467": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10469": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10472": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_WHOLESALER"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10473": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10475": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10476": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10477": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10479": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10480": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10481": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10483": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10484": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOUSEHOLD"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10487": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10491": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10493": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_HOSTEL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10495": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "10498": {
+      "label": "LEGITIMATE",
+      "categories": [
+        "LEGITIMATE_NORMAL"
+      ],
+      "scenarioIds": [],
+      "memberJoinDate": null
+    },
+    "50240": {
+      "label": "FRAUD",
+      "categories": [
+        "obvious_ring"
+      ],
+      "scenarioIds": [
+        "scene_obvious_01"
+      ],
+      "memberJoinDate": "2011-09-11T15:15:34.647Z"
+    },
+    "50241": {
+      "label": "FRAUD",
+      "categories": [
+        "obvious_ring"
+      ],
+      "scenarioIds": [
+        "scene_obvious_01"
+      ],
+      "memberJoinDate": "2011-09-17T14:12:42.815Z"
+    },
+    "50242": {
+      "label": "FRAUD",
+      "categories": [
+        "obvious_ring"
+      ],
+      "scenarioIds": [
+        "scene_obvious_01"
+      ],
+      "memberJoinDate": "2011-04-20T23:15:11.856Z"
+    },
+    "50243": {
+      "label": "FRAUD",
+      "categories": [
+        "obvious_ring"
+      ],
+      "scenarioIds": [
+        "scene_obvious_01"
+      ],
+      "memberJoinDate": "2011-03-11T16:11:42.381Z"
+    },
+    "50244": {
+      "label": "FRAUD",
+      "categories": [
+        "obvious_ring"
+      ],
+      "scenarioIds": [
+        "scene_obvious_01"
+      ],
+      "memberJoinDate": "2011-02-07T11:43:47.217Z"
+    },
+    "50245": {
+      "label": "FRAUD",
+      "categories": [
+        "obvious_ring"
+      ],
+      "scenarioIds": [
+        "scene_obvious_01"
+      ],
+      "memberJoinDate": "2011-09-29T14:24:09.404Z"
+    },
+    "50246": {
+      "label": "FRAUD",
+      "categories": [
+        "noisy_ring"
+      ],
+      "scenarioIds": [
+        "scene_noisy_01"
+      ],
+      "memberJoinDate": "2011-08-21T05:08:31.071Z"
+    },
+    "50247": {
+      "label": "FRAUD",
+      "categories": [
+        "noisy_ring"
+      ],
+      "scenarioIds": [
+        "scene_noisy_01"
+      ],
+      "memberJoinDate": "2011-09-12T11:20:28.329Z"
+    },
+    "50248": {
+      "label": "FRAUD",
+      "categories": [
+        "noisy_ring"
+      ],
+      "scenarioIds": [
+        "scene_noisy_01"
+      ],
+      "memberJoinDate": "2011-05-25T03:37:00.655Z"
+    },
+    "50249": {
+      "label": "FRAUD",
+      "categories": [
+        "noisy_ring"
+      ],
+      "scenarioIds": [
+        "scene_noisy_01"
+      ],
+      "memberJoinDate": "2011-02-22T13:45:51.651Z"
+    },
+    "50250": {
+      "label": "FRAUD",
+      "categories": [
+        "noisy_ring"
+      ],
+      "scenarioIds": [
+        "scene_noisy_01"
+      ],
+      "memberJoinDate": "2010-12-31T23:31:30.997Z"
+    },
+    "50251": {
+      "label": "FRAUD",
+      "categories": [
+        "noisy_ring"
+      ],
+      "scenarioIds": [
+        "scene_noisy_01"
+      ],
+      "memberJoinDate": "2011-05-09T23:59:42.692Z"
+    },
+    "50252": {
+      "label": "FRAUD",
+      "categories": [
+        "noisy_ring"
+      ],
+      "scenarioIds": [
+        "scene_noisy_01"
+      ],
+      "memberJoinDate": "2011-03-09T16:54:14.695Z"
+    },
+    "50253": {
+      "label": "FRAUD",
+      "categories": [
+        "rotating_ip_ring"
+      ],
+      "scenarioIds": [
+        "scene_rotating_01"
+      ],
+      "memberJoinDate": "2011-08-13T16:33:14.549Z"
+    },
+    "50254": {
+      "label": "FRAUD",
+      "categories": [
+        "rotating_ip_ring"
+      ],
+      "scenarioIds": [
+        "scene_rotating_01"
+      ],
+      "memberJoinDate": "2011-02-28T05:53:15.363Z"
+    },
+    "50255": {
+      "label": "FRAUD",
+      "categories": [
+        "rotating_ip_ring"
+      ],
+      "scenarioIds": [
+        "scene_rotating_01"
+      ],
+      "memberJoinDate": "2011-09-27T15:48:10.298Z"
+    },
+    "50256": {
+      "label": "FRAUD",
+      "categories": [
+        "rotating_ip_ring"
+      ],
+      "scenarioIds": [
+        "scene_rotating_01"
+      ],
+      "memberJoinDate": "2011-06-02T12:43:32.701Z"
+    },
+    "50257": {
+      "label": "FRAUD",
+      "categories": [
+        "rotating_ip_ring"
+      ],
+      "scenarioIds": [
+        "scene_rotating_01"
+      ],
+      "memberJoinDate": "2010-12-30T22:43:10.860Z"
+    },
+    "50258": {
+      "label": "FRAUD",
+      "categories": [
+        "slow_burn_ring"
+      ],
+      "scenarioIds": [
+        "scene_slowburn_01"
+      ],
+      "memberJoinDate": "2011-11-11T07:35:39.471Z"
+    },
+    "50259": {
+      "label": "FRAUD",
+      "categories": [
+        "slow_burn_ring"
+      ],
+      "scenarioIds": [
+        "scene_slowburn_01"
+      ],
+      "memberJoinDate": "2011-02-24T10:20:07.940Z"
+    },
+    "50260": {
+      "label": "FRAUD",
+      "categories": [
+        "slow_burn_ring"
+      ],
+      "scenarioIds": [
+        "scene_slowburn_01"
+      ],
+      "memberJoinDate": "2011-10-14T17:25:43.732Z"
+    },
+    "50261": {
+      "label": "FRAUD",
+      "categories": [
+        "slow_burn_ring"
+      ],
+      "scenarioIds": [
+        "scene_slowburn_01"
+      ],
+      "memberJoinDate": "2011-11-25T21:37:06.531Z"
+    },
+    "50262": {
+      "label": "FRAUD",
+      "categories": [
+        "burst_refund"
+      ],
+      "scenarioIds": [
+        "scene_burst_01"
+      ],
+      "memberJoinDate": "2011-08-03T08:21:09.768Z"
+    },
+    "50263": {
+      "label": "FRAUD",
+      "categories": [
+        "burst_refund"
+      ],
+      "scenarioIds": [
+        "scene_burst_01"
+      ],
+      "memberJoinDate": "2011-05-15T13:05:57.599Z"
+    }
+  },
+  "scenarios": [
+    {
+      "scenarioId": "scene_obvious_01",
+      "family": "obvious_ring",
+      "members": [
+        "50240",
+        "50241",
+        "50242",
+        "50243",
+        "50244",
+        "50245"
+      ]
+    },
+    {
+      "scenarioId": "scene_noisy_01",
+      "family": "noisy_ring",
+      "members": [
+        "50246",
+        "50247",
+        "50248",
+        "50249",
+        "50250",
+        "50251",
+        "50252"
+      ]
+    },
+    {
+      "scenarioId": "scene_rotating_01",
+      "family": "rotating_ip_ring",
+      "members": [
+        "50253",
+        "50254",
+        "50255",
+        "50256",
+        "50257"
+      ]
+    },
+    {
+      "scenarioId": "scene_slowburn_01",
+      "family": "slow_burn_ring",
+      "members": [
+        "50258",
+        "50259",
+        "50260",
+        "50261"
+      ]
+    },
+    {
+      "scenarioId": "scene_burst_01",
+      "family": "burst_refund",
+      "members": [
+        "50262",
+        "50263"
+      ]
+    }
+  ]
+}
