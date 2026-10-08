@@ -1,0 +1,106 @@
+:root {
+  /* Colors - Canvas & Surfaces (Ivory/Cream theme) */
+  --rg-canvas: #fdfbf7;
+  --rg-surface: #ffffff;
+  --rg-surface-hover: #f5f2eb;
+  --rg-surface-active: #ebe5dc;
+  --rg-surface-muted: #f4f0e6;
+
+  /* Colors - Brand (Deep Burgundy) */
+  --rg-brand: #6e1c24;
+  --rg-brand-hover: #5a151d;
+  --rg-brand-active: #471017;
+  --rg-brand-text: #ffffff;
+
+  /* Colors - Accent (Restrained Muted Gold) */
+  --rg-accent: #c4a77d;
+  --rg-accent-hover: #b0956d;
+
+  /* Colors - Text */
+  --rg-text-primary: #1c1917;
+  --rg-text-secondary: #57534e;
+  --rg-text-tertiary: #78716c;
+  --rg-text-inverse: #ffffff;
+  --rg-text-brand: var(--rg-brand);
+
+  /* Colors - Borders (Thin 1px) */
+  --rg-border: #e7e5e4;
+  --rg-border-subtle: #f5f5f4;
+  --rg-border-strong: #d6d3d1;
+  --rg-border-brand: #8a2432;
+
+  /* Semantic - Severity */
+  --rg-severity-low: #047857;
+  --rg-severity-low-bg: #ecfdf5;
+  --rg-severity-low-border: #a7f3d0;
+
+  --rg-severity-medium: #b45309;
+  --rg-severity-medium-bg: #fffbeb;
+  --rg-severity-medium-border: #fde68a;
+
+  --rg-severity-high: #c2410c;
+  --rg-severity-high-bg: #fff7ed;
+  --rg-severity-high-border: #fed7aa;
+
+  --rg-severity-critical: #be123c; /* Distinct from brand */
+  --rg-severity-critical-bg: #fff1f2;
+  --rg-severity-critical-border: #fecdd3;
+
+  /* Semantic - Lifecycle */
+  --rg-lifecycle-emerging: var(--rg-severity-medium);
+  --rg-lifecycle-active: var(--rg-severity-critical);
+  --rg-lifecycle-dormant: var(--rg-text-secondary);
+  --rg-lifecycle-disbanded: var(--rg-border-strong);
+
+  /* Semantic - Decision */
+  --rg-decision-unreviewed: var(--rg-text-tertiary);
+  --rg-decision-monitor: var(--rg-severity-medium);
+  --rg-decision-escalated: var(--rg-severity-high);
+  --rg-decision-cleared: var(--rg-severity-low);
+
+  /* Typography Scale */
+  --rg-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --rg-font-mono: 'SFMono-Regular', Consolas, 'Roboto Mono', 'Courier New', monospace;
+
+  --rg-text-display: 2rem;
+  --rg-text-page-title: 1.5rem;
+  --rg-text-section-title: 1.125rem;
+  --rg-text-body: 0.875rem;
+  --rg-text-body-compact: 0.8125rem;
+  --rg-text-meta: 0.75rem;
+
+  --rg-tracking-tight: -0.01em;
+  --rg-tracking-normal: 0em;
+  --rg-tracking-wide: 0.02em;
+  --rg-tracking-wider: 0.05em;
+
+  --rg-leading-none: 1;
+  --rg-leading-tight: 1.25;
+  --rg-leading-normal: 1.5;
+  --rg-leading-relaxed: 1.625;
+
+  /* Spacing Scale */
+  --rg-space-1: 4px;
+  --rg-space-2: 8px;
+  --rg-space-3: 12px;
+  --rg-space-4: 16px;
+  --rg-space-5: 20px;
+  --rg-space-6: 24px;
+  --rg-space-8: 32px;
+  --rg-space-10: 40px;
+
+  /* Geometry - Sharp / Lightly Rounded */
+  --rg-radius-none: 0px;
+  --rg-radius-sm: 2px;
+  --rg-radius-md: 4px;
+  --rg-radius-full: 9999px;
+
+  --rg-border-width: 1px;
+
+  /* Shadows - Minimal */
+  --rg-shadow-none: none;
+  --rg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  /* Transitions */
+  --rg-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,327 @@
+/* Base Resets & Typography */
+
+.rg-app {
+  font-family: var(--rg-font-sans);
+  color: var(--rg-text-primary);
+  background-color: var(--rg-canvas);
+  line-height: var(--rg-leading-normal);
+  font-size: var(--rg-text-body);
+}
+
+/* Typography Classes */
+.rg-display {
+  font-size: var(--rg-text-display);
+  font-weight: 700;
+  line-height: var(--rg-leading-tight);
+  color: var(--rg-brand);
+}
+
+.rg-page-title {
+  font-size: var(--rg-text-page-title);
+  font-weight: 600;
+  line-height: var(--rg-leading-tight);
+  color: var(--rg-text-primary);
+}
+
+.rg-section-title {
+  font-size: var(--rg-text-section-title);
+  font-weight: 600;
+  line-height: var(--rg-leading-tight);
+  color: var(--rg-text-secondary);
+}
+
+.rg-body {
+  font-size: var(--rg-text-body);
+  line-height: var(--rg-leading-normal);
+  color: var(--rg-text-primary);
+}
+
+.rg-body-compact {
+  font-size: var(--rg-text-body-compact);
+  line-height: var(--rg-leading-relaxed);
+  color: var(--rg-text-primary);
+}
+
+.rg-meta {
+  font-size: var(--rg-text-meta);
+  font-weight: 500;
+  color: var(--rg-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: var(--rg-tracking-wider);
+}
+
+.rg-mono {
+  font-family: var(--rg-font-mono);
+  font-size: 0.85em;
+  color: var(--rg-text-secondary);
+  background-color: var(--rg-surface-hover);
+  padding: 0.1em 0.3em;
+  border-radius: var(--rg-radius-sm);
+  border: var(--rg-border-width) solid var(--rg-border);
+}
+
+/* -----------------------------
+   Component Primitives
+------------------------------ */
+
+/* Button */
+.rg-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--rg-font-sans);
+  font-size: var(--rg-text-body-compact);
+  font-weight: 500;
+  line-height: var(--rg-leading-none);
+  border-radius: var(--rg-radius-md);
+  padding: var(--rg-space-2) var(--rg-space-4);
+  cursor: pointer;
+  transition: all var(--rg-transition-fast);
+  border: var(--rg-border-width) solid transparent;
+  outline: none;
+}
+
+.rg-button:focus-visible {
+  outline: 2px solid var(--rg-brand);
+  outline-offset: 2px;
+}
+
+.rg-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rg-button--primary {
+  background-color: var(--rg-brand);
+  color: var(--rg-brand-text);
+  border-color: var(--rg-brand);
+}
+
+.rg-button--primary:hover:not(:disabled) {
+  background-color: var(--rg-brand-hover);
+}
+
+.rg-button--secondary {
+  background-color: var(--rg-surface);
+  color: var(--rg-text-primary);
+  border-color: var(--rg-border-strong);
+}
+
+.rg-button--secondary:hover:not(:disabled) {
+  background-color: var(--rg-surface-hover);
+  border-color: var(--rg-border-brand);
+  color: var(--rg-brand);
+}
+
+/* Badge */
+.rg-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.375rem;
+  font-size: var(--rg-text-meta);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--rg-tracking-wide);
+  border-radius: var(--rg-radius-sm);
+  border: var(--rg-border-width) solid transparent;
+  white-space: nowrap;
+}
+
+.rg-badge--low { color: var(--rg-severity-low); background-color: var(--rg-severity-low-bg); border-color: var(--rg-severity-low-border); }
+.rg-badge--medium { color: var(--rg-severity-medium); background-color: var(--rg-severity-medium-bg); border-color: var(--rg-severity-medium-border); }
+.rg-badge--high { color: var(--rg-severity-high); background-color: var(--rg-severity-high-bg); border-color: var(--rg-severity-high-border); }
+.rg-badge--critical { color: var(--rg-severity-critical); background-color: var(--rg-severity-critical-bg); border-color: var(--rg-severity-critical-border); }
+
+/* Lifecycle mapped to severity internally in Badge component, but using standard badge classes */
+
+.rg-badge--dormant { color: var(--rg-text-secondary); background-color: var(--rg-surface-hover); border-color: var(--rg-border-strong); }
+.rg-badge--disbanded { color: var(--rg-text-tertiary); background-color: var(--rg-surface-muted); border-color: var(--rg-border-subtle); }
+
+/* Panel */
+.rg-panel {
+  background-color: var(--rg-surface);
+  border: var(--rg-border-width) solid var(--rg-border);
+  border-radius: var(--rg-radius-md);
+  box-shadow: var(--rg-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.rg-panel-header {
+  padding: var(--rg-density-padding-y) var(--rg-density-padding-x);
+  border-bottom: var(--rg-border-width) solid var(--rg-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rg-panel-title {
+  font-size: var(--rg-text-section-title);
+  font-weight: 600;
+  color: var(--rg-text-primary);
+  margin: 0;
+}
+
+.rg-panel-meta {
+  color: var(--rg-text-secondary);
+  font-size: var(--rg-text-meta);
+}
+
+.rg-panel-content {
+  padding: var(--rg-density-padding-y) var(--rg-density-padding-x);
+}
+
+/* Table */
+.rg-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.rg-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.rg-table th {
+  padding: var(--rg-density-padding-y) var(--rg-density-padding-x);
+  font-size: var(--rg-text-meta);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--rg-tracking-wider);
+  color: var(--rg-text-tertiary);
+  border-bottom: var(--rg-border-width) solid var(--rg-border-strong);
+  background-color: var(--rg-surface-hover);
+}
+
+.rg-table td {
+  padding: var(--rg-density-padding-y) var(--rg-density-padding-x);
+  font-size: var(--rg-density-text);
+  color: var(--rg-text-primary);
+  border-bottom: var(--rg-border-width) solid var(--rg-border-subtle);
+}
+
+.rg-table tbody tr:hover {
+  background-color: var(--rg-surface-hover);
+}
+
+@media (max-width: 768px) {
+  .rg-table thead {
+    display: none;
+  }
+
+  .rg-table, .rg-table tbody, .rg-table tr, .rg-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .rg-table tr {
+    margin-bottom: var(--rg-space-4);
+    border: var(--rg-border-width) solid var(--rg-border-strong);
+    border-radius: var(--rg-radius-md);
+    padding: var(--rg-space-2);
+    background-color: var(--rg-surface);
+  }
+
+  .rg-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    border-bottom: 1px solid var(--rg-border-subtle);
+    padding: var(--rg-space-2) var(--rg-space-3);
+  }
+
+  .rg-table td:last-child {
+    border-bottom: none;
+  }
+
+  .rg-table td::before {
+    content: attr(data-label);
+    font-size: var(--rg-text-meta);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--rg-text-secondary);
+    margin-right: var(--rg-space-4);
+    text-align: left;
+  }
+}
+
+/* Field */
+.rg-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rg-space-1);
+}
+
+.rg-field-label {
+  font-size: var(--rg-text-meta);
+  font-weight: 600;
+  color: var(--rg-text-secondary);
+}
+
+.rg-field-value {
+  font-size: var(--rg-text-body);
+  color: var(--rg-text-primary);
+}
+
+/* States */
+.rg-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--rg-space-8) var(--rg-space-4);
+  text-align: center;
+  background-color: var(--rg-surface);
+  border: var(--rg-border-width) dashed var(--rg-border-strong);
+  border-radius: var(--rg-radius-md);
+  color: var(--rg-text-secondary);
+}
+
+.rg-empty-state-title {
+  font-size: var(--rg-text-section-title);
+  font-weight: 600;
+  color: var(--rg-text-primary);
+  margin: 0 0 var(--rg-space-2) 0;
+}
+
+.rg-empty-state-description {
+  font-size: var(--rg-text-body);
+  margin: 0 0 var(--rg-space-4) 0;
+}
+
+.rg-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--rg-space-4);
+  background-color: var(--rg-severity-critical-bg);
+  border: var(--rg-border-width) solid var(--rg-severity-critical-border);
+  border-radius: var(--rg-radius-md);
+  color: var(--rg-severity-critical);
+}
+
+.rg-error-state-title {
+  font-size: var(--rg-text-body);
+  font-weight: 600;
+  margin: 0 0 var(--rg-space-1) 0;
+}
+
+.rg-error-state-description {
+  font-size: var(--rg-text-body-compact);
+  margin: 0;
+}
+
+/* Skeleton */
+.rg-skeleton {
+  background-color: var(--rg-border);
+  border-radius: var(--rg-radius-sm);
+  animation: rg-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes rg-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}

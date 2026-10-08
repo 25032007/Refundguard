@@ -1,9 +1,9 @@
 import { useLocation } from 'react-router-dom';
 
 const TITLES = {
-  '/dashboard': 'Dashboard',
-  '/rings': 'Refund Rings',
-  '/metrics': 'Risk Metrics',
+  '/triage': 'Triage Center',
+  '/rings': 'Ring Intelligence',
+  '/system': 'System Metrics',
 };
 
 function titleForPath(pathname) {

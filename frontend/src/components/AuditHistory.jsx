@@ -24,25 +24,25 @@ export default function AuditHistory({ entityId, refreshTrigger }) {
   }, [entityId, refreshTrigger]);
 
   if (loading) {
-    return <div className="detail-muted">Loading audit history...</div>;
+    return <div className="rg-meta" style={{ color: 'var(--rg-text-secondary)' }}>Loading audit history...</div>;
   }
 
   if (history.length === 0) {
-    return <div className="detail-muted">No audit history available.</div>;
+    return <div className="rg-meta" style={{ color: 'var(--rg-text-secondary)' }}>No audit history available.</div>;
   }
 
   return (
-    <div className="audit-history">
+    <div className="rg-audit-history" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--rg-space-3)' }}>
       {history.map((log, index) => (
-        <div key={index} className="list-item">
-          <div className="mono">
+        <div key={index} style={{ padding: 'var(--rg-space-3)', backgroundColor: 'var(--rg-surface-hover)', borderRadius: 'var(--rg-radius-sm)', border: 'var(--rg-border-width) solid var(--rg-border-subtle)' }}>
+          <div className="rg-meta" style={{ marginBottom: 'var(--rg-space-1)' }}>
             {new Date(log.timestamp).toLocaleString()}
           </div>
-          <div>
+          <div className="rg-body-compact" style={{ marginBottom: 'var(--rg-space-1)' }}>
             <strong>{log.previousDecision}</strong> → <strong>{log.newDecision}</strong>
           </div>
-          <div className="list-meta">
-            Analyst: {log.analystId} {log.reason && `· Note: ${log.reason}`}
+          <div className="rg-body-compact" style={{ color: 'var(--rg-text-secondary)' }}>
+            Analyst: <span className="rg-mono">{log.analystId}</span> {log.reason && `· Note: ${log.reason}`}
           </div>
         </div>
       ))}

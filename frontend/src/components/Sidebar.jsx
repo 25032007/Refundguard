@@ -1,9 +1,9 @@
 import { NavLink } from 'react-router-dom';
 
 const NAV_ITEMS = [
-  { to: '/dashboard', label: 'Dashboard' },
+  { to: '/triage', label: 'Triage Center' },
   { to: '/rings', label: 'Refund Rings' },
-  { to: '/metrics', label: 'Risk Metrics' },
+  { to: '/system', label: 'System Metrics' },
 ];
 
 export default function Sidebar() {

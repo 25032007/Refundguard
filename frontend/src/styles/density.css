@@ -1,0 +1,37 @@
+/* Density System */
+
+:root,
+[data-density="comfortable"] {
+  --rg-density-padding-x: var(--rg-space-4);
+  --rg-density-padding-y: var(--rg-space-3);
+  --rg-density-gap: var(--rg-space-4);
+  --rg-density-text: var(--rg-text-body);
+  --rg-density-row-height: 48px;
+  --rg-density-icon-size: 20px;
+}
+
+[data-density="compact"] {
+  --rg-density-padding-x: var(--rg-space-2);
+  --rg-density-padding-y: var(--rg-space-1);
+  --rg-density-gap: var(--rg-space-2);
+  --rg-density-text: var(--rg-text-body-compact);
+  --rg-density-row-height: 32px;
+  --rg-density-icon-size: 16px;
+}
+
+/* Helpers */
+.rg-density-comfortable {
+  --rg-density-padding-x: var(--rg-space-4);
+  --rg-density-padding-y: var(--rg-space-3);
+  --rg-density-gap: var(--rg-space-4);
+  --rg-density-text: var(--rg-text-body);
+  --rg-density-row-height: 48px;
+}
+
+.rg-density-compact {
+  --rg-density-padding-x: var(--rg-space-2);
+  --rg-density-padding-y: var(--rg-space-1);
+  --rg-density-gap: var(--rg-space-2);
+  --rg-density-text: var(--rg-text-body-compact);
+  --rg-density-row-height: 32px;
+}
