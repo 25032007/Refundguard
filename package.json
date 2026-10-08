@@ -2,6 +2,9 @@
   "name": "refundguard",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "description": "Explainable AI Risk Manager for detecting coordinated refund-abuse rings",
   "scripts": {
     "setup": "npm run install-all",
