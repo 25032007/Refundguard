@@ -26,6 +26,10 @@ function loadJson(filename) {
 }
 
 async function generateBenchmark(seed) {
+  const isTestCommand = ['test', 'data:test', 'eval:test'].includes(process.env.npm_lifecycle_event);
+  const mode = process.env.DATASET_MODE || ((isTestCommand || process.env.CI === 'true') ? 'CI_FIXTURE' : 'REAL_UCI');
+  console.log(`DATASET_MODE=${mode}`);
+
   execSync(`node data/adapters/onlineRetail.js --seed ${seed}`, {
     cwd: path.join(__dirname, '..'),
     stdio: 'ignore'
@@ -151,7 +155,7 @@ async function main() {
   } else {
     const { aggregateMetrics } = require('./metrics');
     const aggregate = aggregateMetrics(results);
-    
+
     // Stability summary
     const f1s = results.map(r => ({ seed: r.seed, f1: r.metrics.f1 }));
     f1s.sort((a, b) => a.f1 - b.f1);
@@ -159,7 +163,7 @@ async function main() {
     const bestSeed = f1s[f1s.length - 1].seed;
     const f1Range = f1s[f1s.length - 1].f1 - f1s[0].f1;
     const materiallyDifferent = f1Range > 0.05; // deterministic heuristic
-    
+
     const stabilitySummary = {
       bestSeed,
       worstSeed,
