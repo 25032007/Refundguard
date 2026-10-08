@@ -1,86 +1,154 @@
-import React, { useState, useMemo } from 'react';
-import { useTriageCases } from './hooks/useTriageCases.js';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { getInvestigations, getSummary } from '../../services/api.js';
 import TriageHeader from './components/TriageHeader.jsx';
 import TriageFilters from './components/TriageFilters.jsx';
 import CaseTable from './components/CaseTable.jsx';
-import Skeleton from '../../ui/Skeleton.jsx';
-import ErrorState from '../../ui/ErrorState.jsx';
-import Button from '../../ui/Button.jsx';
-
-const SEVERITY_RANK = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 };
-const DECISION_RANK = { UNREVIEWED: 4, ESCALATED: 3, MONITOR: 2, CLEARED: 1 };
 
 export default function TriagePage() {
-  const { loading, error, cases, retry } = useTriageCases();
-  const [filter, setFilter] = useState({ decision: 'ALL', level: 'ALL', ring: 'ALL' });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-  const filteredAndSortedCases = useMemo(() => {
-    let filtered = cases;
+  // URL state
+  const scope = searchParams.get('scope') || 'flagged'; // all | flagged
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const decision = searchParams.get('decision') || 'ALL';
+  const riskLevel = searchParams.get('riskLevel') || 'ALL';
+  const inRing = searchParams.get('inRing') || 'ALL';
+  const search = searchParams.get('search') || '';
 
-    // Filters
-    if (filter.decision !== 'ALL') {
-      filtered = filtered.filter(c => c.decision === filter.decision);
-    }
-    if (filter.level !== 'ALL') {
-      filtered = filtered.filter(c => c.summary?.overallRisk === filter.level);
-    }
-    if (filter.ring !== 'ALL') {
-      if (filter.ring === 'IN_RING') filtered = filtered.filter(c => !!c.graph?.inRing);
-      if (filter.ring === 'NO_RING') filtered = filtered.filter(c => !c.graph?.inRing);
-    }
+  // Debounced search
+  const [searchInput, setSearchInput] = useState(search);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search !== searchInput) {
+        setSearchParams(prev => {
+          if (searchInput) prev.set('search', searchInput);
+          else prev.delete('search');
+          prev.set('page', '1');
+          return prev;
+        });
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchInput, search, setSearchParams]);
 
-    // Sorting
-    return [...filtered].sort((a, b) => {
-      // 1. Risk score descending
-      const scoreA = a.risk?.score || 0;
-      const scoreB = b.risk?.score || 0;
-      if (scoreA !== scoreB) return scoreB - scoreA;
+  // Build API params
+  const apiParams = {
+    scope,
+    pageSize: 50,
+    page,
+    sort: '-score'
+  };
+  if (decision !== 'ALL') apiParams.status = decision;
+  if (riskLevel !== 'ALL') apiParams.riskLevel = riskLevel;
+  if (inRing === 'IN_RING') apiParams.inRing = true;
+  if (inRing === 'NO_RING') apiParams.inRing = false;
+  if (search) apiParams.search = search;
 
-      // 2. Severity
-      const sevA = SEVERITY_RANK[a.summary?.overallRisk] || 0;
-      const sevB = SEVERITY_RANK[b.summary?.overallRisk] || 0;
-      if (sevA !== sevB) return sevB - sevA;
+  const { data: listData, isLoading, isError, refetch } = useQuery({
+    queryKey: ['investigations', apiParams],
+    queryFn: () => getInvestigations(apiParams),
+    keepPreviousData: true
+  });
 
-      // 3. Decision state
-      const decA = DECISION_RANK[a.decision] || 0;
-      const decB = DECISION_RANK[b.decision] || 0;
-      if (decA !== decB) return decB - decA;
+  const { data: summary } = useQuery({
+    queryKey: ['summary'],
+    queryFn: getSummary,
+  });
 
-      // 4. Stable identifier tie-breaker
-      const idA = String(a.customer?.customerId || '');
-      const idB = String(b.customer?.customerId || '');
-      return idA.localeCompare(idB);
+  const handleFilterChange = (key, value) => {
+    setSearchParams(prev => {
+      if (value === 'ALL' || !value) prev.delete(key);
+      else prev.set(key, value);
+      prev.set('page', '1');
+      return prev;
     });
-  }, [cases, filter]);
+  };
 
-  if (loading) {
+  const handleScopeToggle = (newScope) => {
+    setSearchParams(prev => {
+      prev.set('scope', newScope);
+      prev.set('page', '1');
+      return prev;
+    });
+  };
+
+  if (isError) {
     return (
-      <div className="rg-app page">
-        <Skeleton width="100%" height="200px" style={{ margin: '-32px -32px var(--rg-space-8) -32px', borderRadius: '0 0 var(--rg-radius-md) var(--rg-radius-md)' }} />
-        <Skeleton width="100%" height="40px" style={{ marginBottom: 'var(--rg-space-6)' }} />
-        <Skeleton width="100%" height="400px" />
+      <div className="page">
+        <div className="rg-error-state">
+          <p className="rg-error-state-title">Failed to load triage data</p>
+          <p className="rg-error-state-description">Could not retrieve cases from the API.</p>
+        </div>
+        <button
+          onClick={refetch}
+          style={{ marginTop: 16, padding: '8px 16px', background: 'var(--rg-brand)', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer', fontWeight: 600 }}
+        >
+          Retry
+        </button>
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="rg-app page" style={{ paddingTop: 'var(--rg-space-10)' }}>
-        <ErrorState
-          title="Failed to load triage data"
-          description="Could not retrieve cases from the risk engine."
-        />
-        <Button onClick={retry} style={{ marginTop: 'var(--rg-space-4)' }}>Retry</Button>
-      </div>
-    );
-  }
+  const items = listData?.items || [];
+  const facets = listData?.facets || { status: {}, riskLevel: {}, inRing: { true: 0, false: 0 } };
+  const totalItems = listData?.total || 0;
+  const totalPages = listData?.pages || 1;
+  const hasNext = listData?.hasNext;
+  const hasPrev = listData?.hasPrev;
 
   return (
-    <div className="rg-app page">
-      <TriageHeader cases={cases} />
-      <div style={{ backgroundColor: 'var(--rg-surface)', borderRadius: 'var(--rg-radius-md)', boxShadow: 'var(--rg-shadow-sm)' }}>
-        <TriageFilters filter={filter} setFilter={setFilter} />
-        <CaseTable cases={filteredAndSortedCases} />
+    <div className="page page-transition">
+      <TriageHeader summary={summary} scope={scope} onScopeChange={handleScopeToggle} searchInput={searchInput} setSearchInput={setSearchInput} />
+
+      <div className="case-queue">
+        <TriageFilters
+          decision={decision}
+          riskLevel={riskLevel}
+          inRing={inRing}
+          onFilterChange={handleFilterChange}
+          facets={facets}
+          totalItems={totalItems}
+        />
+        <CaseTable
+          cases={items}
+          isLoading={isLoading}
+          onClear={() => setSearchParams(prev => {
+            prev.delete('decision');
+            prev.delete('riskLevel');
+            prev.delete('inRing');
+            prev.delete('search');
+            prev.set('page', '1');
+            setSearchInput('');
+            return prev;
+          })}
+          hasFilters={decision !== 'ALL' || riskLevel !== 'ALL' || inRing !== 'ALL' || search}
+        />
+
+        {/* PAGINATION */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: 'var(--rg-surface)', borderTop: '1px solid var(--rg-border)', borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }}>
+          <div style={{ fontSize: 12, color: 'var(--rg-text-secondary)' }}>
+            Showing page {page} of {totalPages} ({totalItems.toLocaleString()} cases)
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              disabled={!hasPrev || isLoading}
+              onClick={() => setSearchParams(prev => { prev.set('page', page - 1); return prev; })}
+              style={{ padding: '6px 12px', background: 'var(--rg-canvas)', border: '1px solid var(--rg-border)', borderRadius: 4, cursor: hasPrev ? 'pointer' : 'not-allowed', opacity: hasPrev ? 1 : 0.5 }}
+            >
+              Previous
+            </button>
+            <button
+              disabled={!hasNext || isLoading}
+              onClick={() => setSearchParams(prev => { prev.set('page', page + 1); return prev; })}
+              style={{ padding: '6px 12px', background: 'var(--rg-canvas)', border: '1px solid var(--rg-border)', borderRadius: 4, cursor: hasNext ? 'pointer' : 'not-allowed', opacity: hasNext ? 1 : 0.5 }}
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
