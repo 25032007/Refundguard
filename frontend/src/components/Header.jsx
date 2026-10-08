@@ -7,7 +7,8 @@ const TITLES = {
 };
 
 function titleForPath(pathname) {
-  if (pathname.startsWith('/rings/')) return 'Ring Investigation';
+  if (pathname.startsWith('/rings/')) return 'Ring Intelligence';
+  if (pathname.startsWith('/investigations/')) return 'Customer Investigation';
   return TITLES[pathname] || 'RefundGuard';
 }
 

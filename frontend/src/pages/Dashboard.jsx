@@ -66,7 +66,7 @@ export default function Dashboard() {
                     key={investigation.customer.customerId}
                     className="data-row"
                     onClick={() =>
-                      navigate(`/rings/${investigation.customer.customerId}`)
+                      navigate(`/investigations/${investigation.customer.customerId}`)
                     }
                   >
                     <td className="mono">
