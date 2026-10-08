@@ -180,15 +180,35 @@ RefundGuard/
 ### Install
 From the repository root:
 ```bash
-npm install
+npm run setup
 ```
 
 ### Running the project
-Start the development servers (frontend and backend):
+First, generate the development dataset:
+```bash
+npm run data:generate
+```
+
+Then start the development servers (frontend and backend):
 ```bash
 npm run dev
 ```
 The console will be available at `http://localhost:5173` and the API at `http://localhost:5000`.
+
+## Running on the UCI Benchmark
+
+To run the system on the full synthetic UCI benchmark dataset:
+
+```bash
+npm run data:uci
+npm run dev:uci
+```
+
+To run the full evaluation suite including all UCI-dependent tests:
+
+```bash
+npm run test:full
+```
 
 ### Building
 To build the frontend for production:
@@ -200,13 +220,13 @@ npm run build --prefix frontend
 
 The project has comprehensive test suites. Here are the verified commands and their expected outcomes:
 
-- `npm test`: Runs all engine, data, and API tests. (Currently passes with 263 total tests across risk, nlp, graph, data, eval, backend, and frontend).
-- `npm run data:test`: Validates data generation and scenarios. (25 passing tests).
+- `npm run test:ci`: Runs the engine, API, frontend, and committed mini-fixture tests (`data/fixtures/mini`) without requiring the UCI dataset.
+- `npm run test:full`: Adds the UCI-dependent data and evaluation suites. Generate the benchmark first with `npm run data:uci`.
 - `npm run bench:api`: Runs the API performance benchmark (produces the latency stats above).
 
 ## Demo & Screenshots
 
-*(Placeholder for UI screenshots and interactive demo links)*
+The Analyst Dashboard is available locally at `http://localhost:5173` after running `npm run dev` or `npm run dev:uci`.
 
 ## Limitations
 
@@ -220,3 +240,7 @@ The project has comprehensive test suites. Here are the verified commands and th
 - Production authentication and authorization (SSO/SAML).
 - Real-time streaming event ingestion via Kafka.
 - Distributed graph processing for datasets exceeding 100,000 nodes.
+
+## License
+
+This project is licensed under the MIT License.
