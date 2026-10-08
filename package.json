@@ -13,6 +13,7 @@
     "bench:api": "cross-env REFUNDGUARD_DATA_DIR=data/generated/uci node backend/bench.js",
     "data:validate": "node data/validate.js",
     "data:test": "node --test \"data/tests/*.test.js\"",
+    "data:ci": "node --test \"data/tests/fixture.test.js\"",
     "risk:analyze": "node risk-engine/run.js",
     "risk:test": "node --test \"risk-engine/tests/*.test.js\"",
     "nlp:analyze": "node nlp/run.js",
@@ -26,7 +27,9 @@
     "eval:test": "node --test --test-concurrency=1 \"evaluation/tests/*.test.js\"",
     "backend:test": "node --test \"backend/tests/*.test.js\"",
     "frontend:test": "npm run test --prefix frontend",
-    "test": "npm run risk:test && npm run nlp:test && npm run graph:test && npm run data:test && npm run eval:test && npm run backend:test && npm run frontend:test"
+    "test": "npm run test:ci",
+    "test:ci": "node scripts/run-tests.js risk nlp graph data-ci backend frontend",
+    "test:full": "node scripts/run-tests.js risk nlp graph data eval backend frontend"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
