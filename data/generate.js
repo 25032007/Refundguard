@@ -425,6 +425,18 @@ function main() {
   const refunds = buildRefunds(transactions, clusterMembership);
   const complaints = buildComplaints(customers, transactions, refunds, clusterMembership);
 
+  // Normalize dataset: Ensure no customer createdAt date is AFTER their first transaction.
+  for (const c of customers) {
+    const txs = transactions.filter(t => t.customerId === c.customerId);
+    if (txs.length > 0) {
+      const minTx = Math.min(...txs.map(t => new Date(t.timestamp || t.createdAt).getTime()));
+      if (new Date(c.createdAt).getTime() > minTx) {
+        // Enforce chronological invariant: account must exist before transactions
+        c.createdAt = new Date(minTx - 1000).toISOString();
+      }
+    }
+  }
+
   if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
   fs.writeFileSync(path.join(OUTPUT_DIR, 'customers.json'), JSON.stringify(customers, null, 2));

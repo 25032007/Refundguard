@@ -472,10 +472,38 @@ async function main() {
 
   if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
-  const { customerStats, rawLines, totalSourceRows, missingCustomerIdRows, outlierRows } = await loadAndProfileCSV(PROCESSED_CSV);
-  if (totalSourceRows === 0) {
-    console.error("No data found. Did you run the preprocessor?");
-    process.exit(1);
+  const isTestCommand = ['test', 'data:test', 'eval:test'].includes(process.env.npm_lifecycle_event);
+  const mode = process.env.DATASET_MODE || ((isTestCommand || process.env.CI === 'true') ? 'CI_FIXTURE' : 'REAL_UCI');
+
+  console.log(`DATASET_MODE=${mode}`);
+
+  let customerStats, rawLines, totalSourceRows, missingCustomerIdRows, outlierRows;
+
+  if (mode === 'CI_FIXTURE') {
+    const fixturePath = path.join(__dirname, '..', 'fixtures', 'ci-online-retail.csv');
+    if (!fs.existsSync(fixturePath)) {
+      console.error("CI_FIXTURE mode requested but ci-online-retail.csv not found.");
+      process.exit(1);
+    }
+    const fixtureData = await loadAndProfileCSV(fixturePath);
+    customerStats = fixtureData.customerStats;
+    rawLines = fixtureData.rawLines;
+    totalSourceRows = fixtureData.totalSourceRows;
+    missingCustomerIdRows = fixtureData.missingCustomerIdRows;
+    outlierRows = fixtureData.outlierRows;
+  } else {
+    // REAL_UCI mode
+    const realData = await loadAndProfileCSV(PROCESSED_CSV);
+    customerStats = realData.customerStats;
+    rawLines = realData.rawLines;
+    totalSourceRows = realData.totalSourceRows;
+    missingCustomerIdRows = realData.missingCustomerIdRows;
+    outlierRows = realData.outlierRows;
+
+    if (totalSourceRows === 0) {
+      console.error("REAL_UCI dataset requested but not found. Failing loudly.");
+      process.exit(1);
+    }
   }
 
   const selectedCustomerIds = sampleCustomers(customerStats, TARGET_CUSTOMERS);
@@ -483,6 +511,19 @@ async function main() {
 
   const { injectScenarios } = require('../scenarios/index');
   const scenarioStats = injectScenarios(data, SEED);
+
+  // Normalize dataset: Ensure no customer createdAt date is AFTER their first transaction.
+  // The synthetic scenario injectors randomize timestamps independently, which can break chronology.
+  for (const c of data.customers) {
+    const txs = data.transactions.filter(t => t.customerId === c.customerId);
+    if (txs.length > 0) {
+      const minTx = Math.min(...txs.map(t => new Date(t.timestamp || t.createdAt).getTime()));
+      if (new Date(c.createdAt).getTime() > minTx) {
+        // Enforce chronological invariant: account must exist before transactions
+        c.createdAt = new Date(minTx - 1000).toISOString();
+      }
+    }
+  }
 
   fs.writeFileSync(path.join(OUTPUT_DIR, 'customers.json'), JSON.stringify(data.customers, null, 2));
   fs.writeFileSync(path.join(OUTPUT_DIR, 'transactions.json'), JSON.stringify(data.transactions, null, 2));
@@ -506,7 +547,7 @@ async function main() {
     data.groundTruth.seed = SEED;
 
     const metadata = {
-    source: "UCI Online Retail II",
+    source: mode,
     seed: SEED,
     currency: "GBP",
     backgroundCustomerCount: scenarioStats.bgCount,
