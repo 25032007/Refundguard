@@ -7,7 +7,24 @@
     <title>RefundGuard</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div style="display: flex; height: 100vh; width: 100vw; background: #0E0D0B; color: #F2EDE4; font-family: Inter, sans-serif;">
+        <div style="width: 260px; background: #14120F; border-right: 1px solid #3A342A; padding: 24px;"></div>
+        <div style="flex: 1; display: flex; flexDirection: column;">
+          <div style="height: 64px; background: #14120F; border-bottom: 1px solid #3A342A;"></div>
+          <div style="flex: 1; padding: 32px;">
+            <div style="height: 100px; background: #1B1814; border: 1px solid #3A342A; border-radius: 4px; animation: pulse 2s infinite;"></div>
+            <style>
+              @keyframes pulse {
+                0% { opacity: 0.6; }
+                50% { opacity: 1; }
+                100% { opacity: 0.6; }
+              }
+            </style>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
