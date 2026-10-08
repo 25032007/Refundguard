@@ -7,6 +7,27 @@ const decisionRepository = require('../repositories/decisionRepository');
 
 const LEVEL_ORDER = { LOW: 0, MEDIUM: 1, HIGH: 2, CRITICAL: 3 };
 
+const SIGNAL_LABELS = {
+  refund_frequency: 'Refund Frequency',
+  refund_rate: 'Refund Rate',
+  refund_velocity: 'Refund Velocity',
+  repeated_refund_reason: 'Repeated Refund Reason',
+  shared_ip: 'Shared IP Address',
+  shared_device: 'Shared Device'
+};
+
+function humanizeSignalType(type) {
+  return String(type)
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+function signalLabel(type) {
+  if (!type) return null;
+  return SIGNAL_LABELS[type] || humanizeSignalType(type);
+}
+
 const RECOMMENDATIONS = {
   LOW: 'No immediate action.',
   MEDIUM: 'Monitor customer.',
@@ -179,7 +200,7 @@ function precomputeListRows() {
       customerId,
       riskScore: risk.score,
       riskLevel: riskLevel,
-      topSignal: topSignal ? { type: topSignal.type, label: topSignal.label, contribution: topSignal.contribution } : null,
+      topSignal: topSignal ? { type: topSignal.type, label: signalLabel(topSignal.type), contribution: topSignal.contribution } : null,
       complaintCount: nlpResult ? nlpResult.complaintCount : 0,
       ring: ring ? { ringId: ring.ringId, score: ring.score } : null
     });
@@ -438,16 +459,15 @@ function getSummary() {
     decisionCounts[status]++;
 
     if (row.topSignal) {
-      const key = `${row.topSignal.type}:${row.topSignal.label}`;
+      const key = row.topSignal.type;
       const count = (signalMap.get(key) || 0) + 1;
       signalMap.set(key, count);
     }
   }
 
   const topSignals = Array.from(signalMap.entries())
-    .map(([key, count]) => {
-      const [type, label] = key.split(':');
-      return { type, label, count };
+    .map(([type, count]) => {
+      return { type, label: signalLabel(type), count };
     })
     .sort((a, b) => b.count - a.count)
     .slice(0, 5);
@@ -466,7 +486,7 @@ function getSummary() {
 
 function computeRingsLifecycleSummary(rings, lifecycleByRingId) {
   if (!lifecycleByRingId) return null;
-  const byLifecycle = { EMERGING: 0, ACTIVE: 0, DORMANT: 0, DISBANDED: 0 };
+  const byLifecycle = { EMERGING: 0, ACTIVE: 0, DORMANT: 0, DISBANDED: 0, UNTRACKED: 0 };
   for (const ring of rings) {
     const history = lifecycleByRingId.get(ring.ringId);
     if (history && history.length > 0) {
@@ -476,6 +496,8 @@ function computeRingsLifecycleSummary(rings, lifecycleByRingId) {
       } else {
         byLifecycle[state] = 1;
       }
+    } else {
+      byLifecycle['UNTRACKED']++;
     }
   }
   return byLifecycle;
@@ -494,12 +516,59 @@ function getHealth() {
   };
 }
 
+function toRingSummary(ring) {
+  const { relationshipEdges, ...rest } = ring;
+  return { ...rest, edgeCount: Array.isArray(relationshipEdges) ? relationshipEdges.length : 0 };
+}
+
+function buildRingGraph(ring) {
+  const nodes = [];
+  const links = [];
+  const nodeIndex = new Map();
+
+  const ensureNode = (id, type, ringMember = false) => {
+    const existing = nodeIndex.get(id);
+    if (existing) {
+      if (ringMember) existing.ringMember = true;
+      return existing;
+    }
+    const node = { id, type, ringMember };
+    nodeIndex.set(id, node);
+    nodes.push(node);
+    return node;
+  };
+
+  for (const customerId of ring.customerIds || []) {
+    ensureNode(customerId, 'customer', true);
+  }
+
+  for (const group of (ring.evidence && ring.evidence.sharedIps) || []) {
+    ensureNode(group.ip, 'ip');
+    for (const customerId of group.customers) {
+      ensureNode(customerId, 'customer');
+      links.push({ source: customerId, target: group.ip, type: 'shared_ip' });
+    }
+  }
+
+  for (const group of (ring.evidence && ring.evidence.sharedDevices) || []) {
+    ensureNode(group.deviceId, 'device');
+    for (const customerId of group.customers) {
+      ensureNode(customerId, 'customer');
+      links.push({ source: customerId, target: group.deviceId, type: 'shared_device' });
+    }
+  }
+
+  return { nodes, links };
+}
+
 function getRings(page = 1, pageSize = 50) {
   const cache = getCache();
   const validPageSize = Math.min(Math.max(1, parseInt(pageSize, 10)), 100);
   const validPage = Math.max(1, parseInt(page, 10));
 
-  const items = precomputedRings.slice((validPage - 1) * validPageSize, validPage * validPageSize);
+  const items = precomputedRings
+    .slice((validPage - 1) * validPageSize, validPage * validPageSize)
+    .map(toRingSummary);
 
   return {
     items,
@@ -511,7 +580,9 @@ function getRings(page = 1, pageSize = 50) {
 
 function getRing(ringId) {
   const cache = getCache();
-  return cache.rings.find(r => r.ringId === ringId) || null;
+  const ring = cache.rings.find(r => r.ringId === ringId);
+  if (!ring) return null;
+  return { ...toRingSummary(ring), graph: buildRingGraph(ring) };
 }
 
 function getRingLifecycle(ringId) {
