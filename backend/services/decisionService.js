@@ -1,14 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-const DATA_DIR = path.join(__dirname, '..', '..', 'data', 'persist');
-const DECISIONS_FILE = path.join(DATA_DIR, 'decisions.json');
-const AUDIT_FILE = path.join(DATA_DIR, 'audit.json');
+const PERSIST_DIR = process.env.PERSIST_DIR || path.join(__dirname, '..', '..', 'data', 'persist');
+const DECISIONS_FILE = path.join(PERSIST_DIR, 'decisions.json');
+const AUDIT_FILE = path.join(PERSIST_DIR, 'audit.json');
 
 const VALID_DECISIONS = ['UNREVIEWED', 'MONITOR', 'ESCALATED', 'CLEARED'];
 
 function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (!fs.existsSync(PERSIST_DIR)) fs.mkdirSync(PERSIST_DIR, { recursive: true });
   if (!fs.existsSync(DECISIONS_FILE)) fs.writeFileSync(DECISIONS_FILE, JSON.stringify({}));
   if (!fs.existsSync(AUDIT_FILE)) fs.writeFileSync(AUDIT_FILE, JSON.stringify([]));
 }
@@ -49,6 +49,20 @@ function updateDecision(entityId, newDecision, analystId = 'system', reason = ''
     throw new Error(`Invalid decision: ${newDecision}`);
   }
 
+  if (reason !== undefined && reason !== null && typeof reason !== 'string') {
+    throw new Error('Invalid reason: must be a string');
+  }
+
+  let finalReason = reason ? reason.trim() : '';
+
+  if (finalReason.length > 500) {
+    throw new Error('Invalid reason: maximum 500 characters allowed');
+  }
+
+  if ((newDecision === 'ESCALATED' || newDecision === 'CLEARED') && finalReason.length < 5) {
+    throw new Error(`Invalid reason: ${newDecision} requires a reason of at least 5 characters`);
+  }
+
   const decisions = getDecisions();
   const current = decisions[entityId] || { decision: 'UNREVIEWED' };
 
@@ -59,7 +73,7 @@ function updateDecision(entityId, newDecision, analystId = 'system', reason = ''
     previousDecision: current.decision,
     newDecision,
     analystId,
-    reason,
+    reason: finalReason,
     timestamp: now,
   };
 
@@ -72,7 +86,7 @@ function updateDecision(entityId, newDecision, analystId = 'system', reason = ''
     decision: newDecision,
     previousDecision: current.decision,
     analystId,
-    reason,
+    reason: finalReason,
     createdAt: current.createdAt || now,
     updatedAt: now,
   };

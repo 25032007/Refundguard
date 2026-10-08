@@ -40,7 +40,7 @@ const COMPLAINT_TEMPLATES = {
   ]
 };
 
-function injectScenario({ data, faker, calibration, scenarioId, family, memberCount, generateMembers }) {
+function injectScenario({ data, faker, calibration, scenarioId, family, memberCount, generateMembers, refDate }) {
   const cStartIndex = data.customers.length;
   
   const scenarioMembers = [];
@@ -57,7 +57,7 @@ function injectScenario({ data, faker, calibration, scenarioId, family, memberCo
       email: faker.internet.email().toLowerCase(),
       phone: faker.phone.number(),
       status: 'active',
-      createdAt: faker.date.past({ years: 1, refDate: new Date('2011-12-09T00:00:00Z') }).toISOString()
+      createdAt: faker.date.past({ years: 1, refDate }).toISOString()
     };
     
     data.customers.push(cust);
@@ -81,8 +81,9 @@ function injectScenario({ data, faker, calibration, scenarioId, family, memberCo
     data, 
     faker, 
     calibration,
+    refDate,
     makeTxn: (cid, opts) => {
-      const ts = opts.timestamp || faker.date.recent({ days: 100, refDate: new Date('2011-12-09T00:00:00Z') });
+      const ts = opts.timestamp || faker.date.recent({ days: 100, refDate });
       const tx = {
         transactionId: makeId('txn', data.transactions.length + 100000), // ensure no collision
         customerId: cid,

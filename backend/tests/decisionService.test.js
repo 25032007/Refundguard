@@ -2,11 +2,14 @@ const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
+
+const TEST_DIR = path.join(__dirname, 'test_data');
+process.env.PERSIST_DIR = TEST_DIR;
+
 const decisionService = require('../services/decisionService');
 
-const DATA_DIR = path.join(__dirname, '..', '..', 'data', 'persist');
-const DECISIONS_FILE = path.join(DATA_DIR, 'decisions.json');
-const AUDIT_FILE = path.join(DATA_DIR, 'audit.json');
+const DECISIONS_FILE = path.join(TEST_DIR, 'decisions.json');
+const AUDIT_FILE = path.join(TEST_DIR, 'audit.json');
 
 // Ensure isolated state for tests
 function clearState() {
@@ -14,9 +17,14 @@ function clearState() {
   if (fs.existsSync(AUDIT_FILE)) fs.unlinkSync(AUDIT_FILE);
 }
 
+function clearTestDir() {
+  clearState();
+  if (fs.existsSync(TEST_DIR)) fs.rmdirSync(TEST_DIR);
+}
+
 test('Phase 4: Persistence and Audit Logging', async (t) => {
   t.beforeEach(clearState);
-  t.afterEach(clearState);
+  t.afterEach(clearTestDir);
 
   await t.test('1. missing decision returns UNREVIEWED/default behavior', () => {
     const dec = decisionService.getDecision('cust_missing');
@@ -60,7 +68,7 @@ test('Phase 4: Persistence and Audit Logging', async (t) => {
   });
 
   await t.test('5. decision persists after process/application restart', () => {
-    decisionService.updateDecision('cust_4', 'CLEARED');
+    decisionService.updateDecision('cust_4', 'CLEARED', 'analyst-1', 'Valid Reason');
 
     // Simulate restart by deleting require cache or reading files directly
     const decisions = JSON.parse(fs.readFileSync(DECISIONS_FILE, 'utf8'));
@@ -73,6 +81,12 @@ test('Phase 4: Persistence and Audit Logging', async (t) => {
     }, /Invalid decision/);
   });
 
+  await t.test('10b. invalid reason rejected', () => {
+    assert.throws(() => {
+      decisionService.updateDecision('cust_5', 'ESCALATED', 'analyst-1', 'tiny');
+    }, /Invalid reason/);
+  });
+
   await t.test('11. missing/invalid entity rejected', () => {
     assert.throws(() => {
       decisionService.updateDecision(null, 'MONITOR');
@@ -81,7 +95,7 @@ test('Phase 4: Persistence and Audit Logging', async (t) => {
 
   await t.test('12. multiple entities remain isolated', () => {
     decisionService.updateDecision('cust_A', 'MONITOR');
-    decisionService.updateDecision('cust_B', 'ESCALATED');
+    decisionService.updateDecision('cust_B', 'ESCALATED', 'analyst-1', 'Valid Reason');
 
     const decA = decisionService.getDecision('cust_A');
     const decB = decisionService.getDecision('cust_B');

@@ -73,14 +73,10 @@ function InvestigationBody({ investigation, initialDecision, entityId }) {
   const [decision, setDecision] = useState(initialDecision || 'UNREVIEWED');
   const [auditTrigger, setAuditTrigger] = useState(0);
 
-  const handleDecisionChange = async (newDecision) => {
-    try {
-      const updated = await updateDecision(entityId, { decision: newDecision, analystId: 'analyst-1' });
-      setDecision(updated.decision);
-      setAuditTrigger(t => t + 1);
-    } catch (e) {
-      console.error('Failed to save decision', e);
-    }
+  const handleDecisionChange = async (newDecision, reason) => {
+    const updated = await updateDecision(entityId, { decision: newDecision, analystId: 'analyst-1', reason });
+    setDecision(updated.decision);
+    setAuditTrigger(t => t + 1);
   };
 
   const riskSignalCount = (risk && risk.signals ? risk.signals : []).length;
@@ -100,10 +96,7 @@ function InvestigationBody({ investigation, initialDecision, entityId }) {
       {/* 1. Case Header */}
       <CaseHeader investigation={investigation} />
 
-      {/* 2. Investigation Status / Analyst Decision */}
-      <Section title="Investigation Status">
-        <InvestigationDecision value={decision} onChange={handleDecisionChange} />
-      </Section>
+
 
       {/* 3. Risk Overview */}
       <Section title="Risk Overview">
@@ -304,7 +297,7 @@ function InvestigationBody({ investigation, initialDecision, entityId }) {
 
       {/* 11. Analyst Decision */}
       <Section title="Analyst Decision">
-        <InvestigationDecision value={decision} onChange={handleDecisionChange} />
+        <InvestigationDecision currentDecision={decision} onSave={handleDecisionChange} />
       </Section>
 
       {/* 12. Audit History */}
