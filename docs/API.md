@@ -6,6 +6,11 @@ Base URL: `/api/v1`
 - **riskLevel**: `LOW` | `MEDIUM` | `HIGH` | `CRITICAL`
 - **decision**: `UNREVIEWED` | `MONITOR` | `ESCALATED` | `CLEARED`
 
+## Errors
+Error responses (401, 404, 409, 422, 500) have the shape
+`{ "error": { "code", "message" }, "requestId" }`, where `requestId` is a
+freshly generated UUID v4 (`crypto.randomUUID()`) for log correlation.
+
 ## Endpoints
 
 ### 1. Summary
@@ -38,7 +43,7 @@ Returns dataset summary, risk distribution, decision counts, and top signals.
     "byLifecycle": null
   },
   "topSignals": [
-    { "type": "keyword", "label": "never arrived", "count": 120 }
+    { "type": "refund_frequency", "label": "Refund Frequency", "count": 120 }
   ]
 }
 ```
@@ -66,7 +71,7 @@ Returns a paginated, filterable list of customers, precomputed for fast renderin
       "customerId": "C001",
       "riskScore": 85,
       "riskLevel": "CRITICAL",
-      "topSignal": { "type": "keyword", "label": "fraud", "contribution": 30 },
+      "topSignal": { "type": "refund_rate", "label": "Refund Rate", "contribution": 30 },
       "complaintCount": 2,
       "ring": { "ringId": "R001", "score": 90 },
       "decision": { "status": "ESCALATED", "updatedAt": "2026-10-08T12:00:00.000Z" }
@@ -140,10 +145,30 @@ Returns the audit log for a customer, newest first.
 
 ### 6. Rings
 **GET `/rings`**
-Paginated list of detected rings.
+Paginated list of detected rings. List items are summaries: they never embed
+`relationshipEdges`, and report `edgeCount` instead.
 
 **GET `/rings/:ringId`**
-Detailed view of a single ring including members, edges, and evidence.
+Detailed view of a single ring including members, evidence, `edgeCount`, and a
+render-ready `graph`:
+
+```json
+{
+  "ringId": "ring_12345",
+  "customerIds": ["C001", "C002", "C003"],
+  "memberCount": 3,
+  "edgeCount": 6,
+  "graph": {
+    "nodes": [
+      { "id": "C001", "type": "customer", "ringMember": true },
+      { "id": "198.51.100.7", "type": "ip", "ringMember": false }
+    ],
+    "links": [
+      { "source": "C001", "target": "198.51.100.7", "type": "shared_ip" }
+    ]
+  }
+}
+```
 
 ### 7. Health Check
 **GET `/health`**
