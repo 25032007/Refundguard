@@ -175,7 +175,7 @@ RefundGuard/
 ## Local Setup
 
 ### Prerequisites
-- Node.js (v18 or later)
+- Node.js (v22 or later)
 
 ### Install
 From the repository root:
