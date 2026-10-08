@@ -1,34 +1,25 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Panel from '../../../ui/Panel.jsx';
-import Table from '../../../ui/Table.jsx';
-import Button from '../../../ui/Button.jsx';
-import Badge from '../../../ui/Badge.jsx';
+import { Link } from 'react-router-dom';
 
-export default function RingMembers({ latestSnapshot }) {
-  const navigate = useNavigate();
-  if (!latestSnapshot) return null;
-
-  const newMembers = new Set(latestSnapshot.newMembers || []);
-  const data = (latestSnapshot.customerIds || []).map(id => ({
-    customerId: id,
-    isNew: newMembers.has(id)
-  }));
-
-  const columns = [
-    { key: 'customerId', label: 'Customer ID', render: (row) => <span className="rg-mono">{row.customerId}</span> },
-    { key: 'status', label: 'Status', render: (row) => row.isNew ? <Badge severity="warning">NEWLY ADDED</Badge> : <span className="rg-meta">EXISTING</span> },
-    { key: 'action', label: 'Action', render: (row) => (
-        <Button variant="secondary" onClick={() => navigate(`/investigations/${row.customerId}`)}>
-          Investigate Customer
-        </Button>
-      )
-    }
-  ];
+export default function RingMembers({ current }) {
+  if (!current || !current.customerIds) return null;
 
   return (
-    <Panel title="Current Members" style={{ marginBottom: 'var(--rg-space-6)' }}>
-      <Table columns={columns} data={data} rowKey="customerId" data-density="compact" />
-    </Panel>
+    <div className="inv-section">
+      <div className="inv-section-title">
+        <span className="inv-section-title-bar" />
+        Ring Members ({current.customerIds.length})
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        {current.customerIds.map(id => (
+          <div key={id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: 'var(--rg-surface-hover)', borderRadius: 4, border: '1px solid var(--rg-border-subtle)' }}>
+            <span className="mono" style={{ fontSize: 13 }}>{id}</span>
+            <Link to={`/investigations/${id}`} style={{ fontSize: 12, color: 'var(--rg-brand)', textDecoration: 'none', fontWeight: 600 }}>
+              View Case →
+            </Link>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

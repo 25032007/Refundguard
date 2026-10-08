@@ -1,6 +1,4 @@
 import React from 'react';
-import Badge from '../../../ui/Badge.jsx';
-import Panel from '../../../ui/Panel.jsx';
 
 const REASON_EXPLANATIONS = {
   'NEW_RING': 'Initial detection of coordinated activity',
@@ -9,7 +7,7 @@ const REASON_EXPLANATIONS = {
   'NEW_SHARED_DEVICE': 'New shared device identified',
   'RISK_SCORE_INCREASE': 'Behavioral risk score escalated',
   'ACTIVITY_RESUMED': 'Dormant ring resumed activity',
-  'NO_QUALIFYING_ACTIVITY': 'No suspicious activity detected in snapshot'
+  'NO_QUALIFYING_ACTIVITY': 'No suspicious activity detected in snapshot',
 };
 
 const formatDate = (iso) => {
@@ -17,41 +15,83 @@ const formatDate = (iso) => {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
+const LIFECYCLE_COLORS = {
+  active: 'var(--rg-severity-critical)',
+  emerging: 'var(--rg-severity-medium)',
+  dormant: 'var(--rg-text-secondary)',
+  disbanded: 'var(--rg-text-tertiary)',
+};
+
 export default function LifecycleTimeline({ ringHist }) {
   if (!ringHist || ringHist.length === 0) return null;
 
   return (
-    <Panel title="Lifecycle Timeline" style={{ marginBottom: 'var(--rg-space-6)' }}>
-      <div style={{ position: 'relative', paddingLeft: 'var(--rg-space-5)', margin: 'var(--rg-space-4) 0' }}>
-        <div style={{ position: 'absolute', top: 0, bottom: 0, left: '7px', width: '2px', backgroundColor: 'var(--rg-border-strong)' }}></div>
-        
+    <div style={{ marginBottom: 20 }}>
+      <div className="section-header">
+        <span className="section-label-mark" />
+        <span className="section-label">Lifecycle Timeline</span>
+        <span className="section-count">{ringHist.length} snapshots</span>
+      </div>
+
+      <div style={{ position: 'relative', paddingLeft: 24 }}>
+        {/* Vertical timeline line */}
+        <div style={{
+          position: 'absolute', top: 6, bottom: 6, left: 7, width: 2,
+          background: 'var(--rg-border-strong)', borderRadius: 1,
+        }} />
+
         {ringHist.map((snap, i) => {
           const isLast = i === ringHist.length - 1;
-          const isFirst = i === 0;
+          const lc = snap.state?.toLowerCase();
+          const dotColor = LIFECYCLE_COLORS[lc] || 'var(--rg-border-strong)';
+
           return (
-            <div key={`${snap.lastSeenAt}-${i}`} style={{ position: 'relative', marginBottom: isLast ? 0 : 'var(--rg-space-6)' }}>
-              <div style={{ 
-                position: 'absolute', left: 'calc(-1 * var(--rg-space-5) - 3px)', top: '6px', 
-                width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--rg-brand-active)',
-                border: '2px solid var(--rg-surface)', zIndex: 1
-              }}></div>
-              
-              <div style={{ display: 'flex', gap: 'var(--rg-space-4)', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                <div style={{ minWidth: '100px' }}>
-                  <span className="rg-meta">{formatDate(snap.lastSeenAt)}</span>
+            <div key={`${snap.lastSeenAt}-${i}`} style={{ position: 'relative', marginBottom: isLast ? 0 : 20 }}>
+              {/* Timeline dot */}
+              <div style={{
+                position: 'absolute', left: -17, top: 5,
+                width: 10, height: 10, borderRadius: '50%',
+                background: dotColor,
+                border: '2px solid var(--rg-surface)',
+                zIndex: 1,
+              }} />
+
+              <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                <div style={{ minWidth: 100 }}>
+                  <span style={{ fontFamily: 'var(--rg-font-mono)', fontSize: 11, color: 'var(--rg-text-tertiary)' }}>
+                    {formatDate(snap.lastSeenAt)}
+                  </span>
                 </div>
                 <div>
-                  <Badge lifecycle={snap.state.toLowerCase()}>{snap.state}</Badge>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center',
+                    padding: '1px 7px', fontSize: 9.5, fontWeight: 700,
+                    letterSpacing: '0.1em', textTransform: 'uppercase',
+                    color: dotColor,
+                    border: `1px solid ${dotColor}`,
+                    borderRadius: 2,
+                    background: 'var(--rg-surface)',
+                  }}>
+                    {snap.state}
+                  </span>
                 </div>
-                <div style={{ flex: 1, minWidth: '200px' }}>
+                <div style={{ flex: 1, minWidth: 180 }}>
                   {(snap.evidenceTriggers || []).map((trigger, idx) => (
-                    <div key={idx} style={{ marginBottom: 'var(--rg-space-2)' }}>
-                      <span className="rg-mono" style={{ display: 'block', fontSize: 'var(--rg-text-meta)', color: 'var(--rg-text-secondary)' }}>{trigger}</span>
-                      <span className="rg-body-compact">{REASON_EXPLANATIONS[trigger] || trigger}</span>
+                    <div key={idx} style={{ marginBottom: 4 }}>
+                      <span style={{
+                        fontFamily: 'var(--rg-font-mono)', fontSize: 10,
+                        color: 'var(--rg-text-secondary)', display: 'block',
+                        marginBottom: 1,
+                      }}>
+                        {trigger}
+                      </span>
+                      <span style={{ fontSize: 12, color: 'var(--rg-text-primary)' }}>
+                        {REASON_EXPLANATIONS[trigger] || trigger}
+                      </span>
                     </div>
                   ))}
                   {(!snap.evidenceTriggers || snap.evidenceTriggers.length === 0) && (
-                    <span className="rg-body-compact" style={{ color: 'var(--rg-text-tertiary)' }}>No lifecycle changes</span>
+                    <span style={{ fontSize: 12, color: 'var(--rg-text-tertiary)' }}>No lifecycle changes</span>
                   )}
                 </div>
               </div>
@@ -59,6 +99,6 @@ export default function LifecycleTimeline({ ringHist }) {
           );
         })}
       </div>
-    </Panel>
+    </div>
   );
 }

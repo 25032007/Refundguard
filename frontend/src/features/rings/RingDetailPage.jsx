@@ -1,80 +1,91 @@
 import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import RingOverview from './components/RingOverview.jsx';
-import LifecycleTimeline from './components/LifecycleTimeline.jsx';
-import RingChangeReasons from './components/RingChangeReasons.jsx';
 import RingMembers from './components/RingMembers.jsx';
 import RingResources from './components/RingResources.jsx';
 import RingGraph from './components/RingGraph.jsx';
-import Skeleton from '../../ui/Skeleton.jsx';
-import ErrorState from '../../ui/ErrorState.jsx';
-import { getInvestigation } from '../../services/api.js';
+import { getRing, getInvestigation, getRingLifecycle } from '../../services/api.js';
+import RingHeader from './components/RingHeader.jsx';
+import LifecycleTimeline from './components/LifecycleTimeline.jsx';
+import RingChangeReasons from './components/RingChangeReasons.jsx';
 
-export default function RingDetailPage({ data, selectedRingId }) {
-  const [investigation, setInvestigation] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+export default function RingDetailPage({ selectedRingId, onBack }) {
+  const { data: ring, isLoading: isRingLoading, isError: isRingError } = useQuery({
+    queryKey: ['ring', selectedRingId],
+    queryFn: () => getRing(selectedRingId),
+    enabled: !!selectedRingId,
+  });
 
-  const snapshots = data?.lifecycle?.snapshots || [];
-  
-  const ringHist = snapshots
-    .map(s => s.rings.find(r => r.ringId === selectedRingId))
-    .filter(Boolean);
+  const { data: investigation, isLoading: isGraphLoading, isError: isGraphError } = useQuery({
+    queryKey: ['investigation', ring?.customerIds?.[0]],
+    queryFn: () => getInvestigation(ring.customerIds[0]),
+    enabled: !!ring?.customerIds?.length,
+  });
 
-  const latestSnapshot = ringHist[ringHist.length - 1];
-  const previousSnapshot = ringHist.length > 1 ? ringHist[ringHist.length - 2] : null;
+  const { data: lifecycle, isLoading: isLifecycleLoading, isError: isLifecycleError } = useQuery({
+    queryKey: ['ringLifecycle', selectedRingId],
+    queryFn: () => getRingLifecycle(selectedRingId),
+    enabled: !!selectedRingId,
+  });
 
-  useEffect(() => {
-    let cancelled = false;
-    if (!latestSnapshot || !latestSnapshot.customerIds || latestSnapshot.customerIds.length === 0) {
-      setLoading(false);
-      return;
-    }
-    
-    // Fetch investigation for the first member to power the graph
-    getInvestigation(latestSnapshot.customerIds[0])
-      .then(res => {
-        if (!cancelled) {
-          setInvestigation(res);
-          setLoading(false);
-        }
-      })
-      .catch(err => {
-        if (!cancelled) {
-          setError(err);
-          setLoading(false);
-        }
-      });
-      
-    return () => { cancelled = true; };
-  }, [latestSnapshot]);
-
-  if (!latestSnapshot) {
+  if (isRingLoading) {
     return (
-      <div style={{ paddingTop: 'var(--rg-space-8)' }}>
-        <ErrorState title="Ring not found" description={`Could not find data for ${selectedRingId} in this snapshot.`} />
+      <div style={{ height: 400, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, animation: 'rg-pulse 2s infinite' }} />
+    );
+  }
+
+  if (isRingError || !ring) {
+    return (
+      <div className="rg-error-state" style={{ marginTop: 32 }}>
+        <p className="rg-error-state-title">Ring not found</p>
+        <p className="rg-error-state-description">
+          Could not find data for {selectedRingId}.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="ring-detail-page">
-      <RingOverview previous={previousSnapshot} current={latestSnapshot} />
-      
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--rg-space-6)', alignItems: 'flex-start' }}>
-        <div style={{ flex: '1 1 60%', minWidth: '320px', display: 'flex', flexDirection: 'column' }}>
-          <LifecycleTimeline ringHist={ringHist} />
-          <RingChangeReasons latestSnapshot={latestSnapshot} />
-          <RingResources latestSnapshot={latestSnapshot} />
-          <RingMembers latestSnapshot={latestSnapshot} />
-        </div>
-        
-        <div style={{ flex: '1 1 35%', minWidth: '320px' }}>
-          {loading ? (
-            <Skeleton width="100%" height="400px" />
-          ) : error || !investigation ? (
-            <ErrorState title="Graph unavailable" description="Could not load underlying customer investigation to render graph." />
+    <div className="page-transition">
+      <RingHeader selectedRingId={selectedRingId} ring={ring} onBack={onBack} />
+      <div className="animate-fade-in-up stagger-1">
+        <RingOverview current={ring} />
+      </div>
+
+      <div className="inv-layout" style={{ marginTop: 32 }}>
+        <div className="inv-main">
+          {isLifecycleLoading ? (
+             <div style={{ height: 100, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, animation: 'rg-pulse 2s infinite', marginBottom: 20 }} />
+          ) : isLifecycleError || !lifecycle || !lifecycle.history || lifecycle.history.length === 0 ? (
+             <div style={{ marginBottom: 20, fontSize: 13, color: 'var(--rg-text-tertiary)' }}>No lifecycle history available for this ring.</div>
           ) : (
-            <RingGraph investigation={investigation} />
+            <div className="animate-fade-in-up stagger-3">
+              <LifecycleTimeline ringHist={lifecycle.history} />
+              <RingChangeReasons latestSnapshot={lifecycle.history[lifecycle.history.length - 1]} />
+            </div>
+          )}
+          <div className="animate-fade-in-up stagger-4"><RingResources current={ring} /></div>
+          <div className="animate-fade-in-up stagger-5"><RingMembers current={ring} /></div>
+        </div>
+
+        <div className="inv-aside" style={{ flex: '1 1 400px', minWidth: 320 }}>
+          {isGraphLoading ? (
+            <div style={{
+              height: 400,
+              background: 'var(--rg-surface)',
+              border: '1px solid var(--rg-border)',
+              borderRadius: 4,
+              animation: 'rg-pulse 2s infinite',
+            }} />
+          ) : isGraphError || !investigation ? (
+            <div className="rg-error-state">
+              <p className="rg-error-state-title">Graph unavailable</p>
+              <p className="rg-error-state-description">
+                Could not load underlying customer investigation to render the network graph.
+              </p>
+            </div>
+          ) : (
+            <div className="animate-fade-in"><RingGraph investigation={investigation} /></div>
           )}
         </div>
       </div>

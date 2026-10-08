@@ -1,129 +1,149 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useRingTimeline } from './hooks/useRingTimeline.js';
+import { useQuery } from '@tanstack/react-query';
+import { getRings, getSummary } from '../../services/api.js';
 import RingHeader from './components/RingHeader.jsx';
 import RingDetailPage from './RingDetailPage.jsx';
-import Skeleton from '../../ui/Skeleton.jsx';
-import ErrorState from '../../ui/ErrorState.jsx';
-import Table from '../../ui/Table.jsx';
-import Badge from '../../ui/Badge.jsx';
-import Button from '../../ui/Button.jsx';
-import EmptyState from '../../ui/EmptyState.jsx';
-
-const formatDate = (iso) => {
-  if (!iso) return '';
-  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-};
 
 function RingListTable({ rings, onSelect }) {
   if (!rings || rings.length === 0) {
-    return <EmptyState title="No rings found" description="There are no tracked rings in this snapshot." style={{ margin: 'var(--rg-space-6) 0' }} />;
+    return (
+      <div className="rg-empty-state">
+        <p className="rg-empty-state-title">No rings found</p>
+        <p className="rg-empty-state-description">There are no detected refund rings in the current dataset.</p>
+      </div>
+    );
   }
 
-  const columns = [
-    { key: 'ringId', label: 'Ring', render: (row) => <span className="rg-mono" style={{ fontWeight: 600 }}>{row.ringId}</span> },
-    { key: 'state', label: 'Lifecycle', render: (row) => <Badge lifecycle={row.state.toLowerCase()}>{row.state}</Badge> },
-    { key: 'firstSeen', label: 'First Seen', render: (row) => <span className="rg-meta">{formatDate(row.firstSeenAt)}</span> },
-    { key: 'memberCount', label: 'Members', render: (row) => <span className="rg-body-compact">{row.memberCount} members</span> },
-    { key: 'score', label: 'Risk Score', render: (row) => <span className="rg-body-compact">{row.score}</span> },
-    { key: 'action', label: 'Action', render: (row) => (
-      <Button variant="secondary" onClick={() => onSelect(row.ringId)}>View Timeline</Button>
-    )}
-  ];
-
-  return <Table columns={columns} data={rings} rowKey="ringId" data-density="comfortable" onRowClick={(row) => onSelect(row.ringId)} />;
+  return (
+    <div className="table-wrap">
+      <table className="data-table">
+        <thead>
+          <tr>
+            <th data-label="Ring ID">Ring ID</th>
+            <th data-label="Members">Members</th>
+            <th data-label="Risk Score">Risk Score</th>
+            <th data-label="Action" style={{ textAlign: 'right' }}>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rings.map((row) => (
+            <tr
+              key={row.ringId}
+              onClick={() => onSelect(row.ringId)}
+              style={{ cursor: 'pointer' }}
+            >
+              <td data-label="Ring ID">
+                <span className="mono">{row.ringId}</span>
+              </td>
+              <td data-label="Members">
+                <span style={{ fontSize: 13, fontVariantNumeric: 'tabular-nums' }}>
+                  {row.memberCount}
+                </span>
+              </td>
+              <td data-label="Risk Score">
+                <span style={{ fontSize: 13, fontFamily: 'var(--rg-font-mono)', fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>
+                  {row.score}
+                </span>
+              </td>
+              <td data-label="Action" style={{ textAlign: 'right' }}>
+                <a
+                  className="case-table-action"
+                  onClick={(e) => { e.stopPropagation(); onSelect(row.ringId); }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && onSelect(row.ringId)}
+                >
+                  View Detail →
+                </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export default function RingsPage() {
   const { ringId: selectedRingId } = useParams();
   const navigate = useNavigate();
-  const { loading, error, data, asOf, setAsOf } = useRingTimeline();
 
-  const handleAsOfChange = (e) => {
-    setAsOf(e.target.value);
-    if (selectedRingId) {
-      navigate(`/rings?asOf=${e.target.value}`);
-    }
-  };
+  const { data: ringsData, isLoading, isError } = useQuery({
+    queryKey: ['rings', { page: 1, pageSize: 100 }],
+    queryFn: () => getRings({ page: 1, pageSize: 100 }),
+  });
+
+  const { data: summaryData } = useQuery({
+    queryKey: ['summary'],
+    queryFn: () => getSummary(),
+  });
 
   const setSelectedRing = (id) => {
     if (id) {
-      navigate(`/rings/${id}?asOf=${asOf}`);
+      navigate(`/rings/${id}`);
     } else {
-      navigate(`/rings?asOf=${asOf}`);
+      navigate(`/rings`);
     }
   };
 
-  const getSelectedRingState = () => {
-    if (!selectedRingId || !data) return null;
-    const snaps = data.lifecycle?.snapshots || [];
-    if (snaps.length === 0) return null;
-    const latestSnap = snaps[snaps.length - 1];
-    const ring = latestSnap.rings.find(r => r.ringId === selectedRingId);
-    return ring ? ring.state : null;
-  };
-
-  if (loading && !data) {
+  if (isLoading) {
     return (
-      <div className="rg-app page">
-        <Skeleton width="100%" height="200px" style={{ margin: '-32px -32px var(--rg-space-8) -32px', borderRadius: '0 0 var(--rg-radius-md) var(--rg-radius-md)' }} />
-        <Skeleton width="100%" height="400px" />
+      <div className="page">
+        <div style={{ height: 88, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, marginBottom: 20, animation: 'rg-pulse 2s infinite' }} />
+        <div style={{ height: 400, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, animation: 'rg-pulse 2s infinite' }} />
       </div>
     );
   }
 
-  if (error && !data) {
+  if (isError) {
     return (
-      <div className="rg-app page" style={{ paddingTop: 'var(--rg-space-10)' }}>
-        <ErrorState title="Failed to load temporal data" description="Could not retrieve ring intelligence from the backend." />
+      <div className="page">
+        <div className="rg-error-state">
+          <p className="rg-error-state-title">Failed to load ring intelligence</p>
+          <p className="rg-error-state-description">Could not retrieve ring data from the backend.</p>
+        </div>
       </div>
     );
   }
 
-  const { lifecycle } = data;
-  const currentTrackedRings = lifecycle?.currentTrackedRings || [];
-  const emergingCurrent = lifecycle?.emergingRingsBySnapshot?.[lifecycle.emergingRingsBySnapshot.length - 1]?.rings || [];
+  const ringsList = ringsData?.items || [];
+  const byLifecycle = summaryData?.rings?.byLifecycle || {};
+  const activeRings = byLifecycle.ACTIVE || 0;
+  const emergingRings = byLifecycle.EMERGING || 0;
+  const dormantRings = byLifecycle.DORMANT || 0;
+  const disbandedRings = byLifecycle.DISBANDED || 0;
 
   return (
-    <div className="rg-app page">
-      <RingHeader 
-        selectedRingId={selectedRingId} 
-        ringState={getSelectedRingState()} 
-        onBack={() => setSelectedRing(null)} 
-      />
-
-      {/* Snapshot Control (Always visible to maintain context) */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--rg-space-4)', padding: 'var(--rg-space-4)', backgroundColor: 'var(--rg-surface)', borderRadius: 'var(--rg-radius-md)', marginBottom: 'var(--rg-space-6)', border: 'var(--rg-border-width) solid var(--rg-border-subtle)' }}>
-        <label htmlFor="asOfInput" className="rg-meta">Temporal Snapshot:</label>
-        <input 
-          id="asOfInput"
-          type="date" 
-          value={asOf} 
-          onChange={handleAsOfChange}
-          max="2011-12-09"
-          style={{ padding: 'var(--rg-space-2)', borderRadius: 'var(--rg-radius-sm)', border: 'var(--rg-border-width) solid var(--rg-border-strong)', fontFamily: 'var(--rg-font-sans)', fontSize: 'var(--rg-text-body-compact)' }}
-        />
-        {loading && <span className="rg-meta" style={{ color: 'var(--rg-text-tertiary)' }}>Updating...</span>}
-      </div>
-
+    <div className="page page-transition">
       {selectedRingId ? (
-        <RingDetailPage data={data} selectedRingId={selectedRingId} />
+        <RingDetailPage selectedRingId={selectedRingId} onBack={() => setSelectedRing(null)} />
       ) : (
         <div>
-          {emergingCurrent.length > 0 && (
-            <div style={{ marginBottom: 'var(--rg-space-8)' }}>
-              <h3 className="rg-meta" style={{ marginBottom: 'var(--rg-space-4)', color: 'var(--rg-severity-critical)', borderBottom: '1px solid var(--rg-border-subtle)', paddingBottom: 'var(--rg-space-2)' }}>
-                EMERGING RINGS ({emergingCurrent.length})
-              </h3>
-              <RingListTable rings={emergingCurrent} onSelect={setSelectedRing} />
+          <RingHeader />
+          <div className="ring-metrics-row" style={{ marginBottom: 24 }}>
+            <div className="ring-metric">
+              <span className="ring-metric-label">Tracked Rings</span>
+              <span className="ring-metric-value">{ringsData?.total || 0}</span>
             </div>
-          )}
+            <div className="ring-metric">
+              <span className="ring-metric-label">Lifecycle Status</span>
+              <div style={{ display: 'flex', gap: 16, marginTop: 4 }}>
+                <span style={{ fontSize: 13 }}><span style={{ color: 'var(--rg-severity-critical)', fontWeight: 600 }}>{activeRings}</span> Active</span>
+                <span style={{ fontSize: 13 }}><span style={{ color: 'var(--rg-severity-medium)', fontWeight: 600 }}>{emergingRings}</span> Emerging</span>
+                <span style={{ fontSize: 13 }}><span style={{ color: 'var(--rg-text-secondary)', fontWeight: 600 }}>{dormantRings}</span> Dormant</span>
+                {disbandedRings > 0 && <span style={{ fontSize: 13 }}><span style={{ color: 'var(--rg-text-tertiary)', fontWeight: 600 }}>{disbandedRings}</span> Disbanded</span>}
+              </div>
+            </div>
+          </div>
 
           <div>
-            <h3 className="rg-meta" style={{ marginBottom: 'var(--rg-space-4)', borderBottom: '1px solid var(--rg-border-subtle)', paddingBottom: 'var(--rg-space-2)' }}>
-              ALL TRACKED RINGS ({currentTrackedRings.length})
-            </h3>
-            <RingListTable rings={currentTrackedRings} onSelect={setSelectedRing} />
+            <div className="section-header">
+              <span className="section-label-mark" />
+              <span className="section-label">All Tracked Rings</span>
+              <span className="section-count">{ringsData?.total || 0}</span>
+            </div>
+            <RingListTable rings={ringsList} onSelect={setSelectedRing} />
           </div>
         </div>
       )}

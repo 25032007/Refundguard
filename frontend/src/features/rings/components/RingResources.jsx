@@ -1,42 +1,42 @@
 import React from 'react';
-import Panel from '../../../ui/Panel.jsx';
 
-export default function RingResources({ latestSnapshot }) {
-  if (!latestSnapshot) return null;
-  const { ips = [], devices = [] } = latestSnapshot;
+export default function RingResources({ current }) {
+  if (!current || !current.evidence) return null;
 
-  if (ips.length === 0 && devices.length === 0) {
-    return (
-      <Panel title="Shared Resources" style={{ marginBottom: 'var(--rg-space-6)' }}>
-        <p className="rg-body-compact" style={{ color: 'var(--rg-text-tertiary)' }}>No shared IPs or devices identified.</p>
-      </Panel>
-    );
-  }
+  const { sharedIps = [], sharedDevices = [] } = current.evidence;
+
+  if (sharedIps.length === 0 && sharedDevices.length === 0) return null;
 
   return (
-    <Panel title="Shared Resources" style={{ marginBottom: 'var(--rg-space-6)' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--rg-space-4)' }}>
-        <div>
-          <h4 className="rg-meta" style={{ marginBottom: 'var(--rg-space-2)' }}>Shared IPs</h4>
-          {ips.length > 0 ? (
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {ips.map(ip => <li key={ip} className="rg-mono" style={{ marginBottom: 'var(--rg-space-1)' }}>{ip}</li>)}
-            </ul>
-          ) : (
-            <span className="rg-meta" style={{ color: 'var(--rg-text-tertiary)' }}>None</span>
-          )}
-        </div>
-        <div>
-          <h4 className="rg-meta" style={{ marginBottom: 'var(--rg-space-2)' }}>Shared Devices</h4>
-          {devices.length > 0 ? (
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {devices.map(dev => <li key={dev} className="rg-mono" style={{ marginBottom: 'var(--rg-space-1)' }}>{dev}</li>)}
-            </ul>
-          ) : (
-            <span className="rg-meta" style={{ color: 'var(--rg-text-tertiary)' }}>None</span>
-          )}
-        </div>
+    <div className="inv-section">
+      <div className="inv-section-title">
+        <span className="inv-section-title-bar" />
+        Shared Resources
       </div>
-    </Panel>
+
+      {sharedIps.length > 0 && (
+        <div style={{ marginBottom: 16 }}>
+          <h4 style={{ margin: '0 0 8px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--rg-text-tertiary)' }}>Shared IPs</h4>
+          {sharedIps.map(ip => (
+            <div key={ip.ip} style={{ display: 'flex', flexDirection: 'column', padding: '8px 12px', background: 'var(--rg-surface-hover)', borderRadius: 4, border: '1px solid var(--rg-border-subtle)', marginBottom: 8 }}>
+              <span className="mono" style={{ fontSize: 13, fontWeight: 600, color: 'var(--rg-text-primary)' }}>{ip.ip}</span>
+              <span style={{ fontSize: 12, color: 'var(--rg-text-secondary)' }}>Used by {ip.customers?.length} members</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {sharedDevices.length > 0 && (
+        <div>
+          <h4 style={{ margin: '0 0 8px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: 'var(--rg-text-tertiary)' }}>Shared Devices</h4>
+          {sharedDevices.map(device => (
+            <div key={device.deviceId} style={{ display: 'flex', flexDirection: 'column', padding: '8px 12px', background: 'var(--rg-surface-hover)', borderRadius: 4, border: '1px solid var(--rg-border-subtle)', marginBottom: 8 }}>
+              <span className="mono" style={{ fontSize: 13, fontWeight: 600, color: 'var(--rg-text-primary)' }}>{device.deviceId}</span>
+              <span style={{ fontSize: 12, color: 'var(--rg-text-secondary)' }}>Used by {device.customers?.length} members</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
