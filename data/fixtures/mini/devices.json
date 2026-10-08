@@ -1,0 +1,2130 @@
+[
+  {
+    "deviceId": "dev_1jmJRNGt",
+    "customerId": "10223",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_mT1x9zKU",
+    "customerId": "10223",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_gZuchfdg",
+    "customerId": "10217",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_c3SvsdIN",
+    "customerId": "10160",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_cA5QanvK",
+    "customerId": "10460",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_dvgH5sqm",
+    "customerId": "10229",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_2yH8snW5",
+    "customerId": "10229",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_sLJlUQhq",
+    "customerId": "10059",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_1XKZooKP",
+    "customerId": "10052",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_1G4Asz7m",
+    "customerId": "10052",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_5NZoMUZ2",
+    "customerId": "10355",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_NvUI949C",
+    "customerId": "10163",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_x60hWMUT",
+    "customerId": "10163",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_RIKJgUZo",
+    "customerId": "10484",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_u7TOS9Qg",
+    "customerId": "10100",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_hYZgNxvj",
+    "customerId": "10035",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_18wikSRS",
+    "customerId": "10400",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_WQ1iIuTE",
+    "customerId": "10400",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_uhk0Tzcj",
+    "customerId": "10029",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_wqafWn3V",
+    "customerId": "10280",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_nVDe75pe",
+    "customerId": "10022",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_RB6pXOab",
+    "customerId": "10089",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_wbaAzVZ6",
+    "customerId": "10274",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_3he3F8uM",
+    "customerId": "10274",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_LAC2I5b4",
+    "customerId": "10085",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_jYBaXYpL",
+    "customerId": "10289",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_CF3tk0Yl",
+    "customerId": "10307",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_AtrsC8j0",
+    "customerId": "10124",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_78j1vGFS",
+    "customerId": "10004",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_o1RwVOr0",
+    "customerId": "10097",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_GKrzU8DO",
+    "customerId": "10103",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_kRyPCEsF",
+    "customerId": "10205",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_gqyNFxlf",
+    "customerId": "10427",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_fKfhCLgq",
+    "customerId": "10370",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_l2dQLrjY",
+    "customerId": "10457",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_adbdxcg8",
+    "customerId": "10061",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_1b6VFENG",
+    "customerId": "10145",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_GcBUEIwy",
+    "customerId": "10104",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_PuqCV6H1",
+    "customerId": "10031",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_nYL9pcVq",
+    "customerId": "10007",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_9kJlb2Dr",
+    "customerId": "10082",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_SBOKXDjB",
+    "customerId": "10005",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_JmW4qVMk",
+    "customerId": "10055",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_wruz8ccI",
+    "customerId": "10139",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_zgBmT6TM",
+    "customerId": "10469",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_ZMaYzG2V",
+    "customerId": "10337",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_wwAJn9gy",
+    "customerId": "10028",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_LQIOagRY",
+    "customerId": "10091",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_kyHoELcI",
+    "customerId": "10014",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_hp05VgRe",
+    "customerId": "10445",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_wH2MLnqL",
+    "customerId": "10310",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_CBohH30H",
+    "customerId": "10439",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_Iew75dmi",
+    "customerId": "10080",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_xbhc87hD",
+    "customerId": "10025",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_2ssr4PAq",
+    "customerId": "10088",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_FgdjsUjp",
+    "customerId": "10493",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_yrrMss6E",
+    "customerId": "10430",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_q8U9BRLZ",
+    "customerId": "10334",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_nQt4FzOW",
+    "customerId": "10013",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_c7QJfXHz",
+    "customerId": "10340",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_RCHPb0CZ",
+    "customerId": "10487",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_jrWR00P5",
+    "customerId": "10259",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_AfRNCtx8",
+    "customerId": "10040",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_TkufREpB",
+    "customerId": "10373",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_nvxbTXWi",
+    "customerId": "10475",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_880HI9y0",
+    "customerId": "10379",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_dNUH3Mip",
+    "customerId": "10015",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_b8jjaXpU",
+    "customerId": "10320",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_CsfoNJq0",
+    "customerId": "10211",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_1H3gfOAi",
+    "customerId": "10382",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_u4RkTObV",
+    "customerId": "10046",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_yryVthrB",
+    "customerId": "10016",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_e20fpqWi",
+    "customerId": "10142",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_LaUlL8zI",
+    "customerId": "10290",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_D3eD9HoC",
+    "customerId": "10181",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_ay9Ov8SM",
+    "customerId": "10449",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_WqluGaFl",
+    "customerId": "10194",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_QyNFquB0",
+    "customerId": "10122",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_vibRRFOD",
+    "customerId": "10472",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_t0ZYWBD0",
+    "customerId": "10451",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_xzytVqEB",
+    "customerId": "10053",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_cWqK66CA",
+    "customerId": "10215",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_Xl4NLuxw",
+    "customerId": "10155",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_YpmJMDyV",
+    "customerId": "10412",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_QZW3LwE1",
+    "customerId": "10047",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_Mdutwd9m",
+    "customerId": "10039",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_0gi4KpR1",
+    "customerId": "10112",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_8Y5PobNL",
+    "customerId": "10149",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_i4A9q1l7",
+    "customerId": "10421",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_Uy2K4Jti",
+    "customerId": "10009",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_ggokJxjd",
+    "customerId": "10208",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_wM4nS3WI",
+    "customerId": "10284",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_WkXM1ktT",
+    "customerId": "10077",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_HSFfqELa",
+    "customerId": "10135",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_ICaqCQSs",
+    "customerId": "10076",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_33qsRh5v",
+    "customerId": "10118",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_XWYCWYHl",
+    "customerId": "10352",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_HBBuJ0ft",
+    "customerId": "10350",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_wiWSjqK3",
+    "customerId": "10098",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_CvRbhKSp",
+    "customerId": "10448",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_QBRXdlCA",
+    "customerId": "10434",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_KE0qkqUb",
+    "customerId": "10148",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_3rw7WAY2",
+    "customerId": "10299",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_ixVcvQsI",
+    "customerId": "10179",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_qYRKsN7K",
+    "customerId": "10301",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_HBCc9ZL8",
+    "customerId": "10238",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_kLtq16q7",
+    "customerId": "10268",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_eisxcl1u",
+    "customerId": "10185",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_PcowVT3i",
+    "customerId": "10172",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_bKQqF7lt",
+    "customerId": "10129",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_Sq9kRZNn",
+    "customerId": "10271",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_pgZPVW9b",
+    "customerId": "10329",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_D1FOAboG",
+    "customerId": "10479",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_05ek9qcH",
+    "customerId": "10224",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_hVYnMu0f",
+    "customerId": "10391",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_KGAfflCO",
+    "customerId": "10395",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_Yqcn67uf",
+    "customerId": "10136",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_v3eBa4bm",
+    "customerId": "10038",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_mATMg63x",
+    "customerId": "10419",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_oDGgp48j",
+    "customerId": "10069",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_yHoVHRSa",
+    "customerId": "10239",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_vl6UoAxu",
+    "customerId": "10292",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_2mvCFWIB",
+    "customerId": "10328",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_hgx6LI3x",
+    "customerId": "10481",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_UBqPLTCY",
+    "customerId": "10164",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_QnGVuhlh",
+    "customerId": "10425",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_HSRLqkbN",
+    "customerId": "10204",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_wrnkIzse",
+    "customerId": "10263",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_TNdVAbmR",
+    "customerId": "10383",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_i8mSXFtb",
+    "customerId": "10060",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_OnWro6Ue",
+    "customerId": "10332",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_DmdylY9t",
+    "customerId": "10255",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_uDt2cwDR",
+    "customerId": "10392",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_2fhmDDih",
+    "customerId": "10183",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_h89WcNFW",
+    "customerId": "10166",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_rCboWguy",
+    "customerId": "10399",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_U3Vu3s7O",
+    "customerId": "10248",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_eC3W8EVv",
+    "customerId": "10317",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_Q06gJ0bF",
+    "customerId": "10495",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_5lRk5DGS",
+    "customerId": "10293",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_5NpRLFcO",
+    "customerId": "10375",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_PyvaPahn",
+    "customerId": "10368",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_tCodGLaz",
+    "customerId": "10056",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_Fyb6TQWg",
+    "customerId": "10369",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_KSVfYLBW",
+    "customerId": "10090",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_Tx1N5sYW",
+    "customerId": "10144",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_QEAQ4VEE",
+    "customerId": "10177",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_GyelaLvz",
+    "customerId": "10226",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_PcEQTHiT",
+    "customerId": "10278",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_QZZV4WIr",
+    "customerId": "10057",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_xCzdgWuK",
+    "customerId": "10353",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_oYLqTjAm",
+    "customerId": "10146",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_XS9YFBmY",
+    "customerId": "10027",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_VTfrVWCx",
+    "customerId": "10422",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_BdKNMvf5",
+    "customerId": "10176",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_VuVRoidJ",
+    "customerId": "10101",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_TRBlqZDq",
+    "customerId": "10302",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_3oVYVtyp",
+    "customerId": "10218",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_t2l3w94o",
+    "customerId": "10465",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_2tIaE0rk",
+    "customerId": "10041",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_YVERktcy",
+    "customerId": "10225",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_y6RPQ1Oz",
+    "customerId": "10123",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_XXaODTP0",
+    "customerId": "10233",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_ASxfyuC7",
+    "customerId": "10346",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_OxECpffU",
+    "customerId": "10429",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_fXEnIfwe",
+    "customerId": "10116",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_1bwznUh9",
+    "customerId": "10398",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_n6CjcjY0",
+    "customerId": "10153",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_ysQFQs7w",
+    "customerId": "10459",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_TQBNJUpz",
+    "customerId": "10285",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_yLX5DZro",
+    "customerId": "10167",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_zyrDcx7z",
+    "customerId": "10063",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_jqDO1WZR",
+    "customerId": "10071",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_OfNwgEdT",
+    "customerId": "10345",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_M2bsxkNw",
+    "customerId": "10093",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_PEEpcPgl",
+    "customerId": "10084",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_2zHXwBlB",
+    "customerId": "10436",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_lw2LeLXa",
+    "customerId": "10203",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_weHf15pR",
+    "customerId": "10030",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_1JWnzESA",
+    "customerId": "10054",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_9LZNHqyc",
+    "customerId": "10406",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_GuKYYYpj",
+    "customerId": "10467",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_JNmwTeBC",
+    "customerId": "10376",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_4paFjNfV",
+    "customerId": "10443",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_RxEKSeea",
+    "customerId": "10286",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_edpG8Ini",
+    "customerId": "10473",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_wieFmwEb",
+    "customerId": "10021",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_fCb2tCYE",
+    "customerId": "10288",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_HIZRYG4e",
+    "customerId": "10042",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_hZPemVJZ",
+    "customerId": "10198",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_VrwTcSgH",
+    "customerId": "10476",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_5oochpq7",
+    "customerId": "10441",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_7jC97B1B",
+    "customerId": "10138",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_HzbY3yns",
+    "customerId": "10414",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_pocFQcow",
+    "customerId": "10438",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_okZXvWt1",
+    "customerId": "10222",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_ChOw41Cy",
+    "customerId": "10276",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_flWddnue",
+    "customerId": "10372",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_K43o6sOT",
+    "customerId": "10186",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_0cFiRGxL",
+    "customerId": "10081",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_DKjlg2G9",
+    "customerId": "10326",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_hAm3i5pH",
+    "customerId": "10366",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_NKzCKiTw",
+    "customerId": "10480",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_8QKpwpK0",
+    "customerId": "10360",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_4TpoX5hP",
+    "customerId": "10402",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_A3DZnThm",
+    "customerId": "10311",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_FEnxYSfh",
+    "customerId": "10108",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_pq3JKail",
+    "customerId": "10234",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_anY9QHFU",
+    "customerId": "10102",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_gXV1GOLb",
+    "customerId": "10324",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_BhR2erOy",
+    "customerId": "10420",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_hTuzCE8E",
+    "customerId": "10192",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_c7MgU1NZ",
+    "customerId": "10156",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_CDFhbRvB",
+    "customerId": "10363",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_gpF4nR8w",
+    "customerId": "10381",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_kDAAacc1",
+    "customerId": "10221",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_tmJO62Jm",
+    "customerId": "10396",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_p7uRTh8X",
+    "customerId": "10477",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_1a2wTJMs",
+    "customerId": "10261",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_RYgdp0BB",
+    "customerId": "10266",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_Du8HyoNN",
+    "customerId": "10006",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_EecAp5rV",
+    "customerId": "10281",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_ohWPZ99y",
+    "customerId": "10498",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_ElBi9xkJ",
+    "customerId": "10387",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_vGy4BbqH",
+    "customerId": "10386",
+    "deviceType": "tablet",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_fdxclzGi",
+    "customerId": "10321",
+    "deviceType": "mobile",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_P4txrS7w",
+    "customerId": "10378",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_YZ53g860",
+    "customerId": "10483",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_JzfdYRq0",
+    "customerId": "10036",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_WZcTKSgS",
+    "customerId": "10401",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_oOBPfjG0",
+    "customerId": "10450",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_w4hNvt01",
+    "customerId": "10447",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_3ARi19o8",
+    "customerId": "10462",
+    "deviceType": "tablet",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_CUCEHXZo",
+    "customerId": "10270",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_vlLjIBB9",
+    "customerId": "10294",
+    "deviceType": "tablet",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_P10egGZu",
+    "customerId": "10333",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_Vb9DQJqy",
+    "customerId": "10416",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_bDUFn4WT",
+    "customerId": "10228",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_P2YhKbwS",
+    "customerId": "10237",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_GmjetbBS",
+    "customerId": "10491",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Edge"
+  },
+  {
+    "deviceId": "dev_cJ9OnoYr",
+    "customerId": "10297",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_KABlS7fi",
+    "customerId": "10111",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_LkC2uO5v",
+    "customerId": "10264",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_lhKKbgqD",
+    "customerId": "10341",
+    "deviceType": "tablet",
+    "os": "iOS",
+    "browser": "Firefox"
+  },
+  {
+    "deviceId": "dev_GFWNo2gg",
+    "customerId": "10078",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_bxhkJBRC",
+    "customerId": "10303",
+    "deviceType": "desktop",
+    "os": "macOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_KmgxTpdG",
+    "customerId": "50240",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_maA8RUB4",
+    "customerId": "50246",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_nxHsKgjc",
+    "customerId": "50249",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_b4qiNnNs",
+    "customerId": "50249",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_3HsqTC5m",
+    "customerId": "50249",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_83sgvrEv",
+    "customerId": "50249",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_QEt53Xb6",
+    "customerId": "50249",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_ioEM8DGt",
+    "customerId": "50250",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_UNm47v0z",
+    "customerId": "50250",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_cjucpDiH",
+    "customerId": "50251",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_6kXuVBbf",
+    "customerId": "50251",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_SVTTUuG2",
+    "customerId": "50251",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_4Zu5voSW",
+    "customerId": "50251",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_z6ShC6QK",
+    "customerId": "50251",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_X3Kfp64p",
+    "customerId": "50251",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_wze2aTI6",
+    "customerId": "50252",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_52Tcaget",
+    "customerId": "50252",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_WltkzaIt",
+    "customerId": "50252",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_0Hr2lnyo",
+    "customerId": "50252",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_A6GDzcIp",
+    "customerId": "50252",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_X3Xeo7z1",
+    "customerId": "50253",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_MokImyzi",
+    "customerId": "50258",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_4RDJLRjs",
+    "customerId": "50258",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_Zl7ZhIQa",
+    "customerId": "50258",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_VhUQOR9X",
+    "customerId": "50258",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_HEJizrsD",
+    "customerId": "50259",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_3mLXMF06",
+    "customerId": "50259",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_N0RByOx6",
+    "customerId": "50259",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_aDLPYLYA",
+    "customerId": "50260",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_83ogaUNj",
+    "customerId": "50260",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_DzCotQSw",
+    "customerId": "50260",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_PQCzVMtB",
+    "customerId": "50261",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_YpzihrRR",
+    "customerId": "50261",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_dJl72fXs",
+    "customerId": "50261",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_7yrep30i",
+    "customerId": "50262",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_3bxvqZFM",
+    "customerId": "50262",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_7GTSBeaq",
+    "customerId": "50262",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_9yFcYuIk",
+    "customerId": "50262",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_kVdI5dqI",
+    "customerId": "50262",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_bfJyLWzS",
+    "customerId": "50262",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_Tdp73jBJ",
+    "customerId": "50262",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_cQnuvtv6",
+    "customerId": "50262",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_Oo76Mp2d",
+    "customerId": "50262",
+    "deviceType": "desktop",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_fuda5GCN",
+    "customerId": "50262",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_Oanf0YoX",
+    "customerId": "50262",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_a9z3uhu3",
+    "customerId": "50262",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_xzYYAo7j",
+    "customerId": "50263",
+    "deviceType": "desktop",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_SgQd9tIz",
+    "customerId": "50263",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_0sfAQlZb",
+    "customerId": "50263",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_vw6zBR8y",
+    "customerId": "50263",
+    "deviceType": "mobile",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_GKTL3r94",
+    "customerId": "50263",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_akNzACM5",
+    "customerId": "50263",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_fx0naEyW",
+    "customerId": "50263",
+    "deviceType": "mobile",
+    "os": "Android",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_zdsNeOZH",
+    "customerId": "50263",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_GKX4yYML",
+    "customerId": "50263",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_lGSZR3pi",
+    "customerId": "50263",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Chrome"
+  },
+  {
+    "deviceId": "dev_srArF81K",
+    "customerId": "50263",
+    "deviceType": "desktop",
+    "os": "Windows",
+    "browser": "Safari"
+  },
+  {
+    "deviceId": "dev_venMeogx",
+    "customerId": "50263",
+    "deviceType": "mobile",
+    "os": "iOS",
+    "browser": "Chrome"
+  }
+]

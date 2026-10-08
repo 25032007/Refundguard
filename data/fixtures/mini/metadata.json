@@ -1,0 +1,57 @@
+{
+  "source": "CI_FIXTURE",
+  "seed": 1,
+  "currency": "GBP",
+  "backgroundCustomerCount": 240,
+  "injectedFraudCustomerCount": 24,
+  "totalCustomerCount": 264,
+  "transactionCount": 1121,
+  "refundCount": 305,
+  "sourceAccounting": {
+    "totalSourceRows": 3398,
+    "missingCustomerIdRows": 0,
+    "outlierRows": 0,
+    "validSourceRows": 3398
+  },
+  "normalInvoiceCount": 1121,
+  "cancellationInvoiceCount": 201,
+  "linking": {
+    "fullyLinked": 171,
+    "partiallyLinked": 0,
+    "unlinked": 30,
+    "ambiguous": 0
+  },
+  "samplingMethod": "Stratified deterministic seeded sampling by activity",
+  "deterministicGenerationMethod": "Phase 1B+1C synthetic generator",
+  "scenarioCounts": {
+    "obvious_ring": 1,
+    "noisy_ring": 1,
+    "rotating_ip_ring": 1,
+    "slow_burn_ring": 1,
+    "burst_refund": 1
+  },
+  "accountAgeSource": "synthetic_left_censoring",
+  "refundDerivation": "cancellation_invoice",
+  "linkingMethod": "Deterministic heuristic (same customer, prior, same StockCode, sufficient original quantity)",
+  "excludedCodes": [
+    "POST",
+    "M",
+    "D",
+    "S",
+    "BANK CHARGES",
+    "ADJUST",
+    "AMAZONFEE",
+    "PADS",
+    "CRUK"
+  ],
+  "negativeNonCRows": "Ignored during parsing",
+  "groups": {
+    "legitimateIndividual": 165,
+    "legitimateHousehold": 22,
+    "legitimateOffice": 15,
+    "legitimateHostel": 25,
+    "legitimateWholesaler": 13,
+    "legitimateHighRefundRate": 0,
+    "totalSharedResource": 75
+  }
+}
