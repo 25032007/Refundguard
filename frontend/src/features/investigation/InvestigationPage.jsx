@@ -1,6 +1,7 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useInvestigation } from './hooks/useInvestigation.js';
+import React, { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getInvestigation, getAuditHistory, updateDecision } from '../../services/api.js';
 
 import InvestigationHeader from './components/InvestigationHeader.jsx';
 import RiskSummary from './components/RiskSummary.jsx';
@@ -9,63 +10,124 @@ import RingRelationship from './components/RingRelationship.jsx';
 import TemporalContext from './components/TemporalContext.jsx';
 import InvestigationGraph from './components/InvestigationGraph.jsx';
 import AnalystPanel from './components/AnalystPanel.jsx';
-
-import Skeleton from '../../ui/Skeleton.jsx';
-import ErrorState from '../../ui/ErrorState.jsx';
+import ComplaintIntelligence from './components/ComplaintIntelligence.jsx';
 
 export default function InvestigationPage() {
   const { id } = useParams();
-  const { loading, error, investigation, decision, auditTrigger, saveDecision } = useInvestigation(id);
+  const queryClient = useQueryClient();
 
-  if (loading) {
+  const [conflictError, setConflictError] = useState(false);
+
+  const { data: investigation, isLoading, isError, error: fetchError } = useQuery({
+    queryKey: ['investigation', id],
+    queryFn: () => getInvestigation(id),
+  });
+
+  const { data: auditData } = useQuery({
+    queryKey: ['audit', id],
+    queryFn: () => getAuditHistory(id),
+  });
+
+  const mutation = useMutation({
+    mutationFn: (args) => updateDecision(args),
+    onSuccess: (data) => {
+      // Invalidate queries to refetch investigation and audit history
+      queryClient.invalidateQueries({ queryKey: ['investigation', id] });
+      queryClient.invalidateQueries({ queryKey: ['audit', id] });
+      setConflictError(false);
+    },
+    onError: (error) => {
+      if (error.response?.status === 409) {
+        setConflictError(true);
+      }
+    }
+  });
+
+  if (isLoading) {
     return (
-      <div className="rg-app page">
-        <Skeleton width="300px" height="40px" style={{ marginBottom: 'var(--rg-space-6)' }} />
-        <div style={{ display: 'flex', gap: 'var(--rg-space-6)', flexWrap: 'wrap' }}>
-          <div style={{ flex: '1 1 60%', minWidth: '320px', display: 'flex', flexDirection: 'column', gap: 'var(--rg-space-6)' }}>
-            <Skeleton width="100%" height="200px" />
-            <Skeleton width="100%" height="400px" />
+      <div className="page">
+        <div style={{ height: 100, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, marginBottom: 24, animation: 'rg-pulse 2s infinite' }} />
+        <div style={{ display: 'flex', gap: 24 }}>
+          <div style={{ flex: '1 1 0', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ height: 180, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, animation: 'rg-pulse 2s infinite' }} />
+            <div style={{ height: 300, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, animation: 'rg-pulse 2s infinite' }} />
           </div>
-          <div style={{ flex: '1 1 35%', minWidth: '320px' }}>
-            <Skeleton width="100%" height="600px" />
+          <div style={{ flex: '0 0 340px' }}>
+            <div style={{ height: 400, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, animation: 'rg-pulse 2s infinite' }} />
           </div>
         </div>
       </div>
     );
   }
 
-  if (error || !investigation) {
+  if (isError || !investigation) {
     return (
-      <div className="rg-app page" style={{ paddingTop: 'var(--rg-space-10)' }}>
-        <ErrorState title="Failed to load investigation" description={error?.message || 'Investigation data could not be retrieved.'} />
+      <div className="page">
+        <Link to="/triage" className="back-link" style={{ marginBottom: 16, display: 'inline-flex' }}>← Back to Triage</Link>
+        <div className="rg-error-state">
+          <p className="rg-error-state-title">Investigation not found</p>
+          <p className="rg-error-state-description">
+            {fetchError?.message || 'Investigation data could not be retrieved.'}
+          </p>
+        </div>
       </div>
     );
   }
+
+  const decision = investigation.decision?.status || 'UNREVIEWED';
+  const expectedVersion = investigation.decision?.version || 0;
+
+  const handleSaveDecision = (newDecision, reason) => {
+    return mutation.mutateAsync({ customerId: id, decision: newDecision, reason, expectedVersion });
+  };
+
+  const handleReload = () => {
+    setConflictError(false);
+    queryClient.invalidateQueries({ queryKey: ['investigation', id] });
+    queryClient.invalidateQueries({ queryKey: ['audit', id] });
+  };
 
   return (
-    <div className="rg-app page">
+    <div className="page page-transition">
+      <Link to="/triage" className="back-link">← Triage Center</Link>
+
       <InvestigationHeader investigation={investigation} decision={decision} />
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--rg-space-6)', alignItems: 'flex-start' }}>
-        {/* Left Column - System Evidence */}
-        <div style={{ flex: '1 1 60%', minWidth: '320px', display: 'flex', flexDirection: 'column' }}>
-          <TemporalContext investigation={investigation} />
-          <RiskSummary investigation={investigation} />
-          <EvidenceLedger signals={investigation.risk?.signals || []} />
-          <RingRelationship investigation={investigation} />
-          <InvestigationGraph investigation={investigation} />
+      <div className="inv-layout">
+        <div className="inv-main">
+          <div className="animate-fade-in-up stagger-1"><RiskSummary investigation={investigation} /></div>
+          <div className="animate-fade-in-up stagger-2"><EvidenceLedger signals={investigation.evidence || []} customerId={id} /></div>
+          <div className="animate-fade-in-up stagger-3"><ComplaintIntelligence nlp={investigation.nlp} /></div>
+          <div className="animate-fade-in-up stagger-4"><RingRelationship investigation={investigation} /></div>
+          <div className="animate-fade-in-up stagger-5"><TemporalContext investigation={investigation} /></div>
+          <div className="animate-fade-in-up stagger-5"><InvestigationGraph investigation={investigation} /></div>
         </div>
 
-        {/* Right Column - Analyst Action */}
-        <div style={{ flex: '1 1 35%', minWidth: '320px' }}>
+        <div className="inv-aside">
           <AnalystPanel
             entityId={id}
             decision={decision}
-            onSaveDecision={saveDecision}
-            auditTrigger={auditTrigger}
+            onSaveDecision={handleSaveDecision}
+            isSaving={mutation.isPending}
+            error={conflictError ? null : (mutation.error?.response?.data?.error || mutation.error?.message)}
+            auditData={auditData}
           />
         </div>
       </div>
+
+      {conflictError && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div style={{ background: 'var(--rg-surface)', padding: 32, borderRadius: 8, maxWidth: 400, boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
+            <h3 style={{ margin: '0 0 16px', color: 'var(--rg-severity-high)' }}>Case Changed</h3>
+            <p style={{ margin: '0 0 24px', fontSize: 14, color: 'var(--rg-text-secondary)', lineHeight: 1.5 }}>
+              Another analyst has updated this case since you opened it. Please reload to see the latest decision.
+            </p>
+            <button onClick={handleReload} style={{ background: 'var(--rg-brand)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: 4, cursor: 'pointer', width: '100%' }}>
+              Reload Case
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
