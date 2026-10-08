@@ -1,0 +1,134 @@
+[
+  {
+    "refundId": "R101_1",
+    "transactionId": "T101_1",
+    "customerId": "C101",
+    "orderId": "O101_1",
+    "amount": 40,
+    "reason": "damaged_item",
+    "status": "processed",
+    "requestedAt": "2026-09-10T12:00:00.000Z",
+    "processedAt": "2026-09-10T18:00:00.000Z"
+  },
+  {
+    "refundId": "R101_2",
+    "transactionId": "T101_2",
+    "customerId": "C101",
+    "orderId": "O101_2",
+    "amount": 50,
+    "reason": "wrong_item",
+    "status": "processed",
+    "requestedAt": "2026-09-13T12:00:00.000Z",
+    "processedAt": "2026-09-13T18:00:00.000Z"
+  },
+  {
+    "refundId": "R101_3",
+    "transactionId": "T101_3",
+    "customerId": "C101",
+    "orderId": "O101_3",
+    "amount": 60,
+    "reason": "not_received",
+    "status": "processed",
+    "requestedAt": "2026-09-16T12:00:00.000Z",
+    "processedAt": "2026-09-16T18:00:00.000Z"
+  },
+  {
+    "refundId": "R101_4",
+    "transactionId": "T101_4",
+    "customerId": "C101",
+    "orderId": "O101_4",
+    "amount": 70,
+    "reason": "damaged_item",
+    "status": "processed",
+    "requestedAt": "2026-09-19T12:00:00.000Z",
+    "processedAt": "2026-09-19T18:00:00.000Z"
+  },
+  {
+    "refundId": "R101_5",
+    "transactionId": "T101_5",
+    "customerId": "C101",
+    "orderId": "O101_5",
+    "amount": 80,
+    "reason": "wrong_item",
+    "status": "processed",
+    "requestedAt": "2026-09-22T12:00:00.000Z",
+    "processedAt": "2026-09-22T18:00:00.000Z"
+  },
+  {
+    "refundId": "R102_1",
+    "transactionId": "T102_1",
+    "customerId": "C102",
+    "orderId": "O102_1",
+    "amount": 40,
+    "reason": "damaged_item",
+    "status": "processed",
+    "requestedAt": "2026-09-10T12:00:00.000Z",
+    "processedAt": "2026-09-10T18:00:00.000Z"
+  },
+  {
+    "refundId": "R102_2",
+    "transactionId": "T102_2",
+    "customerId": "C102",
+    "orderId": "O102_2",
+    "amount": 50,
+    "reason": "wrong_item",
+    "status": "processed",
+    "requestedAt": "2026-09-13T12:00:00.000Z",
+    "processedAt": "2026-09-13T18:00:00.000Z"
+  },
+  {
+    "refundId": "R102_3",
+    "transactionId": "T102_3",
+    "customerId": "C102",
+    "orderId": "O102_3",
+    "amount": 60,
+    "reason": "not_received",
+    "status": "processed",
+    "requestedAt": "2026-09-16T12:00:00.000Z",
+    "processedAt": "2026-09-16T18:00:00.000Z"
+  },
+  {
+    "refundId": "R103_1",
+    "transactionId": "T103_1",
+    "customerId": "C103",
+    "orderId": "O103_1",
+    "amount": 40,
+    "reason": "damaged_item",
+    "status": "processed",
+    "requestedAt": "2026-09-10T12:00:00.000Z",
+    "processedAt": "2026-09-10T18:00:00.000Z"
+  },
+  {
+    "refundId": "R104_1",
+    "transactionId": "T104_1",
+    "customerId": "C104",
+    "orderId": "O104_1",
+    "amount": 40,
+    "reason": "damaged_item",
+    "status": "processed",
+    "requestedAt": "2026-09-10T12:00:00.000Z",
+    "processedAt": "2026-09-10T18:00:00.000Z"
+  },
+  {
+    "refundId": "R104_2",
+    "transactionId": "T104_2",
+    "customerId": "C104",
+    "orderId": "O104_2",
+    "amount": 50,
+    "reason": "wrong_item",
+    "status": "processed",
+    "requestedAt": "2026-09-13T12:00:00.000Z",
+    "processedAt": "2026-09-13T18:00:00.000Z"
+  },
+  {
+    "refundId": "R106_1",
+    "transactionId": "T106_1",
+    "customerId": "C106",
+    "orderId": "O106_1",
+    "amount": 40,
+    "reason": "damaged_item",
+    "status": "processed",
+    "requestedAt": "2026-09-10T12:00:00.000Z",
+    "processedAt": "2026-09-10T18:00:00.000Z"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "customerId": "C101",
+    "name": "Alice",
+    "status": "active",
+    "createdAt": "2026-08-01T10:00:00.000Z"
+  },
+  {
+    "customerId": "C102",
+    "name": "Bob",
+    "status": "active",
+    "createdAt": "2026-08-02T10:00:00.000Z"
+  },
+  {
+    "customerId": "C103",
+    "name": "Carol",
+    "status": "active",
+    "createdAt": "2026-08-03T10:00:00.000Z"
+  },
+  {
+    "customerId": "C104",
+    "name": "Dan",
+    "status": "active",
+    "createdAt": "2026-08-04T10:00:00.000Z"
+  },
+  {
+    "customerId": "C105",
+    "name": "Erin",
+    "status": "active",
+    "createdAt": "2026-08-05T10:00:00.000Z"
+  },
+  {
+    "customerId": "C106",
+    "name": "Frank",
+    "status": "active",
+    "createdAt": "2026-08-06T10:00:00.000Z"
+  }
+]
