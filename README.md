@@ -2,17 +2,29 @@
 ### Explainable Fraud Risk Intelligence & Coordinated Ring Detection Platform
 
 [![RefundGuard CI](https://github.com/25032007/Refundguard/actions/workflows/ci.yml/badge.svg)](https://github.com/25032007/Refundguard/actions/workflows/ci.yml)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-https%3A%2F%2Frefundguard.onrender.com-brightgreen?style=for-the-badge&logo=render)](https://refundguard.onrender.com)
 ![Node Version](https://img.shields.io/badge/node-%3E%3D22.0.0-brightgreen.svg)
 ![React](https://img.shields.io/badge/frontend-React%2018%20%7C%20Vite-blue)
 ![Backend](https://img.shields.io/badge/backend-Express%20%7C%20SQLite-orange)
 ![Security](https://img.shields.io/badge/security-JWT%20%7C%20Zod%20%7C%20SHA--256%20Audit-red)
-![License](https://img.shields.io/badge/license-MIT-green)
+
+> 🚀 **Live Production Demo**: [https://refundguard.onrender.com](https://refundguard.onrender.com)
+
+---
+
+## 📌 About RefundGuard AI
+
+**RefundGuard AI** is an enterprise-grade fraud intelligence platform engineered for payment gateways, FinTech platforms, and e-commerce merchants (built for the **Razorpay AI Buildathon**). 
+
+It addresses the multi-billion dollar problem of **coordinated refund abuse** by identifying bad actors who operate across synthetic accounts, shared device signatures, IP clusters, and templated customer service complaint narratives.
+
+Unlike opaque black-box machine learning models, RefundGuard provides **100% explainable, deterministic evidence** with a **SHA-256 cryptographic append-only audit trail** to empower risk analysts to confidently defend fraud decisions.
 
 ---
 
 ## 🎯 Executive Summary & Problem Statement
 
-**Refund fraud costs e-commerce platforms and payment gateways billions annually.** Bad actors systematically abuse return policies by creating synthetic multi-account networks ("refund rings") sharing IP addresses, device signatures, and templated complaint narratives.
+**Refund fraud costs e-commerce platforms billions annually.** Bad actors systematically abuse return policies by creating synthetic multi-account networks ("refund rings") sharing IP addresses, device signatures, and templated complaint narratives.
 
 Standard single-account velocity checks fail because fraudsters deliberately stay below individual transaction thresholds. Black-box machine learning models fail because they lack transparency—fraud analysts cannot defend a denial decision without explicit, audit-ready evidence.
 
@@ -20,35 +32,35 @@ Standard single-account velocity checks fail because fraudsters deliberately sta
 
 ---
 
-## 📸 Platform Screenshots
+## 📸 Application Visual Walkthrough & Screenshots
 
 ### 📊 1. Executive Risk Dashboard
 > Real-time risk posture breakdown, top risk signals, active dataset baseline, and analyst workload queue.
-![Executive Dashboard](docs/screenshots/dashboard.png)
+![Executive Dashboard](https://raw.githubusercontent.com/25032007/Refundguard/master/docs/screenshots/dashboard.png)
 
 ---
 
 ### 📋 2. Case Triage Console
-> Filter cases by Risk Level (`CRITICAL`, `HIGH`, `MEDIUM`), Decision Status, or Network Association. Real-time debounced search.
-![Case Triage Console](docs/screenshots/triage.png)
+> Filter cases by Risk Level (`CRITICAL`, `HIGH`, `MEDIUM`), Decision Status, or Network Association. Includes a Quick Customer Summary Card and dynamic search.
+![Case Triage Console](https://raw.githubusercontent.com/25032007/Refundguard/master/docs/screenshots/triage.png)
 
 ---
 
 ### 🔍 3. Customer Investigation Deep Dive
-> Explainable risk score breakdown (0–100), evidence ledger, complaint NLP similarity metrics, and interactive analyst decision panel.
-![Customer Investigation Deep Dive](docs/screenshots/investigation.png)
+> Explainable risk score breakdown (0–100), evidence ledger, complaint NLP similarity metrics, hotkey controls (`1`, `2`, `3`), and interactive analyst decision panel.
+![Customer Investigation Deep Dive](https://raw.githubusercontent.com/25032007/Refundguard/master/docs/screenshots/investigation.png)
 
 ---
 
 ### 🕸️ 4. Ring Intelligence & Interactive 2D Network Graph
 > Visualizes multi-member refund rings sharing IP addresses (`156.135.169.25`) and device signatures (`dev_00142`). Tracks ring lifecycle states (`EMERGING`, `ACTIVE`, `DORMANT`, `DISBANDED`).
-![Ring Intelligence Graph](docs/screenshots/ring_graph.png)
+![Ring Intelligence Graph](https://raw.githubusercontent.com/25032007/Refundguard/master/docs/screenshots/ring_graph.png)
 
 ---
 
 ### ⚙️ 5. Detection Health & System Diagnostics
 > Model operational health metrics, global risk distribution, pipeline latency (<8ms P95), and decision totals.
-![System Diagnostics](docs/screenshots/system.png)
+![System Diagnostics](https://raw.githubusercontent.com/25032007/Refundguard/master/docs/screenshots/system.png)
 
 ---
 
@@ -125,29 +137,26 @@ Measured on a standard Node.js v22 runtime with 2,024 customer records:
 
 ---
 
-## 🚀 Quick Start & Installation
+## 🚀 Live Demo & Local Installation
 
-### Prerequisites
-- **Node.js**: `v22.0.0` or higher
-- **npm**: `v10.0.0` or higher
+### 🌐 Live Deployment
+Visit the live production application deployed on Render:
+👉 **[https://refundguard.onrender.com](https://refundguard.onrender.com)**
 
-### 1. Clone & Install
+### 💻 Local Setup
 ```bash
+# Clone & Install
 git clone https://github.com/25032007/Refundguard.git
 cd Refundguard
 npm run setup
-```
 
-### 2. Generate Synthetic Dataset
-```bash
+# Generate Synthetic Baseline Data
 npm run data:generate
-```
 
-### 3. Launch Development Server
-```bash
+# Start Unified Local Dev Servers
 npm run dev
 ```
-- **Frontend Analyst Console**: `http://localhost:5173`
+- **Analyst Console**: `http://localhost:5173`
 - **Backend API**: `http://localhost:5000/api/v1`
 
 ---
