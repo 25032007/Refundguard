@@ -3,6 +3,9 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
+# Install build tools required by node-gyp for native modules like better-sqlite3
+RUN apk add --no-cache python3 make g++
+
 # Copy root and service package files
 COPY package*.json ./
 COPY backend/package*.json ./backend/
