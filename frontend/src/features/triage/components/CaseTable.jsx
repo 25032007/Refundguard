@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Badge from '../../../ui/Badge';
 import { formatSignalType } from '../../../utils/format';
 
+import { usePii } from '../../../context/PiiContext';
+
 function ExpandableRow({ row, navigate }) {
+  const { maskPii } = usePii();
   const [expanded, setExpanded] = useState(false);
   const level = row.riskLevel || 'LOW';
   const isHighPriority = level === 'CRITICAL' || level === 'HIGH';
@@ -21,7 +24,7 @@ function ExpandableRow({ row, navigate }) {
           ▶
         </td>
         <td data-label="Customer">
-          <span className="mono" style={{ fontWeight: 600 }}>{row.customerId}</span>
+          <span className="mono" style={{ fontWeight: 600 }}>{maskPii(row.customerId, 'name')}</span>
         </td>
         <td data-label="Risk">
           <Badge severity={level.toLowerCase()}>

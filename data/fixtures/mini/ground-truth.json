@@ -1929,7 +1929,7 @@
       "scenarioIds": [
         "scene_obvious_01"
       ],
-      "memberJoinDate": "2011-09-11T15:15:34.647Z"
+      "memberJoinDate": "2011-09-18T07:10:34.647Z"
     },
     "50241": {
       "label": "FRAUD",
@@ -1939,7 +1939,7 @@
       "scenarioIds": [
         "scene_obvious_01"
       ],
-      "memberJoinDate": "2011-09-17T14:12:42.815Z"
+      "memberJoinDate": "2011-09-24T06:07:42.815Z"
     },
     "50242": {
       "label": "FRAUD",
@@ -1949,7 +1949,7 @@
       "scenarioIds": [
         "scene_obvious_01"
       ],
-      "memberJoinDate": "2011-04-20T23:15:11.856Z"
+      "memberJoinDate": "2011-04-27T15:10:11.856Z"
     },
     "50243": {
       "label": "FRAUD",
@@ -1959,7 +1959,7 @@
       "scenarioIds": [
         "scene_obvious_01"
       ],
-      "memberJoinDate": "2011-03-11T16:11:42.381Z"
+      "memberJoinDate": "2011-03-18T08:06:42.381Z"
     },
     "50244": {
       "label": "FRAUD",
@@ -1969,7 +1969,7 @@
       "scenarioIds": [
         "scene_obvious_01"
       ],
-      "memberJoinDate": "2011-02-07T11:43:47.217Z"
+      "memberJoinDate": "2011-02-14T03:38:47.217Z"
     },
     "50245": {
       "label": "FRAUD",
@@ -1979,7 +1979,7 @@
       "scenarioIds": [
         "scene_obvious_01"
       ],
-      "memberJoinDate": "2011-09-29T14:24:09.404Z"
+      "memberJoinDate": "2011-10-06T06:19:09.404Z"
     },
     "50246": {
       "label": "FRAUD",
@@ -1989,7 +1989,7 @@
       "scenarioIds": [
         "scene_noisy_01"
       ],
-      "memberJoinDate": "2011-08-21T05:08:31.071Z"
+      "memberJoinDate": "2011-08-27T21:03:31.071Z"
     },
     "50247": {
       "label": "FRAUD",
@@ -1999,7 +1999,7 @@
       "scenarioIds": [
         "scene_noisy_01"
       ],
-      "memberJoinDate": "2011-09-12T11:20:28.329Z"
+      "memberJoinDate": "2011-09-19T03:15:28.329Z"
     },
     "50248": {
       "label": "FRAUD",
@@ -2009,7 +2009,7 @@
       "scenarioIds": [
         "scene_noisy_01"
       ],
-      "memberJoinDate": "2011-05-25T03:37:00.655Z"
+      "memberJoinDate": "2011-05-31T19:32:00.655Z"
     },
     "50249": {
       "label": "FRAUD",
@@ -2019,7 +2019,7 @@
       "scenarioIds": [
         "scene_noisy_01"
       ],
-      "memberJoinDate": "2011-02-22T13:45:51.651Z"
+      "memberJoinDate": "2011-03-01T05:40:51.651Z"
     },
     "50250": {
       "label": "FRAUD",
@@ -2029,7 +2029,7 @@
       "scenarioIds": [
         "scene_noisy_01"
       ],
-      "memberJoinDate": "2010-12-31T23:31:30.997Z"
+      "memberJoinDate": "2011-01-07T15:26:30.997Z"
     },
     "50251": {
       "label": "FRAUD",
@@ -2039,7 +2039,7 @@
       "scenarioIds": [
         "scene_noisy_01"
       ],
-      "memberJoinDate": "2011-05-09T23:59:42.692Z"
+      "memberJoinDate": "2011-05-16T15:54:42.692Z"
     },
     "50252": {
       "label": "FRAUD",
@@ -2049,7 +2049,7 @@
       "scenarioIds": [
         "scene_noisy_01"
       ],
-      "memberJoinDate": "2011-03-09T16:54:14.695Z"
+      "memberJoinDate": "2011-03-16T08:49:14.695Z"
     },
     "50253": {
       "label": "FRAUD",
@@ -2059,7 +2059,7 @@
       "scenarioIds": [
         "scene_rotating_01"
       ],
-      "memberJoinDate": "2011-08-13T16:33:14.549Z"
+      "memberJoinDate": "2011-08-20T08:28:14.549Z"
     },
     "50254": {
       "label": "FRAUD",
@@ -2069,7 +2069,7 @@
       "scenarioIds": [
         "scene_rotating_01"
       ],
-      "memberJoinDate": "2011-02-28T05:53:15.363Z"
+      "memberJoinDate": "2011-03-06T21:48:15.363Z"
     },
     "50255": {
       "label": "FRAUD",
@@ -2079,7 +2079,7 @@
       "scenarioIds": [
         "scene_rotating_01"
       ],
-      "memberJoinDate": "2011-09-27T15:48:10.298Z"
+      "memberJoinDate": "2011-10-04T07:43:10.298Z"
     },
     "50256": {
       "label": "FRAUD",
@@ -2089,7 +2089,7 @@
       "scenarioIds": [
         "scene_rotating_01"
       ],
-      "memberJoinDate": "2011-06-02T12:43:32.701Z"
+      "memberJoinDate": "2011-06-09T04:38:32.701Z"
     },
     "50257": {
       "label": "FRAUD",
@@ -2099,7 +2099,7 @@
       "scenarioIds": [
         "scene_rotating_01"
       ],
-      "memberJoinDate": "2010-12-30T22:43:10.860Z"
+      "memberJoinDate": "2011-01-06T14:38:10.860Z"
     },
     "50258": {
       "label": "FRAUD",
@@ -2109,7 +2109,7 @@
       "scenarioIds": [
         "scene_slowburn_01"
       ],
-      "memberJoinDate": "2011-11-11T07:35:39.471Z"
+      "memberJoinDate": "2011-11-17T23:30:39.471Z"
     },
     "50259": {
       "label": "FRAUD",
@@ -2119,7 +2119,7 @@
       "scenarioIds": [
         "scene_slowburn_01"
       ],
-      "memberJoinDate": "2011-02-24T10:20:07.940Z"
+      "memberJoinDate": "2011-03-03T02:15:07.940Z"
     },
     "50260": {
       "label": "FRAUD",
@@ -2129,7 +2129,7 @@
       "scenarioIds": [
         "scene_slowburn_01"
       ],
-      "memberJoinDate": "2011-10-14T17:25:43.732Z"
+      "memberJoinDate": "2011-10-21T09:20:43.732Z"
     },
     "50261": {
       "label": "FRAUD",
@@ -2139,7 +2139,7 @@
       "scenarioIds": [
         "scene_slowburn_01"
       ],
-      "memberJoinDate": "2011-11-25T21:37:06.531Z"
+      "memberJoinDate": "2011-12-02T13:32:06.531Z"
     },
     "50262": {
       "label": "FRAUD",
@@ -2149,7 +2149,7 @@
       "scenarioIds": [
         "scene_burst_01"
       ],
-      "memberJoinDate": "2011-08-03T08:21:09.768Z"
+      "memberJoinDate": "2011-08-10T00:16:09.768Z"
     },
     "50263": {
       "label": "FRAUD",
@@ -2159,7 +2159,7 @@
       "scenarioIds": [
         "scene_burst_01"
       ],
-      "memberJoinDate": "2011-05-15T13:05:57.599Z"
+      "memberJoinDate": "2011-05-22T05:00:57.599Z"
     }
   },
   "scenarios": [

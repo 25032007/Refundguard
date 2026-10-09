@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { usePii } from '../context/PiiContext';
+import HotkeyHelpModal from './HotkeyHelpModal';
 
 const SECTION_TITLES = {
   '/dashboard': { eyebrow: 'Executive Overview', title: 'Risk Intelligence Console', sub: 'Real-time refund fraud & ring monitoring' },
@@ -23,6 +25,8 @@ function getSectionInfo(pathname) {
 export default function Header() {
   const { pathname } = useLocation();
   const info = getSectionInfo(pathname);
+  const { isPiiMasked, togglePiiMask } = usePii();
+  const [isHotkeyHelpOpen, setIsHotkeyHelpOpen] = useState(false);
 
   return (
     <header className="app-header">
@@ -43,7 +47,54 @@ export default function Header() {
       </div>
 
       <div className="app-header-right">
-        {/* Quick Search / Command Bar */}
+        {/* PII Shield Toggle */}
+        <button
+          onClick={togglePiiMask}
+          title={isPiiMasked ? 'PII Masking Active (Compliance Mode)' : 'PII Displaying Unmasked (Click to Mask)'}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '5px 10px',
+            fontSize: '12px',
+            fontWeight: 600,
+            borderRadius: '6px',
+            cursor: 'pointer',
+            border: isPiiMasked ? '1px solid #16a34a' : '1px solid var(--rg-border-strong)',
+            backgroundColor: isPiiMasked ? 'rgba(22, 163, 74, 0.1)' : 'var(--rg-surface)',
+            color: isPiiMasked ? '#15803d' : 'var(--rg-text-primary)',
+            transition: 'all 0.2s ease',
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <span>PII: {isPiiMasked ? 'MASKED' : 'UNMASKED'}</span>
+        </button>
+
+        {/* Hotkeys Button */}
+        <button
+          onClick={() => setIsHotkeyHelpOpen(true)}
+          title="Keyboard Shortcuts (?)"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '28px',
+            height: '28px',
+            fontSize: '12px',
+            fontWeight: 700,
+            borderRadius: '6px',
+            cursor: 'pointer',
+            border: '1px solid var(--rg-border-strong)',
+            backgroundColor: 'var(--rg-surface)',
+            color: 'var(--rg-text-primary)',
+          }}
+        >
+          ?
+        </button>
+
+        {/* Quick Search */}
         <div className="app-header-search-box">
           <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" style={{ color: 'var(--rg-text-tertiary)', flexShrink: 0 }}>
             <circle cx="9" cy="9" r="5" strokeWidth="1.8" />
@@ -58,7 +109,7 @@ export default function Header() {
           <kbd className="app-header-kbd">⌘K</kbd>
         </div>
 
-        {/* Real-time System Health Indicator */}
+        {/* System Health Indicator */}
         <div className="app-header-health-pill">
           <span className="health-dot" />
           <span className="health-text">Engine 99.8% Online</span>
@@ -71,10 +122,15 @@ export default function Header() {
           </div>
           <div className="app-header-analyst-info">
             <span className="app-header-analyst">Risk Analyst</span>
-            <span className="app-header-role">Tier 3 Triage</span>
+            <span className="app-header-role">RBAC: LEAD</span>
           </div>
         </div>
       </div>
+
+      <HotkeyHelpModal
+        isOpen={isHotkeyHelpOpen}
+        onClose={() => setIsHotkeyHelpOpen(false)}
+      />
     </header>
   );
 }

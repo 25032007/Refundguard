@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const crypto = require('crypto');
 
 const apiRoutes = require('./routes');
 const investigationService = require('./services/investigationService');
@@ -22,6 +23,7 @@ app.use('/api/v1', apiRoutes);
 app.use((req, res) => {
   res.status(404).json({
     error: { code: 'NOT_FOUND', message: `Route not found: ${req.method} ${req.originalUrl}` },
+    requestId: crypto.randomUUID(),
   });
 });
 
@@ -29,7 +31,8 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error('[server]', err.message);
   res.status(err.status || 500).json({
-    error: { code: 'INTERNAL_ERROR', message: err.message || 'Internal server error' },
+    error: { code: err.code || 'INTERNAL_ERROR', message: err.message || 'Internal server error' },
+    requestId: crypto.randomUUID(),
   });
 });
 
