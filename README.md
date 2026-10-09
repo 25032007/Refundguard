@@ -36,31 +36,36 @@ Standard single-account velocity checks fail because fraudsters deliberately sta
 
 ### 📊 1. Executive Risk Dashboard
 > Real-time risk posture breakdown, top risk signals, active dataset baseline, and analyst workload queue.
-![Executive Dashboard](https://raw.githubusercontent.com/25032007/Refundguard/master/docs/screenshots/dashboard.png)
+
+<img src="./docs/screenshots/dashboard.png" alt="Executive Risk Dashboard" width="100%" />
 
 ---
 
 ### 📋 2. Case Triage Console
 > Filter cases by Risk Level (`CRITICAL`, `HIGH`, `MEDIUM`), Decision Status, or Network Association. Includes a Quick Customer Summary Card and dynamic search.
-![Case Triage Console](https://raw.githubusercontent.com/25032007/Refundguard/master/docs/screenshots/triage.png)
+
+<img src="./docs/screenshots/triage.png" alt="Case Triage Console" width="100%" />
 
 ---
 
 ### 🔍 3. Customer Investigation Deep Dive
 > Explainable risk score breakdown (0–100), evidence ledger, complaint NLP similarity metrics, hotkey controls (`1`, `2`, `3`), and interactive analyst decision panel.
-![Customer Investigation Deep Dive](https://raw.githubusercontent.com/25032007/Refundguard/master/docs/screenshots/investigation.png)
+
+<img src="./docs/screenshots/investigation.png" alt="Customer Investigation Deep Dive" width="100%" />
 
 ---
 
 ### 🕸️ 4. Ring Intelligence & Interactive 2D Network Graph
 > Visualizes multi-member refund rings sharing IP addresses (`156.135.169.25`) and device signatures (`dev_00142`). Tracks ring lifecycle states (`EMERGING`, `ACTIVE`, `DORMANT`, `DISBANDED`).
-![Ring Intelligence Graph](https://raw.githubusercontent.com/25032007/Refundguard/master/docs/screenshots/ring_graph.png)
+
+<img src="./docs/screenshots/ring_graph.png" alt="Ring Intelligence Graph" width="100%" />
 
 ---
 
 ### ⚙️ 5. Detection Health & System Diagnostics
 > Model operational health metrics, global risk distribution, pipeline latency (<8ms P95), and decision totals.
-![System Diagnostics](https://raw.githubusercontent.com/25032007/Refundguard/master/docs/screenshots/system.png)
+
+<img src="./docs/screenshots/system.png" alt="System Diagnostics" width="100%" />
 
 ---
 
