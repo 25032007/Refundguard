@@ -1,3 +1,4 @@
+[![RefundGuard CI](https://github.com/25032007/Refundguard/actions/workflows/ci.yml/badge.svg)](https://github.com/25032007/Refundguard/actions/workflows/ci.yml)
 # RefundGuard
 
 RefundGuard is a deterministic, explainable refund-fraud detection and investigation platform.
