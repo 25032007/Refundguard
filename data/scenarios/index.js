@@ -5,6 +5,28 @@ const noisyRing = require('./noisyRing');
 const rotatingIpRing = require('./rotatingIpRing');
 const slowBurnRing = require('./slowBurnRing');
 const burstRefund = require('./burstRefund');
+const subsetSharedResourceRing = require('./subsetSharedResourceRing');
+
+// All scenario families, keyed by the family id stored in ground-truth.
+const FAMILIES = {
+  obvious_ring: obviousRing,
+  noisy_ring: noisyRing,
+  rotating_ip_ring: rotatingIpRing,
+  slow_burn_ring: slowBurnRing,
+  burst_refund: burstRefund,
+  subset_shared_resource: subsetSharedResourceRing
+};
+
+// The five original families define the standard benchmark. The unseen
+// subset_shared_resource family is opted-in explicitly so default benchmark
+// generation and existing tests remain unchanged.
+const DEFAULT_FAMILIES = [
+  'obvious_ring',
+  'noisy_ring',
+  'rotating_ip_ring',
+  'slow_burn_ring',
+  'burst_refund'
+];
 
 function getCalibration(data) {
   const amounts = data.refunds.map(r => r.amount).filter(a => a > 0 && a < 10000).sort((a, b) => a - b);
@@ -14,7 +36,7 @@ function getCalibration(data) {
   };
 }
 
-function injectScenarios(data, seed) {
+function injectScenarios(data, seed, options = {}) {
   // Use a separate deterministic faker state for scenarios
   faker.seed(seed + 9999);
 
@@ -23,16 +45,28 @@ function injectScenarios(data, seed) {
   const context = { data, faker, calibration, seed, refDate };
 
   const bgCount = data.customers.length;
+  const families = options.families || DEFAULT_FAMILIES;
 
-  obviousRing(context);
-  noisyRing(context);
-  rotatingIpRing(context);
-  slowBurnRing(context);
-  burstRefund(context);
+  for (const family of families) {
+    const injector = FAMILIES[family];
+    if (!injector) {
+      throw new Error(`Unknown scenario family: ${family}`);
+    }
+    injector(context);
+  }
 
   const injectedCount = data.customers.length - bgCount;
-  
-  return { bgCount, injectedCount };
+
+  const scenarioCounts = {};
+  for (const family of families) {
+    scenarioCounts[family] = data.groundTruth.scenarios.filter(s => s.family === family).length;
+  }
+
+  return { bgCount, injectedCount, families, scenarioCounts };
 }
 
-module.exports = { injectScenarios };
+function generateUnseenDelta(data, seed, family) {
+  return injectScenarios(data, seed, { families: [family] });
+}
+
+module.exports = { injectScenarios, FAMILIES, DEFAULT_FAMILIES, generateUnseenDelta };

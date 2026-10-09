@@ -506,7 +506,7 @@ async function generate(options = {}) {
   const data = processData(rawLines, selectedCustomerIds, targetCustomers);
 
   const { injectScenarios } = require('../scenarios/index');
-  const scenarioStats = injectScenarios(data, SEED);
+  const scenarioStats = injectScenarios(data, SEED, options.scenarioOptions);
 
   // Normalize dataset: Ensure no customer createdAt date is AFTER their first transaction.
   // The synthetic scenario injectors randomize timestamps independently, which can break chronology.
@@ -566,13 +566,7 @@ async function generate(options = {}) {
     },
     samplingMethod: "Stratified deterministic seeded sampling by activity",
     deterministicGenerationMethod: "Phase 1B+1C synthetic generator",
-    scenarioCounts: {
-      obvious_ring: 1,
-      noisy_ring: 1,
-      rotating_ip_ring: 1,
-      slow_burn_ring: 1,
-      burst_refund: 1
-    },
+    scenarioCounts: scenarioStats.scenarioCounts,
     accountAgeSource: "synthetic_left_censoring",
     refundDerivation: "cancellation_invoice",
     linkingMethod: "Deterministic heuristic (same customer, prior, same StockCode, sufficient original quantity)",
