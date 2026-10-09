@@ -360,7 +360,14 @@ function analyzeCustomer(customerId) {
 
 function listInvestigations(options) {
   const cache = getCache();
-  const { scope = 'flagged', risk, status, ring, q, sort = '-score', page = 1, pageSize = 50 } = options;
+  const scope = options.scope || 'flagged';
+  const risk = (options.risk || options.riskLevel || '').toUpperCase();
+  const status = (options.status || options.decision || '').toUpperCase();
+  const q = (options.q || options.search || options.query || '').toLowerCase();
+  const inRing = options.inRing !== undefined ? options.inRing : options.ring;
+  const sort = options.sort || '-score';
+  const page = options.page || 1;
+  const pageSize = options.pageSize || 50;
 
   const dbDecisions = decisionRepository.getDecisionsForDataset(cache.dataset.datasetId);
   const statusMap = new Map(dbDecisions.map(d => [d.customerId, d.decision]));
@@ -370,7 +377,9 @@ function listInvestigations(options) {
 
   const facets = {
     risk: { LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0 },
+    riskLevel: { LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0 },
     status: { UNREVIEWED: 0, MONITOR: 0, ESCALATED: 0, CLEARED: 0 },
+    inRing: { true: 0, false: 0 },
     ring: { inRing: 0, noRing: 0 }
   };
 
@@ -382,19 +391,43 @@ function listInvestigations(options) {
     // Default scope = flagged (MEDIUM or higher)
     if (scope === 'flagged' && LEVEL_ORDER[row.riskLevel] < LEVEL_ORDER.MEDIUM) continue;
 
-    const term = (q || '').toLowerCase();
-    if (term && !row.customerId.toLowerCase().includes(term)) continue;
+    // Search query matching
+    if (q) {
+      const matchCust = row.customerId.toLowerCase().includes(q);
+      const matchSignal = row.topSignal && row.topSignal.label && row.topSignal.label.toLowerCase().includes(q);
+      const matchRing = row.ring && row.ring.ringId && row.ring.ringId.toLowerCase().includes(q);
+      if (!matchCust && !matchSignal && !matchRing) continue;
+    }
 
-    // Note: We compute facets respecting other active filters
-    const matchRisk = !risk || row.riskLevel === risk.toUpperCase();
-    const matchStatus = !status || rowStatus === status.toUpperCase();
-    const matchRing = !ring || ring === 'any' ? true : (ring === 'none' ? !row.ring : row.ring && row.ring.ringId === ring);
+    const matchRisk = !risk || risk === 'ALL' || row.riskLevel === risk;
+    const matchStatus = !status || status === 'ALL' || rowStatus === status;
 
-    if (matchStatus && matchRing) facets.risk[row.riskLevel] = (facets.risk[row.riskLevel] || 0) + 1;
-    if (matchRisk && matchRing) facets.status[rowStatus] = (facets.status[rowStatus] || 0) + 1;
+    let matchRing = true;
+    if (inRing !== undefined && inRing !== 'ALL' && inRing !== 'any') {
+      if (inRing === 'IN_RING' || inRing === 'true' || inRing === true) {
+        matchRing = !!row.ring;
+      } else if (inRing === 'NO_RING' || inRing === 'false' || inRing === false || inRing === 'none') {
+        matchRing = !row.ring;
+      } else {
+        matchRing = row.ring && row.ring.ringId === inRing;
+      }
+    }
+
+    if (matchStatus && matchRing) {
+      facets.risk[row.riskLevel] = (facets.risk[row.riskLevel] || 0) + 1;
+      facets.riskLevel[row.riskLevel] = (facets.riskLevel[row.riskLevel] || 0) + 1;
+    }
+    if (matchRisk && matchRing) {
+      facets.status[rowStatus] = (facets.status[rowStatus] || 0) + 1;
+    }
     if (matchRisk && matchStatus) {
-      if (row.ring) facets.ring.inRing++;
-      else facets.ring.noRing++;
+      if (row.ring) {
+        facets.inRing.true++;
+        facets.ring.inRing++;
+      } else {
+        facets.inRing.false++;
+        facets.ring.noRing++;
+      }
     }
 
     if (matchRisk && matchStatus && matchRing) {

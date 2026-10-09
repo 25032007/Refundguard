@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { usePii } from '../context/PiiContext';
 import HotkeyHelpModal from './HotkeyHelpModal';
 
@@ -24,9 +24,17 @@ function getSectionInfo(pathname) {
 
 export default function Header() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const info = getSectionInfo(pathname);
   const { isPiiMasked, togglePiiMask } = usePii();
   const [isHotkeyHelpOpen, setIsHotkeyHelpOpen] = useState(false);
+  const [globalSearch, setGlobalSearch] = useState('');
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter' && globalSearch.trim()) {
+      navigate(`/triage?search=${encodeURIComponent(globalSearch.trim())}`);
+    }
+  };
 
   return (
     <header className="app-header">
@@ -46,7 +54,7 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="app-header-right">
+      <div className="app-header-right" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'nowrap' }}>
         {/* PII Shield Toggle */}
         <button
           onClick={togglePiiMask}
@@ -64,6 +72,7 @@ export default function Header() {
             backgroundColor: isPiiMasked ? 'rgba(22, 163, 74, 0.1)' : 'var(--rg-surface)',
             color: isPiiMasked ? '#15803d' : 'var(--rg-text-primary)',
             transition: 'all 0.2s ease',
+            flexShrink: 0,
           }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -89,34 +98,37 @@ export default function Header() {
             border: '1px solid var(--rg-border-strong)',
             backgroundColor: 'var(--rg-surface)',
             color: 'var(--rg-text-primary)',
+            flexShrink: 0,
           }}
         >
           ?
         </button>
 
         {/* Quick Search */}
-        <div className="app-header-search-box">
+        <div className="app-header-search-box" style={{ flexShrink: 1 }}>
           <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" style={{ color: 'var(--rg-text-tertiary)', flexShrink: 0 }}>
             <circle cx="9" cy="9" r="5" strokeWidth="1.8" />
             <path d="M13 13L17 17" strokeWidth="1.8" strokeLinecap="round" />
           </svg>
           <input 
             type="text" 
-            placeholder="Search ring, customer, device..." 
+            placeholder="Search ring, customer..." 
             className="app-header-search-input"
-            readOnly
+            value={globalSearch}
+            onChange={(e) => setGlobalSearch(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
           />
-          <kbd className="app-header-kbd">⌘K</kbd>
+          <kbd className="app-header-kbd">↵</kbd>
         </div>
 
         {/* System Health Indicator */}
-        <div className="app-header-health-pill">
+        <div className="app-header-health-pill" style={{ flexShrink: 0 }}>
           <span className="health-dot" />
-          <span className="health-text">Engine 99.8% Online</span>
+          <span className="health-text">99.8% Online</span>
         </div>
 
         {/* Analyst Account Badge */}
-        <div className="app-header-user">
+        <div className="app-header-user" style={{ flexShrink: 0 }}>
           <div className="app-header-avatar">
             <span>RA</span>
           </div>

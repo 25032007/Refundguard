@@ -42,10 +42,9 @@ export default function TriagePage() {
     page,
     sort: '-score'
   };
-  if (decision !== 'ALL') apiParams.status = decision;
+  if (decision !== 'ALL') apiParams.decision = decision;
   if (riskLevel !== 'ALL') apiParams.riskLevel = riskLevel;
-  if (inRing === 'IN_RING') apiParams.inRing = true;
-  if (inRing === 'NO_RING') apiParams.inRing = false;
+  if (inRing !== 'ALL') apiParams.inRing = inRing;
   if (search) apiParams.search = search;
 
   const { data: listData, isLoading, isError, refetch } = useQuery({
