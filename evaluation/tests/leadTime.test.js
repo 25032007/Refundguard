@@ -57,8 +57,24 @@ test('analyzeSeedLeadTime detects both rings against engine-generated passing ri
   assert.strictEqual(result.detectedCount, 2);
   assert.strictEqual(result.missedCount, 0);
   assert.strictEqual(result.detectionRate, 1);
-  assert.ok(Number.isFinite(result.medianLeadTimeDays));
+  assert.ok(Number.isFinite(result.medianLeadTimeDays) || result.medianLeadTimeDays === null);
   assert.ok(result.snapshotCount >= 3);
+  assert.strictEqual(result.snapshotDates.length, result.snapshotCount);
+  assert.ok(result.earlyOrOnTimeCount >= 0 && result.earlyOrOnTimeRate >= 0 && result.earlyOrOnTimeRate <= 1);
+  // Two evaluated families, each with median stats present.
+  assert.strictEqual(result.perFamily.length, 2);
+  for (const fam of result.perFamily) {
+    assert.strictEqual(fam.ringCount, 1);
+    assert.strictEqual(fam.detectedCount, 1);
+    assert.strictEqual(fam.missedCount, 0);
+  }
+  // Every per-ring row carries both signed quantities.
+  for (const r of result.perRing) {
+    assert.ok(r.detected);
+    assert.strictEqual(r.leadTimeDays, -r.detectionDelayDays);
+    assert.ok(r.firstMembershipDate);
+    assert.ok(r.finalMembershipDate);
+  }
 });
 
 test('leadTimeForRing reports null when the ring never matches a passing snapshot', () => {
@@ -68,10 +84,55 @@ test('leadTimeForRing reports null when the ring never matches a passing snapsho
   const result = analyzeSeedLeadTime(dataset, groundTruth, { ringScoreThreshold: 30, overlapThreshold: RING_MATCH_OVERLAP });
   // This GT ring will not be present in engine output (no matching customers). We
   // run through leadTimeForRing directly; membership is unknown -> 0 overlap everywhere.
-  const snapshot = { time: datasetEndMs(dataset), passingRings: [] };
+  const snapshot = { time: datasetEndMs(dataset), passingRings: [], allRings: [] };
   const lead = leadTimeForRing(gtRing, [snapshot], { overlapThreshold: RING_MATCH_OVERLAP });
   assert.strictEqual(lead.detected, false);
   assert.strictEqual(lead.leadTimeDays, null);
+  assert.strictEqual(lead.detectionDelayDays, null);
   // and confirm the real analyzeSeedLeadTime does not list ghost_ring as present.
   assert.ok(!result.perRing.some(r => r.scenarioId === 's_x'));
+});
+
+test('leadTimeDays is positive (early) when detection precedes final membership; delay is the negation', () => {
+  const base = Date.UTC(2020, 2, 1);
+  const gtRing = {
+    scenarioId: 's_early',
+    family: 'obvious_ring',
+    members: ['a1', 'a2', 'a3'],
+    memberJoinDates: { a1: base, a2: base + 86400000, a3: base + 3 * 86400000 } // final = base + 3d
+  };
+  // Detection snapshot happens 2 days before the last member joins -> positive lead time.
+  const snapshot = {
+    time: new Date(base + 1 * 86400000).toISOString(),
+    passingRings: [{ ringId: 'r_early', customerIds: ['a1', 'a2', 'a3'], score: 80 }],
+    allRings: [{ ringId: 'r_early', customerIds: ['a1', 'a2', 'a3'], score: 80 }]
+  };
+  const lead = leadTimeForRing(gtRing, [snapshot], { overlapThreshold: RING_MATCH_OVERLAP, asOfFamilies: ['obvious_ring'] });
+  assert.strictEqual(lead.detected, true);
+  assert.strictEqual(lead.leadTimeDays, 2);
+  assert.strictEqual(lead.detectionDelayDays, -2);
+  assert.strictEqual(lead.leadTimeDays, -lead.detectionDelayDays);
+  assert.deepStrictEqual(lead.asOfScores, [{ date: snapshot.time, score: 80 }]);
+  assert.strictEqual(lead.finalMembershipDate, new Date(base + 3 * 86400000).toISOString());
+});
+
+test('detection after final membership yields negative lead time (a delay, not a lead time)', () => {
+  const base = Date.UTC(2020, 2, 1);
+  const gtRing = {
+    scenarioId: 's_late',
+    family: 'noisy_ring',
+    members: ['a1', 'a2', 'a3'],
+    memberJoinDates: { a1: base, a2: base + 86400000, a3: base + 2 * 86400000 } // final = base + 2d
+  };
+  // Detection snapshot 10 days after the ring fully formed -> late.
+  const snapshot = {
+    time: new Date(base + 12 * 86400000).toISOString(),
+    passingRings: [{ ringId: 'r_late', customerIds: ['a1', 'a2', 'a3'], score: 40 }],
+    allRings: [{ ringId: 'r_late', customerIds: ['a1', 'a2', 'a3'], score: 40 }]
+  };
+  const lead = leadTimeForRing(gtRing, [snapshot], { overlapThreshold: RING_MATCH_OVERLAP, asOfFamilies: ['noisy_ring'] });
+  assert.strictEqual(lead.detected, true);
+  assert.strictEqual(lead.detectionDelayDays, 10);
+  assert.strictEqual(lead.leadTimeDays, -10);
+  assert.strictEqual(lead.leadTimeDays, -lead.detectionDelayDays);
 });

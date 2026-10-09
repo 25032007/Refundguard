@@ -3,7 +3,7 @@
  */
 const { test } = require('node:test');
 const assert = require('node:assert');
-const { mean, std, tValue, confidenceInterval95, summarize } = require('../stats');
+const { mean, std, tValue, confidenceInterval95, summarize, clamp01 } = require('../stats');
 
 test('mean of [1,2,3,4,5] is 3', () => {
   assert.strictEqual(mean([1, 2, 3, 4, 5]), 3);
@@ -59,4 +59,30 @@ test('summarize of empty list has NaN mean and null CI', () => {
   const s = summarize([]);
   assert.ok(Number.isNaN(s.mean));
   assert.strictEqual(s.ciLow, null);
+});
+
+test('clamp01 clamps into [0,1]', () => {
+  assert.strictEqual(clamp01(-0.2), 0);
+  assert.strictEqual(clamp01(1.0042), 1);
+  assert.strictEqual(clamp01(0.5), 0.5);
+});
+
+test('summarize with clampUnit keeps in-range CIs unchanged and clamps out-of-range CI bounds', () => {
+  // Same values as an out-of-range ratio: recall 0.9917 ± small spread
+  // has an upper CI above 1 on a tiny sample; clampUnit shaves it to 1.
+  const raw = [1, 1, 1, 1, 1, 0.95];
+  const plain = summarize(raw);
+  const clamped = summarize(raw, { clampUnit: true });
+  assert.ok(plain.ciHigh > 1, `plain CI leaves unit interval: ${plain.ciHigh}`);
+  assert.strictEqual(clamped.ciHigh, 1);
+  assert.strictEqual(clamped.ciLow, Math.max(0, clamped.ciLow));
+  assert.strictEqual(clamped.mean, plain.mean);
+  assert.strictEqual(clamped.std, plain.std);
+  assert.ok(clamped.ciLow === plain.ciLow, 'in-range low bound unchanged by clamping');
+});
+
+test('summarize without clampUnit still emits unclamped CIs (days, counts)', () => {
+  const s = summarize([10, 40, 70]);
+  assert.ok(s.ciHigh > s.mean);
+  assert.ok(s.ciLow < s.mean);
 });
