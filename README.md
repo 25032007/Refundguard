@@ -37,35 +37,35 @@ Standard single-account velocity checks fail because fraudsters deliberately sta
 ### 📊 1. Executive Risk Dashboard
 > Real-time risk posture breakdown, top risk signals, active dataset baseline, and analyst workload queue.
 
-![Executive Risk Dashboard](https://github.com/25032007/Refundguard/raw/master/docs/screenshots/dashboard.png)
+![Executive Risk Dashboard](./docs/screenshots/dashboard.png)
 
 ---
 
 ### 📋 2. Case Triage Console
 > Filter cases by Risk Level (`CRITICAL`, `HIGH`, `MEDIUM`), Decision Status, or Network Association. Includes a Quick Customer Summary Card and dynamic search.
 
-![Case Triage Console](https://github.com/25032007/Refundguard/raw/master/docs/screenshots/triage.png)
+![Case Triage Console](./docs/screenshots/triage.png)
 
 ---
 
 ### 🔍 3. Customer Investigation Deep Dive
 > Explainable risk score breakdown (0–100), evidence ledger, complaint NLP similarity metrics, hotkey controls (`1`, `2`, `3`), and interactive analyst decision panel.
 
-![Customer Investigation Deep Dive](https://github.com/25032007/Refundguard/raw/master/docs/screenshots/investigation.png)
+![Customer Investigation Deep Dive](./docs/screenshots/investigation.png)
 
 ---
 
 ### 🕸️ 4. Ring Intelligence & Interactive 2D Network Graph
 > Visualizes multi-member refund rings sharing IP addresses (`156.135.169.25`) and device signatures (`dev_00142`). Tracks ring lifecycle states (`EMERGING`, `ACTIVE`, `DORMANT`, `DISBANDED`).
 
-![Ring Intelligence Graph](https://github.com/25032007/Refundguard/raw/master/docs/screenshots/ring_graph.png)
+![Ring Intelligence Graph](./docs/screenshots/ring_graph.png)
 
 ---
 
 ### ⚙️ 5. Detection Health & System Diagnostics
 > Model operational health metrics, global risk distribution, pipeline latency (<8ms P95), and decision totals.
 
-![System Diagnostics](https://github.com/25032007/Refundguard/raw/master/docs/screenshots/system.png)
+![System Diagnostics](./docs/screenshots/system.png)
 
 ---
 
