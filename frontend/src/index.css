@@ -181,6 +181,8 @@ body {
   background: var(--rg-brand);
   border-radius: 0 4px 4px 0;
   box-shadow: 0 0 8px rgba(110, 28, 36, 0.4);
+}
+
 /* Dropdown Select Controls */
 .rg-filter-select {
   padding: 6px 28px 6px 12px;
