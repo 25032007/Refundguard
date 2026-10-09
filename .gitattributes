@@ -5,3 +5,4 @@ data/fixtures/mini/** text eol=lf
 # Generated evaluation docs are byte-compared for reproducibility by
 # evaluation/tests/repro.test.js and must stay LF.
 docs/** text eol=lf
+docs/screenshots/*.png binary
