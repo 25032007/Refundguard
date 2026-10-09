@@ -209,7 +209,7 @@ function writeLeadTimeTable(seed, result, outputPath) {
     rows: result.perRing
   };
   fs.mkdirSync(require('path').dirname(outputPath), { recursive: true });
-  fs.writeFileSync(outputPath, JSON.stringify(table, null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(table, null, 2).replace(/\r\n/g, '\n'));
   return table;
 }
 

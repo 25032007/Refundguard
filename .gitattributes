@@ -1,3 +1,7 @@
 # Committed fixture is byte-compared against fresh generation by data/tests/fixture.test.js.
 # Pin LF so line-ending normalization cannot make the worktree bytes diverge.
 data/fixtures/mini/** text eol=lf
+
+# Generated evaluation docs are byte-compared for reproducibility by
+# evaluation/tests/repro.test.js and must stay LF.
+docs/** text eol=lf

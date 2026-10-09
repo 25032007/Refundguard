@@ -189,7 +189,6 @@ async function runFinalEvaluation(generate = true, options = {}) {
       frozenSeedList: HELD_OUT_SEEDS,
       developmentSeedList: DEVELOPMENT_SEEDS,
       configHash: hash,
-      evaluationTimestamp: new Date().toISOString(),
       determinism,
       predictionRule: 'predictedFraud = (riskLevel === "HIGH" || riskLevel === "CRITICAL")',
       gtIsolationVerified: true
@@ -232,13 +231,13 @@ async function collectLeadTime(holdoutPayloads, thresholds) {
     const file = require('path').join(report.DOCS_RESULTS, `leadtime-per-ring-${p.seed}.json`);
     if (fs.existsSync(file)) {
       const table = JSON.parse(fs.readFileSync(file, 'utf8'));
-      perSeed.push({ seed: p.seed, ...table, perRingTablePath: file });
+      perSeed.push({ seed: p.seed, ...table, perRingTablePath: report.repoRelative(file) });
       continue;
     }
     const evalSeed = await benchmark.evaluateSeed(p.seed, { skipGenerate: true });
     const lead = leadTime.analyzeSeedLeadTime(evalSeed.dataset, evalSeed.groundTruth, { ringScoreThreshold: thresholds.ringScore });
     leadTime.writeLeadTimeTable(p.seed, lead, file);
-    perSeed.push({ seed: p.seed, ...lead, perRingTablePath: file });
+    perSeed.push({ seed: p.seed, ...lead, perRingTablePath: report.repoRelative(file) });
   }
   const detectionRates = perSeed.map(l => l.detectionRate);
   const medians = perSeed.map(l => l.medianLeadTimeDays).filter(v => v !== null && v !== undefined);
@@ -277,8 +276,8 @@ function computeVerdict({ means, determinism, configHashStable }) {
 async function main() {
   const result = await runFinalEvaluation(true);
   const outPath = path.join(report.DOCS_RESULTS, 'final-eval-result.json');
-  fs.writeFileSync(outPath, JSON.stringify(result, null, 2) + '\n');
-  console.log(`Wrote ${outPath}`);
+  report.writeText(outPath, JSON.stringify(result, null, 2) + '\n');
+  console.log(`Wrote ${report.repoRelative(outPath)}`);
   console.log(`verdict=${result.verdict} heldOutSeeds=${result.seeds.length} hash=${result.frozenConfiguration.configHash}`);
 }
 

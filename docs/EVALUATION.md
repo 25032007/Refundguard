@@ -3,8 +3,6 @@
 > Published results, fully reproducible by `npm run eval:report`.
 > All figures below are computed by script from generated benchmark data. No figure is hand-entered.
 
-Generated at: 2026-10-09T06:15:25.778Z
-
 ## Seeds
 
 | Phase | Seeds |
@@ -170,3 +168,4 @@ Member-level recall for the unseen family under the combined condition: 50.00% (
 2. Engine configuration and thresholds are frozen via a sha256 recorded in `docs/results/config.json`.
 3. Per-seed driver data and feature caches live under `data/generated/eval/` (gitignored).
 4. All aggregates in this document come from `docs/results/*.json` produced by the orchestrator.
+

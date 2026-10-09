@@ -35,11 +35,25 @@ const customerMetrics = require('./customerMetrics');
 const decisions = require('./decisions');
 const { hashFrozenConfig, canonicalJson } = require('./seeds');
 
-const GENERATED_EVAL = path.join(__dirname, '..', 'data', 'generated', 'eval');
+const REPO_ROOT = path.join(__dirname, '..');
+const GENERATED_EVAL = path.join(REPO_ROOT, 'data', 'generated', 'eval');
 const CACHE_DIR = path.join(GENERATED_EVAL, 'cache');
 const UNSEEN_ROOT = path.join(GENERATED_EVAL, 'unseen');
-const DOCS_RESULTS = path.join(__dirname, '..', 'docs', 'results');
-const EVALUATION_MD = path.join(__dirname, '..', 'docs', 'EVALUATION.md');
+const DOCS_RESULTS = path.join(REPO_ROOT, 'docs', 'results');
+const EVALUATION_MD = path.join(REPO_ROOT, 'docs', 'EVALUATION.md');
+
+/**
+ * Repo-root-relative path with forward slashes, for anything written into
+ * published artifacts so outputs never contain machine-specific absolute paths.
+ */
+function repoRelative(absolutePath) {
+  return path.relative(REPO_ROOT, absolutePath).split(path.sep).join('/');
+}
+
+/** Writes UTF-8 text with LF line endings regardless of host OS. */
+function writeText(filePath, content) {
+  fs.writeFileSync(filePath, content.replace(/\r\n/g, '\n'));
+}
 
 const CACHE_PATH = {
   devSeed: (seed) => path.join(CACHE_DIR, `dev-seed-${seed}.json`),
@@ -50,11 +64,6 @@ const CACHE_PATH = {
   thresholds: path.join(CACHE_DIR, 'thresholds.json'),
   frozenConfig: path.join(CACHE_DIR, 'frozen-config.json')
 };
-
-function nowIso() {
-  const d = new Date();
-  return d.toISOString();
-}
 
 /**
  * Frozen detector configuration snapshot (measurement-of-config, never mutated).
@@ -349,7 +358,7 @@ async function escalatePhase(holdoutSeeds) {
   const thresholds = JSON.parse(fs.readFileSync(CACHE_PATH.thresholds, 'utf8'));
   const experiment = escalationExperiment(holdoutSeeds, thresholds);
   fs.mkdirSync(DOCS_RESULTS, { recursive: true });
-  fs.writeFileSync(path.join(DOCS_RESULTS, 'ring-escalation.json'), JSON.stringify(experiment, null, 2));
+  writeText(path.join(DOCS_RESULTS, 'ring-escalation.json'), JSON.stringify(experiment, null, 2) + '\n');
   return experiment;
 }
 
@@ -363,8 +372,16 @@ async function reportPhase() {
   if (hash !== frozen.configHash) {
     throw new Error(`Frozen config hash drift: recorded ${frozen.configHash} vs recomputed ${hash}. Detectored configuration changed after freezing — aborting.`);
   }
-  const frozenMeta = { thresholds, configHash: hash, frozenAt: frozen.frozenAt || nowIso() };
-  fs.writeFileSync(CACHE_PATH.frozenConfig, JSON.stringify(frozenMeta, null, 2));
+  const frozenMeta = {
+    thresholds,
+    configHash: hash,
+    seeds: {
+      development: seedsPlan.DEVELOPMENT_SEEDS,
+      heldOut: seedsPlan.HELD_OUT_SEEDS,
+      unseen: { seed: seedsPlan.UNSEEN_SEED, family: seedsPlan.UNSEEN_FAMILY }
+    }
+  };
+  writeText(CACHE_PATH.frozenConfig, JSON.stringify({ thresholds, configHash: hash }, null, 2) + '\n');
 
   const devSeeds = seedsPlan.DEVELOPMENT_SEEDS.map(s => JSON.parse(fs.readFileSync(CACHE_PATH.devSeed(s), 'utf8')));
   const holdoutSeeds = seedsPlan.HELD_OUT_SEEDS.map(s => JSON.parse(fs.readFileSync(CACHE_PATH.holdoutSeed(s), 'utf8')));
@@ -398,7 +415,6 @@ async function reportPhase() {
   // Assemble docs/results JSON.
   const results = {
     evaluationType: 'PHASE_3_FULL_REPORT',
-    generatedAt: nowIso(),
     seeds: {
       development: seedsPlan.DEVELOPMENT_SEEDS,
       heldOut: seedsPlan.HELD_OUT_SEEDS,
@@ -419,29 +435,29 @@ async function reportPhase() {
     escalation: JSON.parse(fs.readFileSync(path.join(DOCS_RESULTS, 'ring-escalation.json'), 'utf8')),
     unseen: JSON.parse(fs.readFileSync(CACHE_PATH.unseen, 'utf8'))
   };
-  fs.writeFileSync(path.join(DOCS_RESULTS, 'eval-summary.json'), JSON.stringify(results, null, 2));
+  writeText(path.join(DOCS_RESULTS, 'eval-summary.json'), JSON.stringify(results, null, 2) + '\n');
 
   // Persist each section.
-  fs.writeFileSync(path.join(DOCS_RESULTS, 'customer-development.json'), JSON.stringify(devConditions, null, 2));
-  fs.writeFileSync(path.join(DOCS_RESULTS, 'customer-heldout.json'), JSON.stringify(holdoutConditions, null, 2));
-  fs.writeFileSync(path.join(DOCS_RESULTS, 'ring-development.json'), JSON.stringify(devRing, null, 2));
-  fs.writeFileSync(path.join(DOCS_RESULTS, 'ring-heldout.json'), JSON.stringify(holdoutRing, null, 2));
-  fs.writeFileSync(path.join(DOCS_RESULTS, 'config.json'), JSON.stringify(frozenMeta, null, 2));
+  writeText(path.join(DOCS_RESULTS, 'customer-development.json'), JSON.stringify(devConditions, null, 2) + '\n');
+  writeText(path.join(DOCS_RESULTS, 'customer-heldout.json'), JSON.stringify(holdoutConditions, null, 2) + '\n');
+  writeText(path.join(DOCS_RESULTS, 'ring-development.json'), JSON.stringify(devRing, null, 2) + '\n');
+  writeText(path.join(DOCS_RESULTS, 'ring-heldout.json'), JSON.stringify(holdoutRing, null, 2) + '\n');
+  writeText(path.join(DOCS_RESULTS, 'config.json'), JSON.stringify(frozenMeta, null, 2) + '\n');
 
   // Real lead time (cached; run via computeHoldoutLeadTime when missing).
   const leadData = await ensureLeadTimeResults(holdoutSeeds, thresholds, frozenConfig);
   results.leadTime = { heldOut: leadData };
-  fs.writeFileSync(path.join(DOCS_RESULTS, 'leadtime.json'), JSON.stringify(leadData, null, 2));
-  fs.writeFileSync(path.join(DOCS_RESULTS, 'eval-summary.json'), JSON.stringify(results, null, 2));
+  writeText(path.join(DOCS_RESULTS, 'leadtime.json'), JSON.stringify(leadData, null, 2) + '\n');
+  writeText(path.join(DOCS_RESULTS, 'eval-summary.json'), JSON.stringify(results, null, 2) + '\n');
 
   // Golden determinism re-check: recompute seed 1 features in-memory from the
   // cached engineered payload (engines deterministic) and compare metrics.
   const reCheck = await determinismCheck(seedsPlan.DEVELOPMENT_SEEDS[0], thresholds);
   results.determinism = reCheck;
-  fs.writeFileSync(path.join(DOCS_RESULTS, 'eval-summary.json'), JSON.stringify(results, null, 2));
+  writeText(path.join(DOCS_RESULTS, 'eval-summary.json'), JSON.stringify(results, null, 2) + '\n');
 
   const markdown = buildEvaluationMarkdown(results);
-  fs.writeFileSync(EVALUATION_MD, markdown);
+  writeText(EVALUATION_MD, markdown + '\n');
 
   // CLI summary output (the "raw output" the report must show).
   return results;
@@ -552,8 +568,6 @@ function buildEvaluationMarkdown(results) {
   lines.push('');
   lines.push('> Published results, fully reproducible by `npm run eval:report`.');
   lines.push('> All figures below are computed by script from generated benchmark data. No figure is hand-entered.');
-  lines.push('');
-  lines.push(`Generated at: ${results.generatedAt}`);
   lines.push('');
   lines.push('## Seeds');
   lines.push('');
@@ -752,7 +766,7 @@ async function main() {
       configHash: results.configHash,
       thresholds: results.thresholds,
       determinism: results.determinism,
-      paths: { md: EVALUATION_MD, results: DOCS_RESULTS }
+      paths: { md: repoRelative(EVALUATION_MD), results: repoRelative(DOCS_RESULTS) }
     }, null, 2));
   } else if (cmd === 'all') {
     const results = await allPhase();
@@ -761,7 +775,7 @@ async function main() {
       configHash: results.configHash,
       thresholds: results.thresholds,
       determinism: results.determinism,
-      paths: { md: EVALUATION_MD, results: DOCS_RESULTS }
+      paths: { md: repoRelative(EVALUATION_MD), results: repoRelative(DOCS_RESULTS) }
     }, null, 2));
   }
 }
@@ -783,5 +797,8 @@ module.exports = {
   CACHE_DIR,
   CACHE_PATH,
   DOCS_RESULTS,
-  EVALUATION_MD
+  EVALUATION_MD,
+  REPO_ROOT,
+  repoRelative,
+  writeText
 };
