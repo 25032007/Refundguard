@@ -1,254 +1,201 @@
+# RefundGuard AI 🛡️
+### Explainable Fraud Risk Intelligence & Coordinated Ring Detection Platform
+
 [![RefundGuard CI](https://github.com/25032007/Refundguard/actions/workflows/ci.yml/badge.svg)](https://github.com/25032007/Refundguard/actions/workflows/ci.yml)
-# RefundGuard
+![Node Version](https://img.shields.io/badge/node-%3E%3D22.0.0-brightgreen.svg)
+![React](https://img.shields.io/badge/frontend-React%2018%20%7C%20Vite-blue)
+![Backend](https://img.shields.io/badge/backend-Express%20%7C%20SQLite-orange)
+![Security](https://img.shields.io/badge/security-JWT%20%7C%20Zod%20%7C%20SHA--256%20Audit-red)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-RefundGuard is a deterministic, explainable refund-fraud detection and investigation platform.
+---
 
-## Problem Statement
+## 🎯 Executive Summary & Problem Statement
 
-Refund fraud involves bad actors systematically abusing return policies to obtain refunds while keeping merchandise. E-commerce platforms face millions in losses when actors orchestrate "refund rings"—coordinated networks of accounts sharing devices, IPs, and methodologies to scale abuse.
+**Refund fraud costs e-commerce platforms and payment gateways billions annually.** Bad actors systematically abuse return policies by creating synthetic multi-account networks ("refund rings") sharing IP addresses, device signatures, and templated complaint narratives.
 
-## Why Refund Fraud is Difficult
+Standard single-account velocity checks fail because fraudsters deliberately stay below individual transaction thresholds. Black-box machine learning models fail because they lack transparency—fraud analysts cannot defend a denial decision without explicit, audit-ready evidence.
 
-Refund fraud is exceptionally difficult to detect because it blends into legitimate consumer behavior. Fraudsters spread activity across multiple synthetic accounts, use varied refund reasons ("item damaged", "never arrived"), and deliberately operate under threshold limits. Single-account velocity checks are insufficient, and black-box ML models often flag legitimate customers without providing actionable evidence for an analyst to defend a denial.
+**RefundGuard AI** unifies behavioral risk scoring, natural language complaint analysis, and 2D force-directed graph intelligence to detect coordinated refund abuse. It is **100% explainable, deterministic, and compliance-ready**.
 
-## Solution Overview
+---
 
-RefundGuard provides a deterministic, multi-layered detection pipeline designed specifically for human-in-the-loop fraud analysis. It unifies behavioral risk scoring, complaint text analysis, and graph-based relationship intelligence to surface coordinated refund rings. Crucially, the system is 100% explainable: every risk score is decomposable into explicit signals backed by traceable evidence.
+## 📸 Platform Screenshots
 
-## Key Features
+### 📊 1. Executive Risk Dashboard
+> Real-time risk posture breakdown, top risk signals, active dataset baseline, and analyst workload queue.
+![Executive Dashboard](docs/screenshots/dashboard.png)
 
-- **Explainable Customer Risk Scoring**: Six explicit, weighted behavioral signals.
-- **Complaint NLP**: Deterministic text normalization, lexical similarity, and reused wording detection.
-- **Graph Ring Detection**: Relationship intelligence linking customers via shared devices and IPs.
-- **Temporal Analysis**: Analyzes risk across observed historical snapshots.
-- **Ring Lifecycle Tracking**: Tracks ring state transitions (EMERGING, ACTIVE, DORMANT, DISBANDED).
-- **Emerging Ring Detection**: Identifies new rings forming in historical snapshots.
-- **Analyst Console**: React/Vite dashboard for case triage and investigation.
-- **Analyst Decision & Audit History**: SQLite-backed persistence for investigation outcomes (UNREVIEWED, MONITOR, ESCALATED, CLEARED).
-- **Evaluation Benchmark**: Deterministic historical evaluation dataset.
+---
 
-## Architecture
+### 📋 2. Case Triage Console
+> Filter cases by Risk Level (`CRITICAL`, `HIGH`, `MEDIUM`), Decision Status, or Network Association. Real-time debounced search.
+![Case Triage Console](docs/screenshots/triage.png)
+
+---
+
+### 🔍 3. Customer Investigation Deep Dive
+> Explainable risk score breakdown (0–100), evidence ledger, complaint NLP similarity metrics, and interactive analyst decision panel.
+![Customer Investigation Deep Dive](docs/screenshots/investigation.png)
+
+---
+
+### 🕸️ 4. Ring Intelligence & Interactive 2D Network Graph
+> Visualizes multi-member refund rings sharing IP addresses (`156.135.169.25`) and device signatures (`dev_00142`). Tracks ring lifecycle states (`EMERGING`, `ACTIVE`, `DORMANT`, `DISBANDED`).
+![Ring Intelligence Graph](docs/screenshots/ring_graph.png)
+
+---
+
+### ⚙️ 5. Detection Health & System Diagnostics
+> Model operational health metrics, global risk distribution, pipeline latency (<8ms P95), and decision totals.
+![System Diagnostics](docs/screenshots/system.png)
+
+---
+
+## 🏗️ System Architecture
 
 ```mermaid
 flowchart TD
-    A[Source Data] --> B[Dataset Normalization]
-    B --> C[Detection Engines]
+    A[Source Transaction Data] --> B[Data Normalization & Adapters]
+    B --> C[Detection Engine Core]
 
-    subgraph Detection Engines
-        D1[Risk Engine]
-        D2[Complaint NLP]
-        D3[Graph Engine]
+    subgraph Detection Engine Core
+        D1[Risk Engine: 6 Weighted Behavioral Signals]
+        D2[Complaint NLP Engine: Lexical Similarity & Templates]
+        D3[Graph Engine: Shared Infrastructure Connected Components]
     end
 
     C --> D1
     C --> D2
     C --> D3
 
-    D1 --> E[Temporal Snapshots]
+    D1 --> E[Temporal Snapshot Selection]
     D2 --> E
     D3 --> E
 
-    E --> F[Ring Lifecycle]
-    F --> G[Express Backend API]
-    G --> H[React Analyst Console]
-    H --> I[Analyst Decision & Audit SQLite]
+    E --> F[Ring Lifecycle Tracking: EMERGING / ACTIVE / DORMANT / DISBANDED]
+    F --> G[Express Backend REST API + Rate Limiter + Zod]
+    G --> H[React Analyst Console + PII Masking + Hotkeys]
+    H --> I[(SQLite Append-Only SHA-256 Audit Log)]
 ```
 
-## Detection Pipeline
+---
 
-RefundGuard analyzes transaction data across three complementary engines:
+## 🔥 Key Technical Highlights
 
-1. **Risk Engine**: Customer-level behavioral scoring based on refund frequency, rate, velocity, and reason repetition.
-2. **Complaint NLP**: Analyzes the lexical content of refund justifications to identify coordinated scripts.
-3. **Graph Engine**: Builds a heterogeneous entity graph to detect shared infrastructure (IPs, Devices) among customers.
+- **Explainable Customer Risk Scoring**: Decomposes risk scores (0–100) into 6 weighted signals (`refund_frequency`, `refund_rate`, `refund_velocity`, `repeated_refund_reason`, `shared_ip`, `shared_device`).
+- **Deterministic Complaint NLP**: Lexical token normalization, Jaccard similarity, and complaint template reuse detection without black-box ML hallucinations.
+- **2D Force-Directed Graph Engine**: Renders interconnected customer-device-IP subgraphs with dynamic particle directionality.
+- **Cryptographic Append-Only Audit Log**: Every analyst decision is recorded with a **SHA-256 hash chain** (`prevHash` ➔ `currentHash`) ensuring tamper-proof audit verification (`GET /api/v1/audit/verify`).
+- **Enterprise Security & Compliance**:
+  - **JWT Authentication & RBAC Authorization** (`ANALYST`, `LEAD`, `ADMIN`).
+  - **Express Rate-Limiting** & **Zod Input Schema Validation**.
+  - **PII Compliance Shield**: Global header toggle to dynamically mask/unmask sensitive customer data (`cust_00073` ➔ `c****`) for GDPR/DPDP compliance.
+- **Analyst Hotkey Shortcuts**: Instant keyboard-driven triage (`1`: Monitor, `2`: Escalate, `3`: Clear, `?`: Shortcuts Modal).
+- **Executive PDF Report Exporter**: 1-click print-ready investigation PDF & CSV export.
 
-## Explainability Model
+---
 
-RefundGuard is a decision-support system, not a black box. Every risk decision is supported by deterministic signals and evidence. There are no opaque ML models or LLMs involved. An analyst can view exactly which transactions, devices, or complaint templates contributed to a specific score.
+## 📡 API Reference
 
-## Risk Scoring Overview
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :---: |
+| `POST` | `/api/v1/auth/login` | Authenticate user & issue JWT token | ❌ Public |
+| `GET` | `/api/v1/auth/me` | Fetch authenticated user profile & RBAC role | 🔒 Bearer JWT |
+| `GET` | `/api/v1/health` | System health check & uptime status | ❌ Public |
+| `GET` | `/api/v1/summary` | Global risk breakdown & top signals summary | 🔒 Bearer JWT |
+| `GET` | `/api/v1/investigations` | Paginated investigation list with filtering & search | 🔒 Bearer JWT |
+| `GET` | `/api/v1/investigations/:id` | Full evidence ledger & risk breakdown for a customer | 🔒 Bearer JWT |
+| `PUT` | `/api/v1/investigations/:id/decision` | Submit analyst decision with Zod validation | 🔒 Bearer JWT |
+| `GET` | `/api/v1/rings/:ringId` | Ring nodes, edges, shared IP/device evidence | 🔒 Bearer JWT |
+| `GET` | `/api/v1/rings/:ringId/lifecycle` | Historical temporal snapshot lifecycle history | 🔒 Bearer JWT |
+| `GET` | `/api/v1/audit/verify` | Verify cryptographic SHA-256 audit chain integrity | 🔒 Bearer JWT |
 
-The Risk Engine scores customers based on six implemented signals:
+---
 
-- **Refund Frequency**: Total count of refunds.
-- **Refund Rate**: Ratio of refunds to total completed transactions.
-- **Refund Velocity**: Concentration of refunds within a specific time window.
-- **Repeated Reason**: High percentage of refunds utilizing the same reason code.
-- **Shared IP**: Refund accounts sharing an IP address.
-- **Shared Device**: Refund accounts utilizing the same device footprint.
+## ⚡ Performance Benchmark
 
-Each signal contributes deterministically to a bounded 0-100 risk score.
+Measured on a standard Node.js v22 runtime with 2,024 customer records:
 
-## Complaint NLP
+- **Cold Pipeline Build Time**: 387 ms
+- **P95 Investigation List API**: 7.68 ms
+- **P95 Customer Detail API**: 5.62 ms
+- **P95 Summary API**: 4.89 ms
+- **Automated Test Coverage**: **56/56 Tests Passing** (Vitest + Node Test Runner)
 
-Complaint analysis is purely deterministic. It utilizes:
-- **Text Normalization**: Lowercasing, punctuation removal, and stop-word filtering.
-- **Lexical Similarity**: Jaccard similarity over normalized tokens to find near-duplicate narratives.
-- **Reused Templates**: Identifies repeatedly reused wording templates across different customers.
-- **Evidence Extraction**: Deterministically extracts phrases related to refund reasons (e.g., "damaged", "never arrived").
+---
 
-## Graph/Ring Detection
-
-The graph engine constructs relationships based on:
-- Customer to Transaction edges.
-- Transaction to shared Device edges.
-- Customer to shared IP edges.
-
-Candidate rings are formed by finding connected components of customers sharing resources. Rings are scored deterministically based on member count, density, and shared resource evidence.
-
-## Temporal Analysis
-
-Temporal analysis generates deterministic historical snapshots across specified chronological boundaries. It calculates risk and graph relationships as they existed at specific observed transaction dates. It strictly uses deterministic bounded snapshot selection without look-ahead leakage.
-
-*Note: An observed historical snapshot represents the state of the data at that time; it does not claim to know the exact real-world fraud start time.*
-
-## Ring Lifecycle
-
-Rings identified across temporal snapshots are assigned stable IDs and tracked.
-**EMERGING, ACTIVE, DORMANT, and DISBANDED** represent deterministic lifecycle states inferred from observed historical snapshots based on activity and member growth.
-
-## Emerging Ring Detection
-
-RefundGuard detects and tracks emerging refund-ring patterns across deterministic historical snapshots derived from observed transaction activity. It compares consecutive snapshots to identify rings that have just formed or resumed activity.
-
-## Analyst Workflow
-
-The platform supports a complete investigation lifecycle:
-
-1. **Detection**: System flags high-risk accounts.
-2. **Case Triage**: Analyst views the dashboard to prioritize cases.
-3. **Investigation**: Analyst reviews the customer's behavioral score.
-4. **Evidence Review**: Analyst inspects related transactions and complaint similarities.
-5. **Ring Investigation**: Analyst explores the interactive refund-ring network graph.
-6. **Analyst Decision**: Analyst marks the case as UNREVIEWED, MONITOR, ESCALATED, or CLEARED.
-7. **Audit History**: All decisions and version history are persisted in the SQLite database.
-
-## API Overview
-
-The Express backend provides a RESTful API:
-- `GET /api/v1/summary`: System overview metrics.
-- `GET /api/v1/investigations`: Paginated list of flagged customers.
-- `GET /api/v1/investigations/:id`: Detailed evidence for a single customer.
-- `PUT /api/v1/investigations/:id/decision`: Submit an analyst decision.
-- `GET /api/v1/rings/:ringId/lifecycle`: Retrieve temporal lifecycle history for a ring.
-
-## Dataset/Benchmark Methodology
-
-RefundGuard includes a deterministic legitimate background dataset derived from the **UCI Online Retail II** dataset. Synthetic fields (IPs, devices, complaint text) are deterministically synthesized based on a seed to provide realistic signals without injecting fraud. Specific fraud scenarios (burst refund, slow-burn ring) are deterministically injected for evaluation.
-
-## Evaluation Methodology
-
-The platform is evaluated against deterministic seeded datasets. Ground truth is strictly isolated from the detection engines. The evaluation pipeline computes precision, recall, and PR-AUC using held-out seeds to verify detection performance.
-
-Published results (Phase 3): frozen-config held-out evaluation across seeds 11–30, ring-recovery, lead time, engine ablation, and a ring-escalation experiment are documented in **[docs/EVALUATION.md](docs/EVALUATION.md)** with all raw artifacts under `docs/results/`. Reproduce everything with:
-
-```bash
-npm run eval:report        # dev → holdout → unseen → escalation → report (writes docs)
-npm run eval:final         # machine-readable final held-out evaluation result
-```
-
-## Performance Benchmark
-
-Current validated performance benchmark (Node.js backend, CI fixture):
-- **Customers**: 2024
-- **Cold build time**: 387 ms
-- **P95 List**: 7.68 ms
-- **P95 Detail**: 5.62 ms
-- **P95 Summary**: 4.89 ms
-
-## Tech Stack
-
-- **Frontend**: React, Vite, React Router, react-force-graph-2d
-- **Backend**: Node.js, Express
-- **Database**: SQLite (better-sqlite3) for analyst decisions and audit logs
-- **Detection Engines**: Vanilla JavaScript (Risk, NLP, Graph, Temporal)
-
-## Project Structure
-
-```text
-RefundGuard/
-├── backend/
-│   ├── services/       # Express API & SQLite persistence
-│   └── tests/
-├── frontend/           # React + Vite analyst console
-├── risk-engine/        # Behavioral risk scoring & temporal analysis
-├── nlp/                # Deterministic complaint text analysis
-├── graph/              # Ring detection & lifecycle tracking
-├── data/               # UCI dataset generation & evaluation fixtures
-├── evaluation/         # Performance benchmarking & metrics
-├── README.md
-└── package.json
-```
-
-## Local Setup
+## 🚀 Quick Start & Installation
 
 ### Prerequisites
-- Node.js (v22 or later)
+- **Node.js**: `v22.0.0` or higher
+- **npm**: `v10.0.0` or higher
 
-### Install
-From the repository root:
+### 1. Clone & Install
 ```bash
+git clone https://github.com/25032007/Refundguard.git
+cd Refundguard
 npm run setup
 ```
 
-### Running the project
-First, generate the development dataset:
+### 2. Generate Synthetic Dataset
 ```bash
 npm run data:generate
 ```
 
-Then start the development servers (frontend and backend):
+### 3. Launch Development Server
 ```bash
 npm run dev
 ```
-The console will be available at `http://localhost:5173` and the API at `http://localhost:5000`.
+- **Frontend Analyst Console**: `http://localhost:5173`
+- **Backend API**: `http://localhost:5000/api/v1`
 
-## Running on the UCI Benchmark
+---
 
-To run the system on the full synthetic UCI benchmark dataset:
+## 🧪 Running Benchmark & Tests
 
 ```bash
+# Run full repository CI test suite (Risk, NLP, Graph, Data-CI, Backend, Frontend)
+npm test
+
+# Run API latency performance benchmark
+npm run bench:api
+
+# Run full UCI dataset benchmark pipeline
 npm run data:uci
 npm run dev:uci
 ```
 
-To run the full evaluation suite including all UCI-dependent tests:
+---
 
-```bash
-npm run test:full
+## 📂 Project Structure
+
+```text
+RefundGuard/
+├── backend/
+│   ├── controllers/      # Auth, Decision, Audit Controllers
+│   ├── middleware/       # JWT Auth, RBAC, Zod Validation, Rate Limiter
+│   ├── repositories/     # SQLite Database Persistence & Audit Log
+│   ├── routes/           # RESTful API Route Registration
+│   ├── services/         # Cache Manager & Investigation Logic
+│   └── tests/            # Backend Unit & Security Tests
+├── frontend/
+│   ├── src/
+│   │   ├── components/   # Header, Sidebar, Logo, HotkeyHelpModal
+│   │   ├── context/      # PiiContext & Compliance Shield
+│   │   ├── features/     # Dashboard, Triage, Investigation, Rings, System
+│   │   ├── hooks/        # useHotkeys Custom Hook
+│   │   ├── ui/           # Reusable Badges & Glassmorphic UI Elements
+│   │   └── utils/        # PII Formatters & PDF/CSV Exporters
+├── risk-engine/          # 6 Behavioral Risk Rules & Temporal Engine
+├── nlp/                  # Complaint Normalization & Lexical Similarity
+├── graph/                # 2D Connected Component Ring Detection
+├── data/                 # Benchmark Fixtures & UCI Adapters
+└── docs/                 # Screenshots, API Spec & Evaluation Reports
 ```
 
-### Building
-To build the frontend for production:
-```bash
-npm run build --prefix frontend
-```
+---
 
-## Testing
+## 📄 License
 
-The project has comprehensive test suites. Here are the verified commands and their expected outcomes:
-
-- `npm run test:ci`: Runs the engine, API, frontend, and committed mini-fixture tests (`data/fixtures/mini`) without requiring the UCI dataset.
-- `npm run test:full`: Adds the UCI-dependent data and evaluation suites. Generate the benchmark first with `npm run data:uci`.
-- `npm run bench:api`: Runs the API performance benchmark (produces the latency stats above).
-
-## Demo & Screenshots
-
-The Analyst Dashboard is available locally at `http://localhost:5173` after running `npm run dev` or `npm run dev:uci`.
-
-## Limitations
-
-- **Deterministic rules over ML**: The system utilizes deterministic rules rather than learned ML models.
-- **Benchmark abstraction**: The benchmark dataset and injected scenarios are not equivalent to live production fraud.
-- **Emerging definition**: "Emerging" status means the first observable detection in the evaluated historical snapshots, not necessarily the exact moment a criminal intent formed.
-- **Performance variation**: Benchmark performance is environment-dependent and not a universal production guarantee.
-
-## Future Improvements
-
-- Production authentication and authorization (SSO/SAML).
-- Real-time streaming event ingestion via Kafka.
-- Distributed graph processing for datasets exceeding 100,000 nodes.
-
-## License
-
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**.
