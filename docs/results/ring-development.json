@@ -1,0 +1,491 @@
+{
+  "perSeed": [
+    {
+      "seed": 1,
+      "gtRingCount": 4,
+      "recovery": {
+        "0.3": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.5": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.7": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        }
+      },
+      "matches": [
+        {
+          "scenarioId": "scene_obvious_01",
+          "family": "obvious_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52000"
+        },
+        {
+          "scenarioId": "scene_noisy_01",
+          "family": "noisy_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52006"
+        },
+        {
+          "scenarioId": "scene_rotating_01",
+          "family": "rotating_ip_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52013"
+        },
+        {
+          "scenarioId": "scene_slowburn_01",
+          "family": "slow_burn_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52018"
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "gtRingCount": 4,
+      "recovery": {
+        "0.3": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.5": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.7": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        }
+      },
+      "matches": [
+        {
+          "scenarioId": "scene_obvious_01",
+          "family": "obvious_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52000"
+        },
+        {
+          "scenarioId": "scene_noisy_01",
+          "family": "noisy_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52006"
+        },
+        {
+          "scenarioId": "scene_rotating_01",
+          "family": "rotating_ip_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52013"
+        },
+        {
+          "scenarioId": "scene_slowburn_01",
+          "family": "slow_burn_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52018"
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "gtRingCount": 4,
+      "recovery": {
+        "0.3": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.5": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.7": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        }
+      },
+      "matches": [
+        {
+          "scenarioId": "scene_obvious_01",
+          "family": "obvious_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52000"
+        },
+        {
+          "scenarioId": "scene_noisy_01",
+          "family": "noisy_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52006"
+        },
+        {
+          "scenarioId": "scene_rotating_01",
+          "family": "rotating_ip_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52013"
+        },
+        {
+          "scenarioId": "scene_slowburn_01",
+          "family": "slow_burn_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52018"
+        }
+      ]
+    },
+    {
+      "seed": 4,
+      "gtRingCount": 4,
+      "recovery": {
+        "0.3": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.5": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.7": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        }
+      },
+      "matches": [
+        {
+          "scenarioId": "scene_obvious_01",
+          "family": "obvious_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52000"
+        },
+        {
+          "scenarioId": "scene_noisy_01",
+          "family": "noisy_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52006"
+        },
+        {
+          "scenarioId": "scene_rotating_01",
+          "family": "rotating_ip_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52013"
+        },
+        {
+          "scenarioId": "scene_slowburn_01",
+          "family": "slow_burn_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52018"
+        }
+      ]
+    },
+    {
+      "seed": 5,
+      "gtRingCount": 4,
+      "recovery": {
+        "0.3": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.5": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.7": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        }
+      },
+      "matches": [
+        {
+          "scenarioId": "scene_obvious_01",
+          "family": "obvious_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52000"
+        },
+        {
+          "scenarioId": "scene_noisy_01",
+          "family": "noisy_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52006"
+        },
+        {
+          "scenarioId": "scene_rotating_01",
+          "family": "rotating_ip_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52013"
+        },
+        {
+          "scenarioId": "scene_slowburn_01",
+          "family": "slow_burn_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52018"
+        }
+      ]
+    },
+    {
+      "seed": 6,
+      "gtRingCount": 4,
+      "recovery": {
+        "0.3": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.5": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.7": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        }
+      },
+      "matches": [
+        {
+          "scenarioId": "scene_obvious_01",
+          "family": "obvious_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52000"
+        },
+        {
+          "scenarioId": "scene_noisy_01",
+          "family": "noisy_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52006"
+        },
+        {
+          "scenarioId": "scene_rotating_01",
+          "family": "rotating_ip_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52013"
+        },
+        {
+          "scenarioId": "scene_slowburn_01",
+          "family": "slow_burn_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52018"
+        }
+      ]
+    },
+    {
+      "seed": 7,
+      "gtRingCount": 4,
+      "recovery": {
+        "0.3": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.5": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.7": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        }
+      },
+      "matches": [
+        {
+          "scenarioId": "scene_obvious_01",
+          "family": "obvious_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52000"
+        },
+        {
+          "scenarioId": "scene_noisy_01",
+          "family": "noisy_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52006"
+        },
+        {
+          "scenarioId": "scene_rotating_01",
+          "family": "rotating_ip_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52013"
+        },
+        {
+          "scenarioId": "scene_slowburn_01",
+          "family": "slow_burn_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52018"
+        }
+      ]
+    },
+    {
+      "seed": 8,
+      "gtRingCount": 4,
+      "recovery": {
+        "0.3": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.5": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.7": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        }
+      },
+      "matches": [
+        {
+          "scenarioId": "scene_obvious_01",
+          "family": "obvious_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52000"
+        },
+        {
+          "scenarioId": "scene_noisy_01",
+          "family": "noisy_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52006"
+        },
+        {
+          "scenarioId": "scene_rotating_01",
+          "family": "rotating_ip_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52013"
+        },
+        {
+          "scenarioId": "scene_slowburn_01",
+          "family": "slow_burn_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52018"
+        }
+      ]
+    },
+    {
+      "seed": 9,
+      "gtRingCount": 4,
+      "recovery": {
+        "0.3": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.5": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.7": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        }
+      },
+      "matches": [
+        {
+          "scenarioId": "scene_obvious_01",
+          "family": "obvious_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52000"
+        },
+        {
+          "scenarioId": "scene_noisy_01",
+          "family": "noisy_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52006"
+        },
+        {
+          "scenarioId": "scene_rotating_01",
+          "family": "rotating_ip_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52013"
+        },
+        {
+          "scenarioId": "scene_slowburn_01",
+          "family": "slow_burn_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52018"
+        }
+      ]
+    },
+    {
+      "seed": 10,
+      "gtRingCount": 4,
+      "recovery": {
+        "0.3": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.5": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        },
+        "0.7": {
+          "recovered": 4,
+          "total": 4,
+          "rate": 1
+        }
+      },
+      "matches": [
+        {
+          "scenarioId": "scene_obvious_01",
+          "family": "obvious_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52000"
+        },
+        {
+          "scenarioId": "scene_noisy_01",
+          "family": "noisy_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52006"
+        },
+        {
+          "scenarioId": "scene_rotating_01",
+          "family": "rotating_ip_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52013"
+        },
+        {
+          "scenarioId": "scene_slowburn_01",
+          "family": "slow_burn_ring",
+          "bestOverlap": 1,
+          "detectedId": "ring_52018"
+        }
+      ]
+    }
+  ],
+  "aggregateRecovery": {
+    "0.3": {
+      "recovered": 40,
+      "total": 40,
+      "rate": 1
+    },
+    "0.5": {
+      "recovered": 40,
+      "total": 40,
+      "rate": 1
+    },
+    "0.7": {
+      "recovered": 40,
+      "total": 40,
+      "rate": 1
+    }
+  }
+}

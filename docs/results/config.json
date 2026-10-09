@@ -1,0 +1,8 @@
+{
+  "thresholds": {
+    "nlp": 15,
+    "ringScore": 75
+  },
+  "configHash": "ad1f9a3e5c85b02f8081ee0360cb8569438d00840308f458bc9d0754620ca8d4",
+  "frozenAt": "2026-10-09T06:00:03.429Z"
+}

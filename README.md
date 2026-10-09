@@ -140,6 +140,13 @@ RefundGuard includes a deterministic legitimate background dataset derived from 
 
 The platform is evaluated against deterministic seeded datasets. Ground truth is strictly isolated from the detection engines. The evaluation pipeline computes precision, recall, and PR-AUC using held-out seeds to verify detection performance.
 
+Published results (Phase 3): frozen-config held-out evaluation across seeds 11–30, ring-recovery, lead time, engine ablation, and a ring-escalation experiment are documented in **[docs/EVALUATION.md](docs/EVALUATION.md)** with all raw artifacts under `docs/results/`. Reproduce everything with:
+
+```bash
+npm run eval:report        # dev → holdout → unseen → escalation → report (writes docs)
+npm run eval:final         # machine-readable final held-out evaluation result
+```
+
 ## Performance Benchmark
 
 Current validated performance benchmark (Node.js backend, CI fixture):

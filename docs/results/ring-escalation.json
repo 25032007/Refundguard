@@ -1,0 +1,2643 @@
+{
+  "modes": [
+    "critical_bootstrap",
+    "no_critical_bootstrap",
+    "no_ring_escalation"
+  ],
+  "perSeed": {
+    "11": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.6486486486486487,
+          "recall": 1,
+          "f1": 0.7868852459016393,
+          "fpr": 0.0065,
+          "prAuc": 0.43375820205088494
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1617,
+            "falsePositives": 105,
+            "fpr": 0.06493506493506493
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 101,
+            "falsePositives": 1,
+            "fpr": 0.009900990099009901
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 59,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 196,
+            "falsePositives": 82,
+            "fpr": 0.41836734693877553
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.6486486486486487,
+          "recall": 1,
+          "f1": 0.7868852459016393,
+          "fpr": 0.0065,
+          "prAuc": 0.43375820205088494
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1617,
+            "falsePositives": 105,
+            "fpr": 0.06493506493506493
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 101,
+            "falsePositives": 1,
+            "fpr": 0.009900990099009901
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 59,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 196,
+            "falsePositives": 82,
+            "fpr": 0.41836734693877553
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.7333333333333333,
+          "recall": 0.9166666666666666,
+          "f1": 0.8148148148148148,
+          "fpr": 0.004,
+          "prAuc": 0.43375820205088494
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1617,
+            "falsePositives": 105,
+            "fpr": 0.06493506493506493
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 101,
+            "falsePositives": 1,
+            "fpr": 0.009900990099009901
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 59,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 196,
+            "falsePositives": 82,
+            "fpr": 0.41836734693877553
+          }
+        }
+      }
+    },
+    "12": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.4,
+          "recall": 1,
+          "f1": 0.5714285714285715,
+          "fpr": 0.018,
+          "prAuc": 0.47792954396654247
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1618,
+            "falsePositives": 82,
+            "fpr": 0.05067985166872682
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 2,
+            "fpr": 0.0125
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 103,
+            "falsePositives": 1,
+            "fpr": 0.009708737864077669
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 58,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 182,
+            "falsePositives": 60,
+            "fpr": 0.32967032967032966
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.4,
+          "recall": 1,
+          "f1": 0.5714285714285715,
+          "fpr": 0.018,
+          "prAuc": 0.47792954396654247
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1618,
+            "falsePositives": 82,
+            "fpr": 0.05067985166872682
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 2,
+            "fpr": 0.0125
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 103,
+            "falsePositives": 1,
+            "fpr": 0.009708737864077669
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 58,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 182,
+            "falsePositives": 60,
+            "fpr": 0.32967032967032966
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.75,
+          "recall": 1,
+          "f1": 0.8571428571428571,
+          "fpr": 0.004,
+          "prAuc": 0.47792954396654247
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1618,
+            "falsePositives": 82,
+            "fpr": 0.05067985166872682
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 2,
+            "fpr": 0.0125
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 103,
+            "falsePositives": 1,
+            "fpr": 0.009708737864077669
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 58,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 182,
+            "falsePositives": 60,
+            "fpr": 0.32967032967032966
+          }
+        }
+      }
+    },
+    "13": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.6,
+          "recall": 1,
+          "f1": 0.7499999999999999,
+          "fpr": 0.008,
+          "prAuc": 0.4344148043762982
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1611,
+            "falsePositives": 102,
+            "fpr": 0.0633147113594041
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 110,
+            "falsePositives": 1,
+            "fpr": 0.00909090909090909
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 55,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 198,
+            "falsePositives": 74,
+            "fpr": 0.37373737373737376
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.6,
+          "recall": 1,
+          "f1": 0.7499999999999999,
+          "fpr": 0.008,
+          "prAuc": 0.4344148043762982
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1611,
+            "falsePositives": 102,
+            "fpr": 0.0633147113594041
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 110,
+            "falsePositives": 1,
+            "fpr": 0.00909090909090909
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 55,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 198,
+            "falsePositives": 74,
+            "fpr": 0.37373737373737376
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.84,
+          "recall": 0.875,
+          "f1": 0.8571428571428572,
+          "fpr": 0.002,
+          "prAuc": 0.4344148043762982
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1611,
+            "falsePositives": 102,
+            "fpr": 0.0633147113594041
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 110,
+            "falsePositives": 1,
+            "fpr": 0.00909090909090909
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 55,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 198,
+            "falsePositives": 74,
+            "fpr": 0.37373737373737376
+          }
+        }
+      }
+    },
+    "14": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.4897959183673469,
+          "recall": 1,
+          "f1": 0.6575342465753424,
+          "fpr": 0.0125,
+          "prAuc": 0.484413660664312
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1637,
+            "falsePositives": 75,
+            "fpr": 0.04581551618814905
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 1,
+            "fpr": 0.006211180124223602
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 100,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 40,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 170,
+            "falsePositives": 51,
+            "fpr": 0.3
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.4897959183673469,
+          "recall": 1,
+          "f1": 0.6575342465753424,
+          "fpr": 0.0125,
+          "prAuc": 0.484413660664312
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1637,
+            "falsePositives": 75,
+            "fpr": 0.04581551618814905
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 1,
+            "fpr": 0.006211180124223602
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 100,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 40,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 170,
+            "falsePositives": 51,
+            "fpr": 0.3
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.7419354838709677,
+          "recall": 0.9583333333333334,
+          "f1": 0.8363636363636364,
+          "fpr": 0.004,
+          "prAuc": 0.484413660664312
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1637,
+            "falsePositives": 75,
+            "fpr": 0.04581551618814905
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 1,
+            "fpr": 0.006211180124223602
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 100,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 40,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 170,
+            "falsePositives": 51,
+            "fpr": 0.3
+          }
+        }
+      }
+    },
+    "15": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.46153846153846156,
+          "recall": 1,
+          "f1": 0.631578947368421,
+          "fpr": 0.014,
+          "prAuc": 0.4473412807490597
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1613,
+            "falsePositives": 89,
+            "fpr": 0.05517668939863608
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 63,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 183,
+            "falsePositives": 66,
+            "fpr": 0.36065573770491804
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.46153846153846156,
+          "recall": 1,
+          "f1": 0.631578947368421,
+          "fpr": 0.014,
+          "prAuc": 0.4473412807490597
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1613,
+            "falsePositives": 89,
+            "fpr": 0.05517668939863608
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 63,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 183,
+            "falsePositives": 66,
+            "fpr": 0.36065573770491804
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.8148148148148148,
+          "recall": 0.9166666666666666,
+          "f1": 0.8627450980392156,
+          "fpr": 0.0025,
+          "prAuc": 0.4473412807490597
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1613,
+            "falsePositives": 89,
+            "fpr": 0.05517668939863608
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 63,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 183,
+            "falsePositives": 66,
+            "fpr": 0.36065573770491804
+          }
+        }
+      }
+    },
+    "16": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.7741935483870968,
+          "recall": 1,
+          "f1": 0.8727272727272727,
+          "fpr": 0.0035,
+          "prAuc": 0.4224976618412492
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1626,
+            "falsePositives": 93,
+            "fpr": 0.05719557195571956
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 164,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 100,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 50,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 173,
+            "falsePositives": 65,
+            "fpr": 0.37572254335260113
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.7741935483870968,
+          "recall": 1,
+          "f1": 0.8727272727272727,
+          "fpr": 0.0035,
+          "prAuc": 0.4224976618412492
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1626,
+            "falsePositives": 93,
+            "fpr": 0.05719557195571956
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 164,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 100,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 50,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 173,
+            "falsePositives": 65,
+            "fpr": 0.37572254335260113
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.9166666666666666,
+          "recall": 0.9166666666666666,
+          "f1": 0.9166666666666666,
+          "fpr": 0.001,
+          "prAuc": 0.4224976618412492
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1626,
+            "falsePositives": 93,
+            "fpr": 0.05719557195571956
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 164,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 100,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 50,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 173,
+            "falsePositives": 65,
+            "fpr": 0.37572254335260113
+          }
+        }
+      }
+    },
+    "17": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.5217391304347826,
+          "recall": 1,
+          "f1": 0.6857142857142856,
+          "fpr": 0.011,
+          "prAuc": 0.4516571568098286
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1614,
+            "falsePositives": 110,
+            "fpr": 0.06815365551425032
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 107,
+            "falsePositives": 2,
+            "fpr": 0.018691588785046728
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 58,
+            "falsePositives": 1,
+            "fpr": 0.017241379310344827
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 187,
+            "falsePositives": 81,
+            "fpr": 0.43315508021390375
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.5217391304347826,
+          "recall": 1,
+          "f1": 0.6857142857142856,
+          "fpr": 0.011,
+          "prAuc": 0.4516571568098286
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1614,
+            "falsePositives": 110,
+            "fpr": 0.06815365551425032
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 107,
+            "falsePositives": 2,
+            "fpr": 0.018691588785046728
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 58,
+            "falsePositives": 1,
+            "fpr": 0.017241379310344827
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 187,
+            "falsePositives": 81,
+            "fpr": 0.43315508021390375
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.6470588235294118,
+          "recall": 0.9166666666666666,
+          "f1": 0.7586206896551724,
+          "fpr": 0.006,
+          "prAuc": 0.4516571568098286
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1614,
+            "falsePositives": 110,
+            "fpr": 0.06815365551425032
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 107,
+            "falsePositives": 2,
+            "fpr": 0.018691588785046728
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 58,
+            "falsePositives": 1,
+            "fpr": 0.017241379310344827
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 187,
+            "falsePositives": 81,
+            "fpr": 0.43315508021390375
+          }
+        }
+      }
+    },
+    "18": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.5454545454545454,
+          "recall": 1,
+          "f1": 0.7058823529411764,
+          "fpr": 0.01,
+          "prAuc": 0.4718135363064608
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1600,
+            "falsePositives": 88,
+            "fpr": 0.055
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 110,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 64,
+            "falsePositives": 1,
+            "fpr": 0.015625
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 66,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 187,
+            "falsePositives": 70,
+            "fpr": 0.37433155080213903
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.5454545454545454,
+          "recall": 1,
+          "f1": 0.7058823529411764,
+          "fpr": 0.01,
+          "prAuc": 0.4718135363064608
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1600,
+            "falsePositives": 88,
+            "fpr": 0.055
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 110,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 64,
+            "falsePositives": 1,
+            "fpr": 0.015625
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 66,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 187,
+            "falsePositives": 70,
+            "fpr": 0.37433155080213903
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.696969696969697,
+          "recall": 0.9583333333333334,
+          "f1": 0.8070175438596493,
+          "fpr": 0.005,
+          "prAuc": 0.4718135363064608
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1600,
+            "falsePositives": 88,
+            "fpr": 0.055
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 110,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 64,
+            "falsePositives": 1,
+            "fpr": 0.015625
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 66,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 187,
+            "falsePositives": 70,
+            "fpr": 0.37433155080213903
+          }
+        }
+      }
+    },
+    "19": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.46153846153846156,
+          "recall": 1,
+          "f1": 0.631578947368421,
+          "fpr": 0.014,
+          "prAuc": 0.45267893482179195
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1613,
+            "falsePositives": 89,
+            "fpr": 0.05517668939863608
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 2,
+            "fpr": 0.012345679012345678
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 106,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 59,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 172,
+            "falsePositives": 62,
+            "fpr": 0.36046511627906974
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.46153846153846156,
+          "recall": 1,
+          "f1": 0.631578947368421,
+          "fpr": 0.014,
+          "prAuc": 0.45267893482179195
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1613,
+            "falsePositives": 89,
+            "fpr": 0.05517668939863608
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 2,
+            "fpr": 0.012345679012345678
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 106,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 59,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 172,
+            "falsePositives": 62,
+            "fpr": 0.36046511627906974
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.6875,
+          "recall": 0.9166666666666666,
+          "f1": 0.7857142857142857,
+          "fpr": 0.005,
+          "prAuc": 0.45267893482179195
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1613,
+            "falsePositives": 89,
+            "fpr": 0.05517668939863608
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 2,
+            "fpr": 0.012345679012345678
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 106,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 59,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 172,
+            "falsePositives": 62,
+            "fpr": 0.36046511627906974
+          }
+        }
+      }
+    },
+    "20": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.6486486486486487,
+          "recall": 1,
+          "f1": 0.7868852459016393,
+          "fpr": 0.0065,
+          "prAuc": 0.46230913132559115
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1622,
+            "falsePositives": 99,
+            "fpr": 0.06103575832305795
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 101,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 56,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 188,
+            "falsePositives": 73,
+            "fpr": 0.3882978723404255
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.6486486486486487,
+          "recall": 1,
+          "f1": 0.7868852459016393,
+          "fpr": 0.0065,
+          "prAuc": 0.46230913132559115
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1622,
+            "falsePositives": 99,
+            "fpr": 0.06103575832305795
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 101,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 56,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 188,
+            "falsePositives": 73,
+            "fpr": 0.3882978723404255
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.71875,
+          "recall": 0.9583333333333334,
+          "f1": 0.8214285714285714,
+          "fpr": 0.0045,
+          "prAuc": 0.46230913132559115
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1622,
+            "falsePositives": 99,
+            "fpr": 0.06103575832305795
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 101,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 56,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 188,
+            "falsePositives": 73,
+            "fpr": 0.3882978723404255
+          }
+        }
+      }
+    },
+    "21": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.6153846153846154,
+          "recall": 1,
+          "f1": 0.761904761904762,
+          "fpr": 0.0075,
+          "prAuc": 0.46744936065463594
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1615,
+            "falsePositives": 92,
+            "fpr": 0.05696594427244582
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 100,
+            "falsePositives": 1,
+            "fpr": 0.01
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 2,
+            "fpr": 0.03225806451612903
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 173,
+            "falsePositives": 65,
+            "fpr": 0.37572254335260113
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.6153846153846154,
+          "recall": 1,
+          "f1": 0.761904761904762,
+          "fpr": 0.0075,
+          "prAuc": 0.46744936065463594
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1615,
+            "falsePositives": 92,
+            "fpr": 0.05696594427244582
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 100,
+            "falsePositives": 1,
+            "fpr": 0.01
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 2,
+            "fpr": 0.03225806451612903
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 173,
+            "falsePositives": 65,
+            "fpr": 0.37572254335260113
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.6666666666666666,
+          "recall": 1,
+          "f1": 0.8,
+          "fpr": 0.006,
+          "prAuc": 0.46744936065463594
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1615,
+            "falsePositives": 92,
+            "fpr": 0.05696594427244582
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 100,
+            "falsePositives": 1,
+            "fpr": 0.01
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 62,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 62,
+            "falsePositives": 2,
+            "fpr": 0.03225806451612903
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 173,
+            "falsePositives": 65,
+            "fpr": 0.37572254335260113
+          }
+        }
+      }
+    },
+    "22": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.46153846153846156,
+          "recall": 1,
+          "f1": 0.631578947368421,
+          "fpr": 0.014,
+          "prAuc": 0.4256117817272047
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1628,
+            "falsePositives": 90,
+            "fpr": 0.05528255528255528
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 50,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 1,
+            "fpr": 0.016666666666666666
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 178,
+            "falsePositives": 63,
+            "fpr": 0.3539325842696629
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.46153846153846156,
+          "recall": 1,
+          "f1": 0.631578947368421,
+          "fpr": 0.014,
+          "prAuc": 0.4256117817272047
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1628,
+            "falsePositives": 90,
+            "fpr": 0.05528255528255528
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 50,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 1,
+            "fpr": 0.016666666666666666
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 178,
+            "falsePositives": 63,
+            "fpr": 0.3539325842696629
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.8,
+          "recall": 0.8333333333333334,
+          "f1": 0.816326530612245,
+          "fpr": 0.0025,
+          "prAuc": 0.4256117817272047
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1628,
+            "falsePositives": 90,
+            "fpr": 0.05528255528255528
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 50,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 60,
+            "falsePositives": 1,
+            "fpr": 0.016666666666666666
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 178,
+            "falsePositives": 63,
+            "fpr": 0.3539325842696629
+          }
+        }
+      }
+    },
+    "23": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.5217391304347826,
+          "recall": 1,
+          "f1": 0.6857142857142856,
+          "fpr": 0.011,
+          "prAuc": 0.46530989369701947
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1633,
+            "falsePositives": 93,
+            "fpr": 0.05695039804041641
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 101,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 45,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 169,
+            "falsePositives": 68,
+            "fpr": 0.40236686390532544
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.5217391304347826,
+          "recall": 1,
+          "f1": 0.6857142857142856,
+          "fpr": 0.011,
+          "prAuc": 0.46530989369701947
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1633,
+            "falsePositives": 93,
+            "fpr": 0.05695039804041641
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 101,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 45,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 169,
+            "falsePositives": 68,
+            "fpr": 0.40236686390532544
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.7,
+          "recall": 0.875,
+          "f1": 0.7777777777777777,
+          "fpr": 0.0045,
+          "prAuc": 0.46530989369701947
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1633,
+            "falsePositives": 93,
+            "fpr": 0.05695039804041641
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 1,
+            "fpr": 0.00625
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 101,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 45,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 169,
+            "falsePositives": 68,
+            "fpr": 0.40236686390532544
+          }
+        }
+      }
+    },
+    "24": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.5333333333333333,
+          "recall": 1,
+          "f1": 0.6956521739130436,
+          "fpr": 0.0105,
+          "prAuc": 0.44184451817817816
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1617,
+            "falsePositives": 97,
+            "fpr": 0.05998763141620284
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 107,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 55,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 166,
+            "falsePositives": 64,
+            "fpr": 0.3855421686746988
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.5333333333333333,
+          "recall": 1,
+          "f1": 0.6956521739130436,
+          "fpr": 0.0105,
+          "prAuc": 0.44184451817817816
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1617,
+            "falsePositives": 97,
+            "fpr": 0.05998763141620284
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 107,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 55,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 166,
+            "falsePositives": 64,
+            "fpr": 0.3855421686746988
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.7333333333333333,
+          "recall": 0.9166666666666666,
+          "f1": 0.8148148148148148,
+          "fpr": 0.004,
+          "prAuc": 0.44184451817817816
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1617,
+            "falsePositives": 97,
+            "fpr": 0.05998763141620284
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 107,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 55,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 166,
+            "falsePositives": 64,
+            "fpr": 0.3855421686746988
+          }
+        }
+      }
+    },
+    "25": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.42105263157894735,
+          "recall": 1,
+          "f1": 0.5925925925925926,
+          "fpr": 0.0165,
+          "prAuc": 0.4107436939754012
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1619,
+            "falsePositives": 104,
+            "fpr": 0.06423718344657196
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 109,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 46,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 64,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 198,
+            "falsePositives": 77,
+            "fpr": 0.3888888888888889
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.42105263157894735,
+          "recall": 1,
+          "f1": 0.5925925925925926,
+          "fpr": 0.0165,
+          "prAuc": 0.4107436939754012
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1619,
+            "falsePositives": 104,
+            "fpr": 0.06423718344657196
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 109,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 46,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 64,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 198,
+            "falsePositives": 77,
+            "fpr": 0.3888888888888889
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.7692307692307693,
+          "recall": 0.8333333333333334,
+          "f1": 0.8,
+          "fpr": 0.003,
+          "prAuc": 0.4107436939754012
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1619,
+            "falsePositives": 104,
+            "fpr": 0.06423718344657196
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 109,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 46,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 64,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 198,
+            "falsePositives": 77,
+            "fpr": 0.3888888888888889
+          }
+        }
+      }
+    },
+    "26": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.4528301886792453,
+          "recall": 1,
+          "f1": 0.6233766233766235,
+          "fpr": 0.0145,
+          "prAuc": 0.3874237710403137
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1616,
+            "falsePositives": 108,
+            "fpr": 0.06683168316831684
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 1,
+            "fpr": 0.006172839506172839
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 54,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 66,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 186,
+            "falsePositives": 76,
+            "fpr": 0.40860215053763443
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.4528301886792453,
+          "recall": 1,
+          "f1": 0.6233766233766235,
+          "fpr": 0.0145,
+          "prAuc": 0.3874237710403137
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1616,
+            "falsePositives": 108,
+            "fpr": 0.06683168316831684
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 1,
+            "fpr": 0.006172839506172839
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 54,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 66,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 186,
+            "falsePositives": 76,
+            "fpr": 0.40860215053763443
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.8076923076923077,
+          "recall": 0.875,
+          "f1": 0.8400000000000001,
+          "fpr": 0.0025,
+          "prAuc": 0.3874237710403137
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1616,
+            "falsePositives": 108,
+            "fpr": 0.06683168316831684
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 162,
+            "falsePositives": 1,
+            "fpr": 0.006172839506172839
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 54,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 66,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 186,
+            "falsePositives": 76,
+            "fpr": 0.40860215053763443
+          }
+        }
+      }
+    },
+    "27": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.7058823529411765,
+          "recall": 1,
+          "f1": 0.8275862068965517,
+          "fpr": 0.005,
+          "prAuc": 0.44091738245440537
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1618,
+            "falsePositives": 96,
+            "fpr": 0.059332509270704575
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 164,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 108,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 46,
+            "falsePositives": 1,
+            "fpr": 0.021739130434782608
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 64,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 180,
+            "falsePositives": 68,
+            "fpr": 0.37777777777777777
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.7058823529411765,
+          "recall": 1,
+          "f1": 0.8275862068965517,
+          "fpr": 0.005,
+          "prAuc": 0.44091738245440537
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1618,
+            "falsePositives": 96,
+            "fpr": 0.059332509270704575
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 164,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 108,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 46,
+            "falsePositives": 1,
+            "fpr": 0.021739130434782608
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 64,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 180,
+            "falsePositives": 68,
+            "fpr": 0.37777777777777777
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.8076923076923077,
+          "recall": 0.875,
+          "f1": 0.8400000000000001,
+          "fpr": 0.0025,
+          "prAuc": 0.44091738245440537
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1618,
+            "falsePositives": 96,
+            "fpr": 0.059332509270704575
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 164,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 108,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 46,
+            "falsePositives": 1,
+            "fpr": 0.021739130434782608
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 64,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 180,
+            "falsePositives": 68,
+            "fpr": 0.37777777777777777
+          }
+        }
+      }
+    },
+    "28": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.631578947368421,
+          "recall": 1,
+          "f1": 0.7741935483870968,
+          "fpr": 0.007,
+          "prAuc": 0.419457339057365
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1617,
+            "falsePositives": 96,
+            "fpr": 0.059369202226345084
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 163,
+            "falsePositives": 1,
+            "fpr": 0.006134969325153374
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 2,
+            "fpr": 0.0196078431372549
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 57,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 168,
+            "falsePositives": 69,
+            "fpr": 0.4107142857142857
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.631578947368421,
+          "recall": 1,
+          "f1": 0.7741935483870968,
+          "fpr": 0.007,
+          "prAuc": 0.419457339057365
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1617,
+            "falsePositives": 96,
+            "fpr": 0.059369202226345084
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 163,
+            "falsePositives": 1,
+            "fpr": 0.006134969325153374
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 2,
+            "fpr": 0.0196078431372549
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 57,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 168,
+            "falsePositives": 69,
+            "fpr": 0.4107142857142857
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.7058823529411765,
+          "recall": 1,
+          "f1": 0.8275862068965517,
+          "fpr": 0.005,
+          "prAuc": 0.419457339057365
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1617,
+            "falsePositives": 96,
+            "fpr": 0.059369202226345084
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 163,
+            "falsePositives": 1,
+            "fpr": 0.006134969325153374
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 102,
+            "falsePositives": 2,
+            "fpr": 0.0196078431372549
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 57,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 168,
+            "falsePositives": 69,
+            "fpr": 0.4107142857142857
+          }
+        }
+      }
+    },
+    "29": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.6486486486486487,
+          "recall": 1,
+          "f1": 0.7868852459016393,
+          "fpr": 0.0065,
+          "prAuc": 0.4567203856749312
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1618,
+            "falsePositives": 100,
+            "fpr": 0.06180469715698393
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 1,
+            "fpr": 0.006211180124223602
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 107,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 51,
+            "falsePositives": 1,
+            "fpr": 0.0196078431372549
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 63,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 175,
+            "falsePositives": 70,
+            "fpr": 0.4
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.6486486486486487,
+          "recall": 1,
+          "f1": 0.7868852459016393,
+          "fpr": 0.0065,
+          "prAuc": 0.4567203856749312
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1618,
+            "falsePositives": 100,
+            "fpr": 0.06180469715698393
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 1,
+            "fpr": 0.006211180124223602
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 107,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 51,
+            "falsePositives": 1,
+            "fpr": 0.0196078431372549
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 63,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 175,
+            "falsePositives": 70,
+            "fpr": 0.4
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.8518518518518519,
+          "recall": 0.9583333333333334,
+          "f1": 0.9019607843137256,
+          "fpr": 0.002,
+          "prAuc": 0.4567203856749312
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1618,
+            "falsePositives": 100,
+            "fpr": 0.06180469715698393
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 161,
+            "falsePositives": 1,
+            "fpr": 0.006211180124223602
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 107,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 51,
+            "falsePositives": 1,
+            "fpr": 0.0196078431372549
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 63,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 175,
+            "falsePositives": 70,
+            "fpr": 0.4
+          }
+        }
+      }
+    },
+    "30": {
+      "critical_bootstrap": {
+        "metrics": {
+          "precision": 0.5333333333333333,
+          "recall": 1,
+          "f1": 0.6956521739130436,
+          "fpr": 0.0105,
+          "prAuc": 0.4213309862576136
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1619,
+            "falsePositives": 97,
+            "fpr": 0.05991352686843731
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 2,
+            "fpr": 0.0125
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 109,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 51,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 187,
+            "falsePositives": 79,
+            "fpr": 0.42245989304812837
+          }
+        }
+      },
+      "no_critical_bootstrap": {
+        "metrics": {
+          "precision": 0.5333333333333333,
+          "recall": 1,
+          "f1": 0.6956521739130436,
+          "fpr": 0.0105,
+          "prAuc": 0.4213309862576136
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1619,
+            "falsePositives": 97,
+            "fpr": 0.05991352686843731
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 2,
+            "fpr": 0.0125
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 109,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 51,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 187,
+            "falsePositives": 79,
+            "fpr": 0.42245989304812837
+          }
+        }
+      },
+      "no_ring_escalation": {
+        "metrics": {
+          "precision": 0.6571428571428571,
+          "recall": 0.9583333333333334,
+          "f1": 0.7796610169491525,
+          "fpr": 0.006,
+          "prAuc": 0.4213309862576136
+        },
+        "groupFpr": {
+          "LEGITIMATE_NORMAL": {
+            "total": 1619,
+            "falsePositives": 97,
+            "fpr": 0.05991352686843731
+          },
+          "LEGITIMATE_HOUSEHOLD": {
+            "total": 160,
+            "falsePositives": 2,
+            "fpr": 0.0125
+          },
+          "LEGITIMATE_OFFICE": {
+            "total": 109,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HOSTEL": {
+            "total": 51,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_WHOLESALER": {
+            "total": 61,
+            "falsePositives": 0,
+            "fpr": 0
+          },
+          "LEGITIMATE_HIGH_REFUND_RATE": {
+            "total": 187,
+            "falsePositives": 79,
+            "fpr": 0.42245989304812837
+          }
+        }
+      }
+    }
+  },
+  "summary": {
+    "critical_bootstrap": {
+      "precision": {
+        "n": 20,
+        "mean": 0.5538439503129479,
+        "std": 0.10123846401099436,
+        "ciLow": 0.5064634352062619,
+        "ciHigh": 0.6012244654196338
+      },
+      "recall": {
+        "n": 20,
+        "mean": 1,
+        "std": 0,
+        "ciLow": 1,
+        "ciHigh": 1
+      },
+      "f1": {
+        "n": 20,
+        "mean": 0.7077675837947414,
+        "std": 0.08260769784864556,
+        "ciLow": 0.6691064354448292,
+        "ciHigh": 0.7464287321446536
+      },
+      "fpr": {
+        "n": 20,
+        "mean": 0.010350000000000003,
+        "std": 0.004000328933843737,
+        "ciLow": 0.008477809945228797,
+        "ciHigh": 0.01222219005477121
+      },
+      "prAuc": {
+        "n": 20,
+        "mean": 0.44378115128145434,
+        "std": 0.024748975147881862,
+        "ciLow": 0.43219840748615274,
+        "ciHigh": 0.45536389507675595
+      },
+      "highRefundFpr": {
+        "n": 20,
+        "mean": 0.382020505360427,
+        "std": 0.031904710559223774,
+        "ciLow": 0.36708881279285127,
+        "ciHigh": 0.3969521979280027
+      }
+    },
+    "no_critical_bootstrap": {
+      "precision": {
+        "n": 20,
+        "mean": 0.5538439503129479,
+        "std": 0.10123846401099436,
+        "ciLow": 0.5064634352062619,
+        "ciHigh": 0.6012244654196338
+      },
+      "recall": {
+        "n": 20,
+        "mean": 1,
+        "std": 0,
+        "ciLow": 1,
+        "ciHigh": 1
+      },
+      "f1": {
+        "n": 20,
+        "mean": 0.7077675837947414,
+        "std": 0.08260769784864556,
+        "ciLow": 0.6691064354448292,
+        "ciHigh": 0.7464287321446536
+      },
+      "fpr": {
+        "n": 20,
+        "mean": 0.010350000000000003,
+        "std": 0.004000328933843737,
+        "ciLow": 0.008477809945228797,
+        "ciHigh": 0.01222219005477121
+      },
+      "prAuc": {
+        "n": 20,
+        "mean": 0.44378115128145434,
+        "std": 0.024748975147881862,
+        "ciLow": 0.43219840748615274,
+        "ciHigh": 0.45536389507675595
+      },
+      "highRefundFpr": {
+        "n": 20,
+        "mean": 0.382020505360427,
+        "std": 0.031904710559223774,
+        "ciLow": 0.36708881279285127,
+        "ciHigh": 0.3969521979280027
+      }
+    },
+    "no_ring_escalation": {
+      "precision": {
+        "n": 20,
+        "mean": 0.7523260632868081,
+        "std": 0.07210982744477416,
+        "ciLow": 0.7185780130574347,
+        "ciHigh": 0.7860741135161814
+      },
+      "recall": {
+        "n": 20,
+        "mean": 0.9229166666666666,
+        "std": 0.0510757807587604,
+        "ciLow": 0.8990127401752155,
+        "ciHigh": 0.9468205931581177
+      },
+      "f1": {
+        "n": 20,
+        "mean": 0.8257892076095998,
+        "std": 0.0400618558062385,
+        "ciLow": 0.8070398974262369,
+        "ciHigh": 0.8445385177929627
+      },
+      "fpr": {
+        "n": 20,
+        "mean": 0.0038000000000000004,
+        "std": 0.0014814644248530788,
+        "ciLow": 0.0031066612749661403,
+        "ciHigh": 0.004493338725033861
+      },
+      "prAuc": {
+        "n": 20,
+        "mean": 0.44378115128145434,
+        "std": 0.024748975147881862,
+        "ciLow": 0.43219840748615274,
+        "ciHigh": 0.45536389507675595
+      },
+      "highRefundFpr": {
+        "n": 20,
+        "mean": 0.382020505360427,
+        "std": 0.031904710559223774,
+        "ciLow": 0.36708881279285127,
+        "ciHigh": 0.3969521979280027
+      }
+    }
+  }
+}

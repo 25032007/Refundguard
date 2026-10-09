@@ -1,0 +1,54 @@
+{
+  "seed": 27,
+  "ringCount": 4,
+  "detectedCount": 4,
+  "missedCount": 0,
+  "detectionRate": 1,
+  "medianLeadTimeDays": 13.330000000000002,
+  "rows": [
+    {
+      "scenarioId": "scene_obvious_01",
+      "family": "obvious_ring",
+      "memberCount": 6,
+      "detected": true,
+      "detectionDate": "2011-11-18T22:41:37.767Z",
+      "detectedRingId": "ring_52000",
+      "finalMembershipDate": "2011-11-08T13:05:35.280Z",
+      "leadTimeDays": 10.4,
+      "bestOverlap": 1
+    },
+    {
+      "scenarioId": "scene_noisy_01",
+      "family": "noisy_ring",
+      "memberCount": 7,
+      "detected": true,
+      "detectionDate": "2011-12-02T22:41:37.767Z",
+      "detectedRingId": "ring_52006",
+      "finalMembershipDate": "2011-12-03T00:32:22.120Z",
+      "leadTimeDays": -0.08,
+      "bestOverlap": 1
+    },
+    {
+      "scenarioId": "scene_rotating_01",
+      "family": "rotating_ip_ring",
+      "memberCount": 5,
+      "detected": true,
+      "detectionDate": "2011-11-18T22:41:37.767Z",
+      "detectedRingId": "ring_52013",
+      "finalMembershipDate": "2011-11-02T16:24:12.295Z",
+      "leadTimeDays": 16.26,
+      "bestOverlap": 1
+    },
+    {
+      "scenarioId": "scene_slowburn_01",
+      "family": "slow_burn_ring",
+      "memberCount": 4,
+      "detected": true,
+      "detectionDate": "2012-02-24T22:41:37.767Z",
+      "detectedRingId": "ring_52018",
+      "finalMembershipDate": "2011-11-08T17:55:32.953Z",
+      "leadTimeDays": 108.2,
+      "bestOverlap": 1
+    }
+  ]
+}

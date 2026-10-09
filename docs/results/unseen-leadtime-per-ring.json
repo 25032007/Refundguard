@@ -1,0 +1,20 @@
+{
+  "seed": 30,
+  "ringCount": 1,
+  "detectedCount": 0,
+  "missedCount": 1,
+  "detectionRate": 0,
+  "medianLeadTimeDays": null,
+  "rows": [
+    {
+      "scenarioId": "scene_subset_shared_01",
+      "family": "subset_shared_resource",
+      "memberCount": 8,
+      "detected": false,
+      "detectionDate": null,
+      "finalMembershipDate": "2011-12-05T06:50:51.464Z",
+      "leadTimeDays": null,
+      "bestOverlap": 0
+    }
+  ]
+}
