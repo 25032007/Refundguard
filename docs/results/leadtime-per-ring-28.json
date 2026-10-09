@@ -1,10 +1,129 @@
 {
   "seed": 28,
+  "snapshotDates": [
+    "2010-10-08T01:10:09.836Z",
+    "2010-10-15T01:10:09.836Z",
+    "2010-10-22T01:10:09.836Z",
+    "2010-10-29T01:10:09.836Z",
+    "2010-11-05T01:10:09.836Z",
+    "2010-11-12T01:10:09.836Z",
+    "2010-11-19T01:10:09.836Z",
+    "2010-11-26T01:10:09.836Z",
+    "2010-12-03T01:10:09.836Z",
+    "2010-12-10T01:10:09.836Z",
+    "2010-12-17T01:10:09.836Z",
+    "2010-12-24T01:10:09.836Z",
+    "2010-12-31T01:10:09.836Z",
+    "2011-01-07T01:10:09.836Z",
+    "2011-01-14T01:10:09.836Z",
+    "2011-01-21T01:10:09.836Z",
+    "2011-01-28T01:10:09.836Z",
+    "2011-02-04T01:10:09.836Z",
+    "2011-02-11T01:10:09.836Z",
+    "2011-02-18T01:10:09.836Z",
+    "2011-02-25T01:10:09.836Z",
+    "2011-03-04T01:10:09.836Z",
+    "2011-03-11T01:10:09.836Z",
+    "2011-03-18T01:10:09.836Z",
+    "2011-03-25T01:10:09.836Z",
+    "2011-04-01T01:10:09.836Z",
+    "2011-04-08T01:10:09.836Z",
+    "2011-04-15T01:10:09.836Z",
+    "2011-04-22T01:10:09.836Z",
+    "2011-04-29T01:10:09.836Z",
+    "2011-05-06T01:10:09.836Z",
+    "2011-05-13T01:10:09.836Z",
+    "2011-05-20T01:10:09.836Z",
+    "2011-05-27T01:10:09.836Z",
+    "2011-06-03T01:10:09.836Z",
+    "2011-06-10T01:10:09.836Z",
+    "2011-06-17T01:10:09.836Z",
+    "2011-06-24T01:10:09.836Z",
+    "2011-07-01T01:10:09.836Z",
+    "2011-07-08T01:10:09.836Z",
+    "2011-07-15T01:10:09.836Z",
+    "2011-07-22T01:10:09.836Z",
+    "2011-07-29T01:10:09.836Z",
+    "2011-08-05T01:10:09.836Z",
+    "2011-08-12T01:10:09.836Z",
+    "2011-08-19T01:10:09.836Z",
+    "2011-08-26T01:10:09.836Z",
+    "2011-09-02T01:10:09.836Z",
+    "2011-09-09T01:10:09.836Z",
+    "2011-09-16T01:10:09.836Z",
+    "2011-09-23T01:10:09.836Z",
+    "2011-09-30T01:10:09.836Z",
+    "2011-10-07T01:10:09.836Z",
+    "2011-10-14T01:10:09.836Z",
+    "2011-10-21T01:10:09.836Z",
+    "2011-10-28T01:10:09.836Z",
+    "2011-11-04T01:10:09.836Z",
+    "2011-11-11T01:10:09.836Z",
+    "2011-11-18T01:10:09.836Z",
+    "2011-11-25T01:10:09.836Z",
+    "2011-12-02T01:10:09.836Z",
+    "2011-12-09T01:10:09.836Z",
+    "2011-12-16T01:10:09.836Z"
+  ],
   "ringCount": 4,
   "detectedCount": 4,
   "missedCount": 0,
   "detectionRate": 1,
-  "medianLeadTimeDays": 56.835,
+  "earlyOrOnTimeCount": 1,
+  "earlyOrOnTimeRate": 0.25,
+  "lateCount": 3,
+  "medianLeadTimeDays": 6.49,
+  "medianDetectionDelayDays": 67.12,
+  "perFamily": [
+    {
+      "family": "noisy_ring",
+      "ringCount": 1,
+      "detectedCount": 1,
+      "missedCount": 0,
+      "detectionRate": 1,
+      "earlyOrOnTimeCount": 0,
+      "earlyOrOnTimeRate": 0,
+      "lateCount": 1,
+      "medianLeadTimeDays": null,
+      "medianDetectionDelayDays": 68.7
+    },
+    {
+      "family": "obvious_ring",
+      "ringCount": 1,
+      "detectedCount": 1,
+      "missedCount": 0,
+      "detectionRate": 1,
+      "earlyOrOnTimeCount": 0,
+      "earlyOrOnTimeRate": 0,
+      "lateCount": 1,
+      "medianLeadTimeDays": null,
+      "medianDetectionDelayDays": 46.55
+    },
+    {
+      "family": "rotating_ip_ring",
+      "ringCount": 1,
+      "detectedCount": 1,
+      "missedCount": 0,
+      "detectionRate": 1,
+      "earlyOrOnTimeCount": 1,
+      "earlyOrOnTimeRate": 1,
+      "lateCount": 0,
+      "medianLeadTimeDays": 6.49,
+      "medianDetectionDelayDays": null
+    },
+    {
+      "family": "slow_burn_ring",
+      "ringCount": 1,
+      "detectedCount": 1,
+      "missedCount": 0,
+      "detectionRate": 1,
+      "earlyOrOnTimeCount": 0,
+      "earlyOrOnTimeRate": 0,
+      "lateCount": 1,
+      "medianLeadTimeDays": null,
+      "medianDetectionDelayDays": 67.12
+    }
+  ],
   "rows": [
     {
       "scenarioId": "scene_obvious_01",
@@ -13,9 +132,169 @@
       "detected": true,
       "detectionDate": "2011-12-02T01:10:09.836Z",
       "detectedRingId": "ring_52000",
+      "firstMembershipDate": "2011-03-07T15:59:41.711Z",
       "finalMembershipDate": "2011-10-16T12:04:57.462Z",
-      "leadTimeDays": 46.55,
-      "bestOverlap": 1
+      "leadTimeDays": -46.55,
+      "detectionDelayDays": 46.55,
+      "bestOverlap": 1,
+      "asOfScores": [
+        {
+          "date": "2011-03-11T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-03-18T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-03-25T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-04-01T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-04-08T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-04-15T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-04-22T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-04-29T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-05-06T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-05-13T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-05-20T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-05-27T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-06-03T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-06-10T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-06-17T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-06-24T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-07-01T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-07-08T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-07-15T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-07-22T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-07-29T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-08-05T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-08-12T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-08-19T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-08-26T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-09-02T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-09-09T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-09-16T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-09-23T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-09-30T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-10-07T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-10-14T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-10-21T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-10-28T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-11-04T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-11-11T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-11-18T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-11-25T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-12-02T01:10:09.836Z",
+          "score": 92.9
+        }
+      ]
     },
     {
       "scenarioId": "scene_noisy_01",
@@ -24,9 +303,197 @@
       "detected": true,
       "detectionDate": "2011-11-18T01:10:09.836Z",
       "detectedRingId": "ring_52006",
+      "firstMembershipDate": "2011-01-06T01:10:09.836Z",
       "finalMembershipDate": "2011-09-10T08:26:38.896Z",
-      "leadTimeDays": 68.7,
-      "bestOverlap": 1
+      "leadTimeDays": -68.7,
+      "detectionDelayDays": 68.7,
+      "bestOverlap": 1,
+      "asOfScores": [
+        {
+          "date": "2011-01-07T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-01-14T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-01-21T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-01-28T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-02-04T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-02-11T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-02-18T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-02-25T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-03-04T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-03-11T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-03-18T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-03-25T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-04-01T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-04-08T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-04-15T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-04-22T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-04-29T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-05-06T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-05-13T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-05-20T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-05-27T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-06-03T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-06-10T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-06-17T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-06-24T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-07-01T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-07-08T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-07-15T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-07-22T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-07-29T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-08-05T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-08-12T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-08-19T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-08-26T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-09-02T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-09-09T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-09-16T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-09-23T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-09-30T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-10-07T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-10-14T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-10-21T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-10-28T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-11-04T01:10:09.836Z",
+          "score": null
+        },
+        {
+          "date": "2011-11-11T01:10:09.836Z",
+          "score": 55
+        },
+        {
+          "date": "2011-11-18T01:10:09.836Z",
+          "score": 75
+        }
+      ]
     },
     {
       "scenarioId": "scene_rotating_01",
@@ -35,8 +502,10 @@
       "detected": true,
       "detectionDate": "2011-12-02T01:10:09.836Z",
       "detectedRingId": "ring_52013",
+      "firstMembershipDate": "2011-05-04T21:10:24.948Z",
       "finalMembershipDate": "2011-12-08T12:52:15.083Z",
-      "leadTimeDays": -6.49,
+      "leadTimeDays": 6.49,
+      "detectionDelayDays": -6.49,
       "bestOverlap": 1
     },
     {
@@ -46,8 +515,10 @@
       "detected": true,
       "detectionDate": "2011-12-16T01:10:09.836Z",
       "detectedRingId": "ring_52018",
+      "firstMembershipDate": "2011-02-07T15:37:03.969Z",
       "finalMembershipDate": "2011-10-09T22:16:45.846Z",
-      "leadTimeDays": 67.12,
+      "leadTimeDays": -67.12,
+      "detectionDelayDays": 67.12,
       "bestOverlap": 1
     }
   ]
