@@ -1,29 +1,42 @@
 import React from 'react';
 
-export default function TriageFilters({ decision, riskLevel, inRing, onFilterChange, facets, totalItems }) {
+export default function TriageFilters({ decision, riskLevel, inRing, onFilterChange, onClearFilters, facets, totalItems }) {
   const isFiltered = decision !== 'ALL' || riskLevel !== 'ALL' || inRing !== 'ALL';
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--rg-surface)', borderBottom: '1px solid var(--rg-border)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--rg-text-secondary)' }}>Filters</span>
+    <div style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'space-between', 
+      padding: '12px 16px', 
+      background: 'var(--rg-surface)', 
+      borderBottom: '1px solid var(--rg-border)',
+      borderTopLeftRadius: 6,
+      borderTopRightRadius: 6,
+      flexWrap: 'wrap',
+      gap: 12
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--rg-text-tertiary)' }}>Filter Cases:</span>
 
+        {/* Decision Status Dropdown */}
         <select
           value={decision}
           onChange={(e) => onFilterChange('decision', e.target.value)}
-          style={{ padding: '6px 12px', fontSize: 13, background: 'var(--rg-canvas)', border: '1px solid var(--rg-border)', borderRadius: 4, color: 'var(--rg-text-primary)' }}
+          className="rg-filter-select"
         >
-          <option value="ALL">All Status</option>
+          <option value="ALL">All Statuses ({totalItems.toLocaleString()})</option>
           <option value="UNREVIEWED">Unreviewed ({facets.status?.UNREVIEWED || 0})</option>
           <option value="MONITOR">Monitor ({facets.status?.MONITOR || 0})</option>
           <option value="ESCALATED">Escalated ({facets.status?.ESCALATED || 0})</option>
           <option value="CLEARED">Cleared ({facets.status?.CLEARED || 0})</option>
         </select>
 
+        {/* Risk Level Dropdown */}
         <select
           value={riskLevel}
           onChange={(e) => onFilterChange('riskLevel', e.target.value)}
-          style={{ padding: '6px 12px', fontSize: 13, background: 'var(--rg-canvas)', border: '1px solid var(--rg-border)', borderRadius: 4, color: 'var(--rg-text-primary)' }}
+          className="rg-filter-select"
         >
           <option value="ALL">All Risk Levels</option>
           <option value="CRITICAL">Critical ({facets.riskLevel?.CRITICAL || 0})</option>
@@ -32,32 +45,30 @@ export default function TriageFilters({ decision, riskLevel, inRing, onFilterCha
           <option value="LOW">Low ({facets.riskLevel?.LOW || 0})</option>
         </select>
 
+        {/* Association Dropdown */}
         <select
           value={inRing}
           onChange={(e) => onFilterChange('inRing', e.target.value)}
-          style={{ padding: '6px 12px', fontSize: 13, background: 'var(--rg-canvas)', border: '1px solid var(--rg-border)', borderRadius: 4, color: 'var(--rg-text-primary)' }}
+          className="rg-filter-select"
         >
-          <option value="ALL">All Cases</option>
+          <option value="ALL">All Networks</option>
           <option value="IN_RING">Ring Associated ({facets.inRing?.true || 0})</option>
           <option value="NO_RING">Independent ({facets.inRing?.false || 0})</option>
         </select>
 
         {isFiltered && (
           <button
-            onClick={() => {
-              onFilterChange('decision', 'ALL');
-              onFilterChange('riskLevel', 'ALL');
-              onFilterChange('inRing', 'ALL');
-            }}
-            style={{ background: 'transparent', border: 'none', color: 'var(--rg-text-tertiary)', fontSize: 13, cursor: 'pointer', textDecoration: 'underline' }}
+            onClick={onClearFilters}
+            className="rg-button rg-button--secondary"
+            style={{ fontSize: 11, padding: '4px 10px', height: 32 }}
           >
-            Clear filters
+            Clear Filters ✕
           </button>
         )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', fontSize: 11, color: 'var(--rg-text-secondary)' }}>
-        <span style={{ fontWeight: 600, color: 'var(--rg-text-primary)' }}>{totalItems.toLocaleString()} cases</span>
+      <div style={{ display: 'flex', alignItems: 'center', fontSize: 12, color: 'var(--rg-text-secondary)', fontVariantNumeric: 'tabular-nums' }}>
+        <span style={{ fontWeight: 700, color: 'var(--rg-text-primary)' }}>{totalItems.toLocaleString()} cases found</span>
       </div>
     </div>
   );

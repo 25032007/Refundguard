@@ -24,13 +24,14 @@ export default function TriagePage() {
     const timer = setTimeout(() => {
       if (search !== searchInput) {
         setSearchParams(prev => {
-          if (searchInput) prev.set('search', searchInput);
-          else prev.delete('search');
-          prev.set('page', '1');
-          return prev;
+          const next = new URLSearchParams(prev);
+          if (searchInput) next.set('search', searchInput);
+          else next.delete('search');
+          next.set('page', '1');
+          return next;
         });
       }
-    }, 500);
+    }, 400);
     return () => clearTimeout(timer);
   }, [searchInput, search, setSearchParams]);
 
@@ -60,18 +61,33 @@ export default function TriagePage() {
 
   const handleFilterChange = (key, value) => {
     setSearchParams(prev => {
-      if (value === 'ALL' || !value) prev.delete(key);
-      else prev.set(key, value);
-      prev.set('page', '1');
-      return prev;
+      const next = new URLSearchParams(prev);
+      if (value === 'ALL' || !value) next.delete(key);
+      else next.set(key, value);
+      next.set('page', '1');
+      return next;
     });
+  };
+
+  const handleClearFilters = () => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.delete('decision');
+      next.delete('riskLevel');
+      next.delete('inRing');
+      next.delete('search');
+      next.set('page', '1');
+      return next;
+    });
+    setSearchInput('');
   };
 
   const handleScopeToggle = (newScope) => {
     setSearchParams(prev => {
-      prev.set('scope', newScope);
-      prev.set('page', '1');
-      return prev;
+      const next = new URLSearchParams(prev);
+      next.set('scope', newScope);
+      next.set('page', '1');
+      return next;
     });
   };
 
@@ -109,41 +125,36 @@ export default function TriagePage() {
           riskLevel={riskLevel}
           inRing={inRing}
           onFilterChange={handleFilterChange}
+          onClearFilters={handleClearFilters}
           facets={facets}
           totalItems={totalItems}
         />
         <CaseTable
           cases={items}
           isLoading={isLoading}
-          onClear={() => setSearchParams(prev => {
-            prev.delete('decision');
-            prev.delete('riskLevel');
-            prev.delete('inRing');
-            prev.delete('search');
-            prev.set('page', '1');
-            setSearchInput('');
-            return prev;
-          })}
-          hasFilters={decision !== 'ALL' || riskLevel !== 'ALL' || inRing !== 'ALL' || search}
+          onClear={handleClearFilters}
+          hasFilters={decision !== 'ALL' || riskLevel !== 'ALL' || inRing !== 'ALL' || search !== ''}
         />
 
         {/* PAGINATION */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: 'var(--rg-surface)', borderTop: '1px solid var(--rg-border)', borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }}>
-          <div style={{ fontSize: 12, color: 'var(--rg-text-secondary)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: 'var(--rg-surface)', borderTop: '1px solid var(--rg-border)', borderBottomLeftRadius: 6, borderBottomRightRadius: 6 }}>
+          <div style={{ fontSize: 12, color: 'var(--rg-text-secondary)', fontVariantNumeric: 'tabular-nums' }}>
             Showing page {page} of {totalPages} ({totalItems.toLocaleString()} cases)
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <button
               disabled={!hasPrev || isLoading}
-              onClick={() => setSearchParams(prev => { prev.set('page', page - 1); return prev; })}
-              style={{ padding: '6px 12px', background: 'var(--rg-canvas)', border: '1px solid var(--rg-border)', borderRadius: 4, cursor: hasPrev ? 'pointer' : 'not-allowed', opacity: hasPrev ? 1 : 0.5 }}
+              onClick={() => setSearchParams(prev => { const next = new URLSearchParams(prev); next.set('page', String(page - 1)); return next; })}
+              className="rg-button rg-button--secondary"
+              style={{ fontSize: 12, padding: '4px 12px' }}
             >
               Previous
             </button>
             <button
               disabled={!hasNext || isLoading}
-              onClick={() => setSearchParams(prev => { prev.set('page', page + 1); return prev; })}
-              style={{ padding: '6px 12px', background: 'var(--rg-canvas)', border: '1px solid var(--rg-border)', borderRadius: 4, cursor: hasNext ? 'pointer' : 'not-allowed', opacity: hasNext ? 1 : 0.5 }}
+              onClick={() => setSearchParams(prev => { const next = new URLSearchParams(prev); next.set('page', String(page + 1)); return next; })}
+              className="rg-button rg-button--secondary"
+              style={{ fontSize: 12, padding: '4px 12px' }}
             >
               Next
             </button>
