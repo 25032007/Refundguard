@@ -102,8 +102,8 @@ function gtMapOf(payload) {
   return payload.gtCustomers || {};
 }
 
-function summarizeIntegerSeq(values) {
-  return stats.summarize(values.map(Number));
+function summarizeIntegerSeq(values, options) {
+  return stats.summarize(values.map(Number), options);
 }
 
 /**
@@ -190,14 +190,17 @@ async function runFinalEvaluation(generate = true, options = {}) {
       developmentSeedList: DEVELOPMENT_SEEDS,
       configHash: hash,
       determinism,
+      ciMethod: '95% Student-t confidence interval on per-seed values, clamped to [0,1] for ratio metrics',
       predictionRule: 'predictedFraud = (riskLevel === "HIGH" || riskLevel === "CRITICAL")',
       gtIsolationVerified: true
     },
     limitations: [
       'The held-out result measures generalization to unseen benchmark seeds, not to unseen real-world fraud.',
       'Background legitimate customers are sampled from UCI Online Retail dataset with synthetic fraud scenario injection.',
+      'Every seed reuses the same fraud template (24 fraud customers: 4 rings and 1 burst), so seed-to-seed variance reflects background resampling, not variation in fraud design.',
+      'NLP signals come from synthetic, rule-generated complaint text attached to injected refunds, not real user reviews.',
       'Evaluation is offline and static — does not account for adversary adaptation or real-time payment provider webhooks.',
-      'Lead time is measured from the last member-join date to the first detected overlap; snapshot cadence is weekly.'
+      'Lead time is measured as (final member join − first detection) in days, positive when detection precedes full ring formation; late detections are reported as a detection delay (first detection − final member join). Snapshot cadence is weekly.'
     ]
   };
 }
@@ -225,7 +228,6 @@ function aggregateRingAcross(payloads, thresholds) {
 }
 
 async function collectLeadTime(holdoutPayloads, thresholds) {
-  const cachedList = [];
   const perSeed = [];
   for (const p of holdoutPayloads) {
     const file = require('path').join(report.DOCS_RESULTS, `leadtime-per-ring-${p.seed}.json`);
@@ -235,18 +237,62 @@ async function collectLeadTime(holdoutPayloads, thresholds) {
       continue;
     }
     const evalSeed = await benchmark.evaluateSeed(p.seed, { skipGenerate: true });
-    const lead = leadTime.analyzeSeedLeadTime(evalSeed.dataset, evalSeed.groundTruth, { ringScoreThreshold: thresholds.ringScore });
+    const lead = leadTime.analyzeSeedLeadTime(evalSeed.dataset, evalSeed.groundTruth, {
+      ringScoreThreshold: thresholds.ringScore,
+      asOfFamilies: ['obvious_ring', 'noisy_ring']
+    });
     leadTime.writeLeadTimeTable(p.seed, lead, file);
     perSeed.push({ seed: p.seed, ...lead, perRingTablePath: report.repoRelative(file) });
   }
+
   const detectionRates = perSeed.map(l => l.detectionRate);
-  const medians = perSeed.map(l => l.medianLeadTimeDays).filter(v => v !== null && v !== undefined);
+  const earlyOrOnTimeRates = perSeed.map(l => l.earlyOrOnTimeRate);
+
+  // Pooled over ALL rings across seeds.
+  let totalRings = 0, totalDetected = 0, totalMissed = 0;
+  let earlyOrOnTimeCount = 0, earlyCount = 0, lateCount = 0;
+  const earlyLeadTimes = [];
+  const lateDelays = [];
+  for (const seed of perSeed) {
+    for (const r of seed.rows || seed.perRing || []) {
+      totalRings++;
+      if (r.detected) {
+        totalDetected++;
+        if (r.leadTimeDays !== null && r.leadTimeDays >= 0) earlyOrOnTimeCount++;
+        if (r.leadTimeDays !== null && r.leadTimeDays > 0) {
+          earlyCount++;
+          earlyLeadTimes.push(r.leadTimeDays);
+        }
+        if (r.detectionDelayDays !== null && r.detectionDelayDays > 0) {
+          lateCount++;
+          lateDelays.push(r.detectionDelayDays);
+        }
+      } else {
+        totalMissed++;
+      }
+    }
+  }
+  const medianOf = (arr) => {
+    if (arr.length === 0) return null;
+    const sorted = [...arr].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  };
+
   return {
     perSeed,
-    detectionRate: summarizeIntegerSeq(detectionRates),
-    medianLeadTimeDays: medians.length ? summarizeIntegerSeq(medians) : { n: 0, mean: Number.NaN, std: Number.NaN, ciLow: null, ciHigh: null },
-    totalDetected: perSeed.reduce((a, l) => a + (l.detectedCount || 0), 0),
-    totalMissed: perSeed.reduce((a, l) => a + (l.missedCount || 0), 0)
+    detectionRate: summarizeIntegerSeq(detectionRates, { clampUnit: true }),
+    earlyOrOnTimeRate: summarizeIntegerSeq(earlyOrOnTimeRates, { clampUnit: true }),
+    pooled: {
+      totalRings,
+      totalDetected,
+      totalMissed,
+      earlyOrOnTimeCount,
+      earlyCount,
+      lateCount,
+      medianLeadTimeDays: medianOf(earlyLeadTimes),
+      medianDetectionDelayDays: medianOf(lateDelays)
+    }
   };
 }
 

@@ -106,7 +106,7 @@ function aggregateCondition(seedMetricsList, conditionKey) {
   const valueOf = (s, key) => (key === 'prevalence' ? s.prevalence : (s.metrics && s.metrics[key]));
   const out = { condition: conditionKey, summaries: {} };
   for (const key of keys) {
-    out.summaries[key] = summarize(seedMetricsList.map(s => valueOf(s, key)));
+    out.summaries[key] = summarize(seedMetricsList.map(s => valueOf(s, key)), { clampUnit: true });
   }
   out.familyRecalls = aggregateFamilyRecalls(seedMetricsList);
   out.groupFpr = aggregateGroupFpr(seedMetricsList);

@@ -56,15 +56,22 @@ function confidenceInterval95(values) {
 
 /**
  * Aggregates a list of per-seed metric values into mean/std/CI95 summary.
+ *
+ * @param {Array<number>} values
+ * @param {object} [options] { clampUnit: true } clamps ciLow/ciHigh to [0,1]
+ *   for ratio metrics (precision/recall/F1/FPR/PR-AUC); the t-interval on a
+ *   bounded ratio can otherwise exceed the unit interval on small samples.
  */
-function summarize(values) {
+function summarize(values, options = {}) {
   const ci = confidenceInterval95(values);
+  const clamp = options.clampUnit === true;
+  const fix = (v) => clamp && typeof v === 'number' && Number.isFinite(v) ? clamp01(v) : v;
   return {
     n: ci.n,
-    mean: ci.mean,
-    std: ci.std,
-    ciLow: ci.ciLow,
-    ciHigh: ci.ciHigh
+    mean: fix(ci.mean),
+    std: fix(ci.std),
+    ciLow: fix(ci.ciLow),
+    ciHigh: fix(ci.ciHigh)
   };
 }
 

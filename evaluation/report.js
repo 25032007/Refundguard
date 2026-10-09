@@ -58,7 +58,10 @@ function writeText(filePath, content) {
 const CACHE_PATH = {
   devSeed: (seed) => path.join(CACHE_DIR, `dev-seed-${seed}.json`),
   holdoutSeed: (seed) => path.join(CACHE_DIR, `holdout-seed-${seed}.json`),
-  unseen: path.join(CACHE_DIR, 'unseen.json'),
+  // 'unseen-seeds' (not 'unseen') so the previous single-seed cache shape is
+  // not mistaken for the multi-seed aggregate below.
+  unseen: path.join(CACHE_DIR, 'unseen-seeds.json'),
+  unseenSeed: (seed) => path.join(CACHE_DIR, `unseen-seed-${seed}.json`),
   devAggregate: path.join(CACHE_DIR, 'dev-aggregate.json'),
   holdoutAggregate: path.join(CACHE_DIR, 'holdout-aggregate.json'),
   thresholds: path.join(CACHE_DIR, 'thresholds.json'),
@@ -256,55 +259,48 @@ async function unseenPhase({ frozenConfig, thresholds }) {
   const cachePath = CACHE_PATH.unseen;
   if (fs.existsSync(cachePath)) return JSON.parse(fs.readFileSync(cachePath, 'utf8'));
 
-  const result = await benchmark.evaluateSeed(seedsPlan.UNSEEN_SEED, {
-    skipGenerate: false,
-    outputRoot: UNSEEN_ROOT,
-    scenarioOptions: { families: [seedsPlan.UNSEEN_FAMILY] }
-  });
-  const payload = extractSeedPayload(result);
-  const payloadPath = path.join(CACHE_DIR, `unseen-seed-${seedsPlan.UNSEEN_SEED}.json`);
-  fs.writeFileSync(payloadPath, JSON.stringify(payload));
+  const perSeed = [];
+  for (const seed of seedsPlan.HELD_OUT_SEEDS) {
+    const payloadPath = CACHE_PATH.unseenSeed(seed);
+    let payload;
+    if (fs.existsSync(payloadPath)) {
+      payload = JSON.parse(fs.readFileSync(payloadPath, 'utf8'));
+    } else {
+      const result = await benchmark.evaluateSeed(seed, {
+        skipGenerate: false,
+        outputRoot: UNSEEN_ROOT,
+        scenarioOptions: { families: [seedsPlan.UNSEEN_FAMILY] }
+      });
+      payload = extractSeedPayload(result);
+      fs.writeFileSync(payloadPath, JSON.stringify(payload));
+    }
+    const conditions = {};
+    for (const key of decisions.CONDITION_KEYS) {
+      conditions[key] = customerMetrics.metricsForCondition(payload.features, { customers: groundTruthMapOf(payload) }, key, thresholds);
+    }
+    perSeed.push({ seed, conditions });
+  }
 
   const conditions = {};
   for (const key of decisions.CONDITION_KEYS) {
-    conditions[key] = customerMetrics.metricsForCondition(payload.features, { customers: groundTruthMapOf(payload) }, key, thresholds);
+    conditions[key] = customerMetrics.aggregateCondition(perSeed.map(p => p.conditions[key]), key);
   }
+  const familyRecall = conditions.combined.familyRecalls[seedsPlan.UNSEEN_FAMILY] || { total: 0, detected: 0, recall: 0 };
 
-  const gtRings = ringMetrics.gtRingsFromGroundTruth(result.groundTruth);
-  const recovery = ringMetrics.recoverySummary(
-    gtRings,
-    ringMetrics.passingRings(payload.rings, thresholds.ringScore),
-    seedsPlan.RING_RECOVERY_THRESHOLDS
-  );
-  const classified = ringMetrics.classifyRings({
-    gtRings,
-    detectedRings: payload.rings,
-    gtCustomerMap: result.groundTruth.customers,
-    ringScoreThreshold: thresholds.ringScore,
-    matchOverlap: seedsPlan.RING_MATCH_OVERLAP
-  });
-
-  const lead = leadTime.analyzeSeedLeadTime(result.dataset, result.groundTruth, { ringScoreThreshold: thresholds.ringScore });
-  leadTime.writeLeadTimeTable(seedsPlan.UNSEEN_SEED, lead, path.join(DOCS_RESULTS, 'unseen-leadtime-per-ring.json'));
-
-  const unfairPlatform = {
-    seed: seedsPlan.UNSEEN_SEED,
+  const result = {
     family: seedsPlan.UNSEEN_FAMILY,
+    familyMemberCount: familyRecall.total / (perSeed.length || 1),
     thresholds,
+    seeds: seedsPlan.HELD_OUT_SEEDS,
+    n: perSeed.length,
+    perSeed,
     conditions,
-    ringRecovery: recovery.recovery,
-    ringClassification: {
-      detectedPassingCount: classified.detectedPassingCount,
-      matchedCount: classified.matchedCount,
-      fpRingCount: classified.fpRingCount,
-      fpByGroup: classified.fpByGroup
-    },
-    leadTime: lead,
+    familyRecall,
     frozenConfigHash: frozenConfigHash(frozenConfig)
   };
   fs.mkdirSync(path.dirname(cachePath), { recursive: true });
-  fs.writeFileSync(cachePath, JSON.stringify(unfairPlatform));
-  return unfairPlatform;
+  writeText(cachePath, JSON.stringify(result, null, 2) + '\n');
+  return result;
 }
 
 /**
@@ -345,10 +341,11 @@ function escalationExperiment(holdoutSeeds, thresholds) {
     const keys = ['precision', 'recall', 'f1', 'fpr', 'prAuc'];
     summary[mode] = {};
     for (const k of keys) {
-      summary[mode][k] = stats.summarize(Object.values(perSeed).map(s => s[mode].metrics[k]));
+      summary[mode][k] = stats.summarize(Object.values(perSeed).map(s => s[mode].metrics[k]), { clampUnit: true });
     }
     summary[mode].highRefundFpr = stats.summarize(
-      Object.values(perSeed).map(s => (s[mode].groupFpr.LEGITIMATE_HIGH_REFUND_RATE || { fpr: 0 }).fpr)
+      Object.values(perSeed).map(s => (s[mode].groupFpr.LEGITIMATE_HIGH_REFUND_RATE || { fpr: 0 }).fpr),
+      { clampUnit: true }
     );
   }
   return { modes, perSeed, summary };
@@ -378,7 +375,7 @@ async function reportPhase() {
     seeds: {
       development: seedsPlan.DEVELOPMENT_SEEDS,
       heldOut: seedsPlan.HELD_OUT_SEEDS,
-      unseen: { seed: seedsPlan.UNSEEN_SEED, family: seedsPlan.UNSEEN_FAMILY }
+      unseen: { family: seedsPlan.UNSEEN_FAMILY, seeds: seedsPlan.HELD_OUT_SEEDS }
     }
   };
   writeText(CACHE_PATH.frozenConfig, JSON.stringify({ thresholds, configHash: hash }, null, 2) + '\n');
@@ -418,11 +415,12 @@ async function reportPhase() {
     seeds: {
       development: seedsPlan.DEVELOPMENT_SEEDS,
       heldOut: seedsPlan.HELD_OUT_SEEDS,
-      unseen: { seed: seedsPlan.UNSEEN_SEED, family: seedsPlan.UNSEEN_FAMILY }
+      unseen: { family: seedsPlan.UNSEEN_FAMILY, seeds: seedsPlan.HELD_OUT_SEEDS }
     },
     frozenConfig: frozenConfig,
     configHash: hash,
     thresholds,
+    ciMethod: '95% Student-t confidence interval on per-seed values, clamped to [0,1] for ratio metrics',
     customerMetrics: {
       development: devConditions,
       heldOut: holdoutConditions
@@ -464,13 +462,27 @@ async function reportPhase() {
 }
 
 async function ensureLeadTimeResults(holdoutSeeds, thresholds, frozenConfig) {
-  const cacheKey = path.join(CACHE_DIR, `leadtime-${frozenConfigHash(frozenConfig)}.json`);
+  // 'leadtime-v2' prefix: v2 schema (detectionDelayDays, early-or-on-time,
+  // per-family, snapshot dates, as-of ring scores); old v1 caches are stale.
+  const cacheKey = path.join(CACHE_DIR, `leadtime-v2-${frozenConfigHash(frozenConfig)}.json`);
   if (fs.existsSync(cacheKey)) return JSON.parse(fs.readFileSync(cacheKey, 'utf8'));
   const out = [];
   for (const seed of holdoutSeeds) {
+    const file = path.join(DOCS_RESULTS, `leadtime-per-ring-${seed.seed}.json`);
+    if (fs.existsSync(file)) {
+      const existing = JSON.parse(fs.readFileSync(file, 'utf8'));
+      // Resumable checkpoint: a previously written v2 table is reusable.
+      if (existing && Array.isArray(existing.snapshotDates) && Array.isArray(existing.rows)) {
+        out.push({ seed: seed.seed, ...existing, perRing: existing.rows });
+        continue;
+      }
+    }
     const evalSeed = await benchmark.evaluateSeed(seed.seed, { skipGenerate: true });
-    const lead = leadTime.analyzeSeedLeadTime(evalSeed.dataset, evalSeed.groundTruth, { ringScoreThreshold: thresholds.ringScore });
-    leadTime.writeLeadTimeTable(seed.seed, lead, path.join(DOCS_RESULTS, `leadtime-per-ring-${seed.seed}.json`));
+    const lead = leadTime.analyzeSeedLeadTime(evalSeed.dataset, evalSeed.groundTruth, {
+      ringScoreThreshold: thresholds.ringScore,
+      asOfFamilies: ['obvious_ring', 'noisy_ring']
+    });
+    leadTime.writeLeadTimeTable(seed.seed, lead, file);
     out.push({ seed: seed.seed, ...lead });
   }
   fs.mkdirSync(path.dirname(cacheKey), { recursive: true });
@@ -537,6 +549,95 @@ function fmtNum(value) {
   return Number(value).toFixed(4);
 }
 
+function fmtDay(value) {
+  if (value === null || value === undefined || Number.isNaN(value)) return '—';
+  return Number(value).toFixed(2);
+}
+
+function medianOf(arr) {
+  if (arr.length === 0) return null;
+  const sorted = [...arr].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+/** Pools per-ring lead-time/delay values across all held-out seeds. */
+function poolLeadTime(heldOutList) {
+  const total = { rings: 0, detected: 0, missed: 0, earlyOrOnTime: 0, early: 0, late: 0 };
+  const earlyLeadTimes = [];
+  const lateDelays = [];
+  for (const seed of heldOutList) {
+    for (const r of seed.perRing || []) {
+      total.rings++;
+      if (r.detected) {
+        total.detected++;
+        if (r.leadTimeDays !== null && r.leadTimeDays >= 0) total.earlyOrOnTime++;
+        if (r.leadTimeDays !== null && r.leadTimeDays > 0) {
+          total.early++;
+          earlyLeadTimes.push(r.leadTimeDays);
+        }
+        if (r.detectionDelayDays !== null && r.detectionDelayDays > 0) {
+          total.late++;
+          lateDelays.push(r.detectionDelayDays);
+        }
+      } else {
+        total.missed++;
+      }
+    }
+  }
+  return {
+    total,
+    medianLeadTimeDays: medianOf(earlyLeadTimes),
+    medianDetectionDelayDays: medianOf(lateDelays)
+  };
+}
+
+/** Pools per-family lead-time/delay counts across all held-out seeds. */
+function poolLeadTimeByFamily(heldOutList) {
+  const byFamily = {};
+  for (const seed of heldOutList) {
+    for (const r of seed.perRing || []) {
+      const fam = (byFamily[r.family] = byFamily[r.family] || {
+        family: r.family,
+        ringCount: 0,
+        detectedCount: 0,
+        missedCount: 0,
+        earlyOrOnTimeCount: 0,
+        lateCount: 0,
+        earlyLeadTimes: [],
+        lateDelays: []
+      });
+      fam.ringCount++;
+      if (r.detected) {
+        fam.detectedCount++;
+        if (r.leadTimeDays !== null && r.leadTimeDays >= 0) fam.earlyOrOnTimeCount++;
+        if (r.leadTimeDays !== null && r.leadTimeDays > 0) fam.earlyLeadTimes.push(r.leadTimeDays);
+        if (r.detectionDelayDays !== null && r.detectionDelayDays > 0) {
+          fam.lateCount++;
+          fam.lateDelays.push(r.detectionDelayDays);
+        }
+      } else {
+        fam.missedCount++;
+      }
+    }
+  }
+  return Object.keys(byFamily).sort().map(f => {
+    const fam = byFamily[f];
+    return {
+      family: f,
+      ringCount: fam.ringCount,
+      detectedCount: fam.detectedCount,
+      missedCount: fam.missedCount,
+      detectionRate: fam.ringCount === 0 ? 0 : fam.detectedCount / fam.ringCount,
+      earlyOrOnTimeCount: fam.earlyOrOnTimeCount,
+      earlyOrOnTimeRate: fam.ringCount === 0 ? 0 : fam.earlyOrOnTimeCount / fam.ringCount,
+      lateCount: fam.lateCount,
+      medianLeadTimeDays: medianOf(fam.earlyLeadTimes),
+      medianDetectionDelayDays: medianOf(fam.lateDelays)
+    };
+  });
+}
+
 function fmtRange(summary, key) {
   const s = summary[key];
   if (!s) return '—';
@@ -562,6 +663,23 @@ function markdownTable(headers, rows) {
   return [h, sep, body].join('\n');
 }
 
+/** Wraps a comma-joined list of tokens at ~width chars for a code block. */
+function wrapCsv(tokens, width = 100) {
+  const lines = [];
+  let current = '';
+  for (const tok of tokens) {
+    const piece = current === '' ? tok : current + ', ' + tok;
+    if (piece.length > width && current !== '') {
+      lines.push(current);
+      current = tok;
+    } else {
+      current = piece;
+    }
+  }
+  if (current !== '') lines.push(current);
+  return lines.join('\n');
+}
+
 function buildEvaluationMarkdown(results) {
   const lines = [];
   lines.push('# RefundGuard Evaluation Report (Phase 3)');
@@ -576,7 +694,7 @@ function buildEvaluationMarkdown(results) {
     [
       ['Development', results.seeds.development.join(', ')],
       ['Held-out (frozen config)', results.seeds.heldOut.join(', ')],
-      ['Unseen family', `${results.seeds.unseen.family} (seed ${results.seeds.unseen.seed})`]
+      ['Unseen family', `${results.seeds.unseen.family} (seeds ${results.seeds.unseen.seeds.join(', ')})`]
     ]
   ));
   lines.push('');
@@ -600,6 +718,7 @@ function buildEvaluationMarkdown(results) {
   lines.push('## Customer-level metrics');
   lines.push('');
   lines.push('PR-AUC uses the per-condition ranking score (max normalized engine contribution); the fraud prevalence (positive rate) is shown next to PR-AUC for context.');
+  lines.push('Confidence intervals are 95% Student-t intervals on the per-seed values, **clamped to [0,1]** for ratio metrics (precision, recall, F1, FPR, PR-AUC, prevalence) so published bounds never leave the unit interval.');
   lines.push('');
   lines.push('### Development (seeds 1–10)');
   lines.push('');
@@ -619,6 +738,35 @@ function buildEvaluationMarkdown(results) {
   });
   lines.push(markdownTable(['Condition', 'Precision', 'Recall', 'F1', 'FPR', 'PR-AUC (prevalence)'], hoRows));
   lines.push('');
+
+  // ── Fusion rules / recommended operating points ─────────────────────────
+  lines.push('#### Fusion rules (held-out)');
+  lines.push('');
+  lines.push('Decision conditions are engine-fusions of `risk`, `nlp` (NLP complaint text) and `graph` (refund ring). The recommended operating points are:');
+  lines.push('');
+  const fusionRows = [
+    ['risk_graph', '`risk_graph` (risk OR graph)', 'recommended (primary)'],
+    ['graph_only', '`graph_only`', 'graph only'],
+    ['risk_only', '`risk_only`', 'risk only'],
+    ['combined', '`combined` (all-OR)', 'risk OR nlp OR graph']
+  ].map(([cond, label, role]) => {
+    const a = hoC[cond].aggregate.summaries;
+    return [label, role, fmtRange(a, 'recall'), fmtRangePct(a, 'fpr'), fmtRange(a, 'precision'), fmtRange(a, 'f1')];
+  });
+  lines.push(markdownTable(['Rule', 'Role', 'Recall', 'FPR', 'Precision', 'F1'], fusionRows));
+  lines.push('');
+  const rg = hoC.risk_graph.aggregate.summaries;
+  const co = hoC.combined.aggregate.summaries;
+  lines.push(
+    `**all-OR is dominated and not recommended.** \`combined\` (risk OR nlp OR graph) reaches the same recall ` +
+    `${fmtPct(co.recall.mean)} as \`risk_graph\` but at ${fmtPct(co.fpr.mean)} FPR vs ${fmtPct(rg.fpr.mean)} ` +
+    `for \`risk_graph\` (≈${(co.fpr.mean / rg.fpr.mean).toFixed(1)}×), and lower precision ` +
+    `(${fmtNum(co.precision.mean)} vs ${fmtNum(rg.precision.mean)}). The added false positives come from the NLP engine ` +
+    `(nlp_only FPR is ${fmtPct(hoC.nlp_only.aggregate.summaries.fpr.mean)}); risk and graph alone add no FPs beyond risk (` +
+    `\`risk_graph\` FPR equals \`risk_only\` FPR).`
+  );
+  lines.push('');
+
   lines.push('### Scenario-family recall and hard-negative FPR (held-out)');
   lines.push('');
   lines.push('**Per-family recall** (subset of FRAUD customers per injected family, combined condition):');
@@ -657,23 +805,80 @@ function buildEvaluationMarkdown(results) {
     seedsPlan.RING_RECOVERY_THRESHOLDS.map(t => [String(t), String(hoRingAgg[String(t)].recovered), String(hoRingAgg[String(t)].total), fmtPct(hoRingAgg[String(t)].rate)])
   ));
   lines.push('');
-  lines.push('## Lead time (held-out)');
+  lines.push('## Lead time and detection delay (held-out)');
+  lines.push('');
+  lines.push('Definitions (per ground-truth ring, detection at time D, first member joins at F₀, last member at F₁):');
+  lines.push('');
+  lines.push('- `leadTimeDays = (F₁ − D) / day` — **positive = early** (detected before the ring fully formed). "Lead time" is reported ONLY for early-detected rings.');
+  lines.push('- `detectionDelayDays = (D − F₁) / day` — **positive = late** (detected after the ring fully formed). Late rings are reported as a **detection delay**, never as "lead time".');
+  lines.push('- Missed rings have no D and are counted as neither early nor late; the early-or-on-time rate is computed **over all rings**.');
   lines.push('');
   const leadAll = results.leadTime.heldOut;
   const detectionRates = leadAll.map(l => l.detectionRate);
-  const medians = leadAll.map(l => l.medianLeadTimeDays).filter(v => v !== null && v !== undefined);
-  const missed = leadAll.reduce((a, l) => a + (l.missedCount || 0), 0);
+  const earlyOrOnTimeRates = leadAll.map(l => l.earlyOrOnTimeRate);
+  const pooled = poolLeadTime(leadAll);
   lines.push(markdownTable(
     ['Metric', 'Value'],
     [
-      ['Detection rate (mean ± sd)', `${fmtPct(stats.mean(detectionRates))} ± ${fmtPct(stats.std(detectionRates))}`],
-      ['Number of missed rings', String(missed)],
-      ['Median lead time over detected rings (mean ± sd, days)', medians.length ? `${fmtNum(stats.mean(medians))} ± ${fmtNum(stats.std(medians))}` : '—']
+      ['Detection rate (pooled)', `${pooled.total.detected}/${pooled.total.rings} (${fmtPct(pooled.total.detected / pooled.total.rings)}); mean ± sd over seeds ${fmtPct(stats.mean(detectionRates))} ± ${fmtPct(stats.std(detectionRates))}`],
+      ['Early-or-on-time rate, all rings (pooled)', `${pooled.total.earlyOrOnTime}/${pooled.total.rings} (${fmtPct(pooled.total.earlyOrOnTime / pooled.total.rings)}); mean ± sd over seeds ${fmtPct(stats.mean(earlyOrOnTimeRates))} ± ${fmtPct(stats.std(earlyOrOnTimeRates))}`],
+      ['Median lead time over early-detected rings (pooled, days)', fmtDay(pooled.medianLeadTimeDays)],
+      ['Median detection delay over late-detected rings (pooled, days)', fmtDay(pooled.medianDetectionDelayDays)],
+      ['Missed rings (pooled)', String(pooled.total.missed)]
     ]
   ));
   lines.push('');
-  lines.push('Per-ring lead-time tables are written to `docs/results/leadtime-per-ring-<seed>.json`.');
+  lines.push('Pooled totals: early-or-on-time (lead time ≥ 0) = ' + String(pooled.total.earlyOrOnTime) + '; early (lead time > 0) = ' + String(pooled.total.early) + '; late (detection delay > 0) = ' + String(pooled.total.late) + '.');
   lines.push('');
+  lines.push('### Per family (pooled over seeds 11–30)');
+  lines.push('');
+  const famLeadRows = poolLeadTimeByFamily(leadAll).map(f => [
+    f.family,
+    String(f.ringCount),
+    String(f.detectedCount),
+    String(f.missedCount),
+    fmtPct(f.detectionRate),
+    fmtPct(f.earlyOrOnTimeRate),
+    fmtDay(f.medianLeadTimeDays),
+    fmtDay(f.medianDetectionDelayDays)
+  ]);
+  lines.push(markdownTable(['Family', 'Rings', 'Detected', 'Missed', 'Detection rate', 'Early-or-on-time', 'Median lead time (early, d)', 'Median detection delay (late, d)'], famLeadRows));
+  lines.push('');
+  lines.push('Per-ring lead-time tables (including per-seed `snapshotDates`) are written to `docs/results/leadtime-per-ring-<seed>.json`.');
+  lines.push('');
+  const seed11 = leadAll.find(l => l.seed === seedsPlan.HELD_OUT_SEEDS[0]);
+  if (seed11 && seed11.snapshotDates) {
+    lines.push('**Snapshot dates used (ISO, weekly cadence, seed ' + String(seed11.seed) + '):**');
+    lines.push('');
+    lines.push('```');
+    lines.push(wrapCsv(seed11.snapshotDates));
+    lines.push('```');
+    lines.push('');
+  }
+  const lateAudits = [];
+  for (const seed of leadAll) {
+    for (const r of seed.perRing || []) {
+      if (['obvious_ring', 'noisy_ring'].includes(r.family) && r.detected && r.detectionDelayDays !== null && r.detectionDelayDays > 30) {
+        lateAudits.push({ seed: seed.seed, ring: r, asOfScores: r.asOfScores || [] });
+      }
+    }
+  }
+  if (lateAudits.length) {
+    lines.push('### Snapshot cadence vs detector slowness (obvious/noisy rings detected more than 30 days late)');
+    lines.push('');
+    lines.push('For each such ring, the as-of ring score at every weekly snapshot from first membership through detection is shown, so a reader can separate snapshot cadence (coarse weekly granularity) from detector slowness (score rising late).');
+    lines.push('');
+    for (const { seed, ring } of lateAudits) {
+      lines.push(`**Seed ${seed} · ${ring.family} (\`${ring.scenarioId}\`) · detection delay ${fmtDay(ring.detectionDelayDays)} d · final membership ${ring.finalMembershipDate}**`);
+      lines.push('');
+      const scoreRows = ring.asOfScores.map(s => [String(s.date), s.score === null || s.score === undefined ? '—' : String(s.score)]);
+      lines.push(markdownTable(['As-of snapshot (weekly)', 'Ring score'], scoreRows));
+      lines.push('');
+    }
+  } else {
+    lines.push('No obvious or noisy ring was detected more than 30 days late on any held-out seed.');
+    lines.push('');
+  }
   lines.push('## Engine ablation (held-out)');
   lines.push('');
   lines.push('The combined condition couples risk + NLP + graph. Ablating engines isolates each family\'s contribution on held-out seeds.');
@@ -698,21 +903,33 @@ function buildEvaluationMarkdown(results) {
   lines.push('## Unseen scenario family');
   lines.push('');
   const unseen = results.unseen;
-  lines.push(`Family: **${unseen.family}** (8 members; only 4 share an IP; unique devices; varied refund reasons). Evaluated once with the frozen config.`);
+  lines.push(`Family: **${unseen.family}** (${String(unseen.familyMemberCount)} members per seed; only 4 share an IP; unique devices; varied refund reasons). Evaluated on **every held-out seed 11–30** with the frozen config (one ring per seed, **n = ${String(unseen.n)}**), so seed variance reflects background resampling, not variability in fraud design.`);
   lines.push('');
   const uRows = decisions.CONDITION_KEYS.map(k => {
-    const m = unseen.conditions[k].metrics;
-    return [k, fmtNum(m.precision), fmtNum(m.recall), fmtNum(m.f1), fmtPct(m.fpr)];
+    const a = unseen.conditions[k].summaries;
+    return [k, fmtRange(a, 'precision'), fmtRange(a, 'recall'), fmtRange(a, 'f1'), fmtRangePct(a, 'fpr'), String(unseen.n)];
   });
-  lines.push(markdownTable(['Condition', 'Precision', 'Recall', 'F1', 'FPR'], uRows));
+  lines.push(markdownTable(['Condition', 'Precision', 'Recall', 'F1', 'FPR', 'n'], uRows));
   lines.push('');
-  const famRec = unseen.conditions.combined.familyRecalls[seedsPlan.UNSEEN_FAMILY];
-  lines.push(`Member-level recall for the unseen family under the combined condition: ${famRec ? fmtPct(famRec.recall) : '—'} (${famRec ? famRec.detected : 0}/${famRec ? famRec.total : 0}).`);
+  const famRec = unseen.familyRecall;
+  lines.push(`Member-level recall for the unseen family under the combined condition (pooled over ${String(unseen.n)} seeds): ${fmtPct(famRec.recall)} (${String(famRec.detected)}/${String(famRec.total)}).`);
+  lines.push('');
+  lines.push('With only 8 members per seed, single-seed recall moves in 1/8 steps; the aggregate over n = 20 seeds is the primary figure.');
+  lines.push('');
+  lines.push(markdownTable(
+    ['Seed', 'Recall', 'Precision', 'F1', 'FPR'],
+    unseen.seeds.map((s, i) => {
+      const m = unseen.perSeed[i].conditions.combined.metrics;
+      return [String(s), fmtPct(m.recall), fmtNum(m.precision), fmtNum(m.f1), fmtPct(m.fpr)];
+    })
+  ));
   lines.push('');
   lines.push('## Limitations');
   lines.push('');
   lines.push('- Synthetic, seeded injection into UCI background data; generalization to real-world fraud posture is not measured.');
+  lines.push('- Every seed reuses the same fraud template — 24 fraud customers made of 4 rings (obvious, noisy, rotating IP, slow burn) and 1 burst — so seed-to-seed variance reflects background customer resampling, not variation in fraud design.');
   lines.push('- Held-out seeds share the same scenario families as development; performance on a genuinely novel family is reported separately (unseen experiment above).');
+  lines.push('- NLP signals come from synthetic, rule-generated complaint text attached to injected refunds, not real user reviews; real-world complaint wording may differ from the training-free lexicon used here.');
   lines.push('- PR-AUC ranking score is a heuristic monotone score, not a calibrated probability.');
   lines.push('- Ring confidence thresholds are evaluation-layer choices, not detector configuration changes.');
   lines.push('- The set of legitimate-hard-negative groups is defined by the generator distribution (household/office/hostel/wholesaler/normal/high-refund).');
@@ -723,6 +940,7 @@ function buildEvaluationMarkdown(results) {
   lines.push('2. Engine configuration and thresholds are frozen via a sha256 recorded in `docs/results/config.json`.');
   lines.push('3. Per-seed driver data and feature caches live under `data/generated/eval/` (gitignored).');
   lines.push('4. All aggregates in this document come from `docs/results/*.json` produced by the orchestrator.');
+  lines.push('5. Confidence intervals use the Student-t formula and are clamped to [0,1] (method stated in the Customer-level metrics section).');
   lines.push('');
   return lines.join('\n');
 }
