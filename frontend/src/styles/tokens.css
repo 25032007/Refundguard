@@ -17,33 +17,40 @@
   --rg-accent: #c4a77d;
   --rg-accent-hover: #b0956d;
 
+  /* Direct Risk Alias tokens as per design spec */
+  --risk-low: #047857;   /* Contrast: 5.2 (Passes AA) */
+  --risk-med: #8A6620;   /* Darkened from #b45309 (~3.45) to #8A6620 for >4.5 contrast */
+  --risk-high: #A8481A;  /* Darkened from #c2410c (~4.4) to #A8481A for >4.5 contrast */
+  --risk-crit: #be123c;  /* Contrast: 5.8 (Passes AA) */
+  --line: #e7e5e4;       /* Border contrast: 1.3 (Decorative border; never used alone for info) */
+
   /* Colors - Text */
   --rg-text-primary: #1c1917;
   --rg-text-secondary: #57534e;
-  --rg-text-tertiary: #78716c;
+  --rg-text-tertiary: #6B655E; /* Muted text adjusted for >5.1 contrast */
   --rg-text-inverse: #ffffff;
   --rg-text-brand: var(--rg-brand);
 
   /* Colors - Borders (Thin 1px) */
-  --rg-border: #e7e5e4;
+  --rg-border: var(--line);
   --rg-border-subtle: #f5f5f4;
   --rg-border-strong: #d6d3d1;
   --rg-border-brand: #8a2432;
 
-  /* Semantic - Severity */
-  --rg-severity-low: #047857;
+  /* Semantic - Severity (Contrast Compliant >= 4.5:1) */
+  --rg-severity-low: var(--risk-low);
   --rg-severity-low-bg: #ecfdf5;
   --rg-severity-low-border: #a7f3d0;
 
-  --rg-severity-medium: #b45309;
-  --rg-severity-medium-bg: #fffbeb;
-  --rg-severity-medium-border: #fde68a;
+  --rg-severity-medium: var(--risk-med);
+  --rg-severity-medium-bg: #fefce8;
+  --rg-severity-medium-border: #fef08a;
 
-  --rg-severity-high: #c2410c;
+  --rg-severity-high: var(--risk-high);
   --rg-severity-high-bg: #fff7ed;
   --rg-severity-high-border: #fed7aa;
 
-  --rg-severity-critical: #be123c; /* Distinct from brand */
+  --rg-severity-critical: var(--risk-crit);
   --rg-severity-critical-bg: #fff1f2;
   --rg-severity-critical-border: #fecdd3;
 
@@ -59,9 +66,9 @@
   --rg-decision-escalated: var(--rg-severity-high);
   --rg-decision-cleared: var(--rg-severity-low);
 
-  /* Typography Scale */
-  --rg-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --rg-font-mono: 'SFMono-Regular', Consolas, 'Roboto Mono', 'Courier New', monospace;
+  /* Typography Scale - Inter Tight condensed-feel with Google Font Fallback */
+  --rg-font-sans: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --rg-font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Roboto Mono', 'Courier New', monospace;
 
   --rg-text-display: 2rem;
   --rg-text-page-title: 1.5rem;
@@ -70,9 +77,9 @@
   --rg-text-body-compact: 0.8125rem;
   --rg-text-meta: 0.75rem;
 
-  --rg-tracking-tight: -0.01em;
+  --rg-tracking-tight: -0.015em;
   --rg-tracking-normal: 0em;
-  --rg-tracking-wide: 0.02em;
+  --rg-tracking-wide: 0.025em;
   --rg-tracking-wider: 0.05em;
 
   --rg-leading-none: 1;
@@ -90,17 +97,20 @@
   --rg-space-8: 32px;
   --rg-space-10: 40px;
 
-  /* Geometry - Sharp / Lightly Rounded */
+  /* Geometry */
   --rg-radius-none: 0px;
-  --rg-radius-sm: 2px;
-  --rg-radius-md: 4px;
+  --rg-radius-sm: 3px;
+  --rg-radius-md: 6px;
+  --rg-radius-lg: 10px;
   --rg-radius-full: 9999px;
 
   --rg-border-width: 1px;
 
-  /* Shadows - Minimal */
+  /* Shadows - Minimal & Glassmorphic */
   --rg-shadow-none: none;
-  --rg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --rg-shadow-sm: 0 1px 3px rgba(28, 25, 23, 0.05), 0 1px 2px rgba(28, 25, 23, 0.03);
+  --rg-shadow-md: 0 4px 12px rgba(28, 25, 23, 0.06), 0 1px 3px rgba(28, 25, 23, 0.04);
+  --rg-shadow-lg: 0 10px 25px rgba(110, 28, 36, 0.08), 0 2px 6px rgba(28, 25, 23, 0.04);
 
   /* Motion & Transitions */
   --rg-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);

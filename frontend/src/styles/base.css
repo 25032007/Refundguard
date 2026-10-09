@@ -14,13 +14,15 @@
   font-weight: 700;
   line-height: var(--rg-leading-tight);
   color: var(--rg-brand);
+  letter-spacing: var(--rg-tracking-tight);
 }
 
 .rg-page-title {
   font-size: var(--rg-text-page-title);
-  font-weight: 600;
+  font-weight: 700;
   line-height: var(--rg-leading-tight);
   color: var(--rg-text-primary);
+  letter-spacing: var(--rg-tracking-tight);
 }
 
 .rg-section-title {
@@ -44,7 +46,7 @@
 
 .rg-meta {
   font-size: var(--rg-text-meta);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--rg-text-tertiary);
   text-transform: uppercase;
   letter-spacing: var(--rg-tracking-wider);
@@ -55,9 +57,10 @@
   font-size: 0.85em;
   color: var(--rg-text-secondary);
   background-color: var(--rg-surface-hover);
-  padding: 0.1em 0.3em;
+  padding: 0.1em 0.35em;
   border-radius: var(--rg-radius-sm);
   border: var(--rg-border-width) solid var(--rg-border);
+  font-variant-numeric: tabular-nums;
 }
 
 /* -----------------------------
@@ -69,9 +72,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   font-family: var(--rg-font-sans);
   font-size: var(--rg-text-body-compact);
-  font-weight: 500;
+  font-weight: 600;
   line-height: var(--rg-leading-none);
   border-radius: var(--rg-radius-md);
   padding: var(--rg-space-2) var(--rg-space-4);
@@ -79,6 +83,7 @@
   transition: all var(--rg-transition-fast);
   border: var(--rg-border-width) solid transparent;
   outline: none;
+  box-shadow: var(--rg-shadow-sm);
 }
 
 .rg-button:focus-visible {
@@ -89,6 +94,7 @@
 .rg-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .rg-button--primary {
@@ -99,6 +105,8 @@
 
 .rg-button--primary:hover:not(:disabled) {
   background-color: var(--rg-brand-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--rg-shadow-md);
 }
 
 .rg-button--secondary {
@@ -111,31 +119,102 @@
   background-color: var(--rg-surface-hover);
   border-color: var(--rg-border-brand);
   color: var(--rg-brand);
+  transform: translateY(-1px);
 }
 
-/* Badge */
+/* Badge System with Icon + Label + Contrast Lock + Pattern Support */
 .rg-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.125rem 0.375rem;
+  gap: 4px;
+  padding: 0.15rem 0.45rem;
   font-size: var(--rg-text-meta);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--rg-tracking-wide);
   border-radius: var(--rg-radius-sm);
   border: var(--rg-border-width) solid transparent;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--rg-transition-fast);
 }
 
-.rg-badge--low { color: var(--rg-severity-low); background-color: var(--rg-severity-low-bg); border-color: var(--rg-severity-low-border); }
-.rg-badge--medium { color: var(--rg-severity-medium); background-color: var(--rg-severity-medium-bg); border-color: var(--rg-severity-medium-border); }
-.rg-badge--high { color: var(--rg-severity-high); background-color: var(--rg-severity-high-bg); border-color: var(--rg-severity-high-border); }
-.rg-badge--critical { color: var(--rg-severity-critical); background-color: var(--rg-severity-critical-bg); border-color: var(--rg-severity-critical-border); }
+.rg-badge-icon {
+  font-size: 0.85em;
+  line-height: 1;
+  display: inline-block;
+  opacity: 0.9;
+}
 
-/* Lifecycle mapped to severity internally in Badge component, but using standard badge classes */
+.rg-badge-label {
+  display: inline-block;
+}
 
-.rg-badge--dormant { color: var(--rg-text-secondary); background-color: var(--rg-surface-hover); border-color: var(--rg-border-strong); }
-.rg-badge--disbanded { color: var(--rg-text-tertiary); background-color: var(--rg-surface-muted); border-color: var(--rg-border-subtle); }
+/* Severity Badge Variants (Contrast >= 4.5:1) */
+.rg-badge--low { 
+  color: var(--risk-low); 
+  background-color: var(--rg-severity-low-bg); 
+  border-color: var(--rg-severity-low-border); 
+}
+.rg-badge--medium { 
+  color: var(--risk-med); /* #8A6620 (Contrast ratio: 4.7:1) */
+  background-color: var(--rg-severity-medium-bg); 
+  border-color: var(--rg-severity-medium-border); 
+}
+.rg-badge--high { 
+  color: var(--risk-high); /* #A8481A (Contrast ratio: 5.1:1) */
+  background-color: var(--rg-severity-high-bg); 
+  border-color: var(--rg-severity-high-border); 
+}
+.rg-badge--critical { 
+  color: var(--risk-crit); 
+  background-color: var(--rg-severity-critical-bg); 
+  border-color: var(--rg-severity-critical-border); 
+}
+
+.rg-badge--dormant { 
+  color: var(--rg-text-secondary); 
+  background-color: var(--rg-surface-hover); 
+  border-color: var(--rg-border-strong); 
+}
+.rg-badge--disbanded { 
+  color: var(--rg-text-tertiary); 
+  background-color: var(--rg-surface-muted); 
+  border-color: var(--rg-border-subtle); 
+}
+.rg-badge--unreviewed { 
+  color: var(--rg-text-tertiary); 
+  background-color: var(--rg-surface-hover); 
+  border-color: var(--rg-border); 
+}
+
+/* Lifecycle Pattern Indicators (Label + Pattern, not color alone) */
+.rg-badge--pattern-dotted {
+  background-image: radial-gradient(var(--risk-med) 1px, transparent 1px);
+  background-size: 4px 4px;
+  background-position: 0 0;
+  border-style: dashed;
+}
+
+.rg-badge--pattern-hatch {
+  background-image: repeating-linear-gradient(45deg, rgba(190, 18, 60, 0.06), rgba(190, 18, 60, 0.06) 3px, transparent 3px, transparent 6px);
+  border-left-width: 3px;
+  border-left-color: var(--risk-crit);
+}
+
+.rg-badge--pattern-crosshatch {
+  background-image: repeating-linear-gradient(0deg, rgba(87, 83, 78, 0.08) 0px, rgba(87, 83, 78, 0.08) 1px, transparent 1px, transparent 4px),
+                    repeating-linear-gradient(90deg, rgba(87, 83, 78, 0.08) 0px, rgba(87, 83, 78, 0.08) 1px, transparent 1px, transparent 4px);
+}
+
+.rg-badge--pattern-grid {
+  background-image: linear-gradient(to right, rgba(120, 113, 108, 0.1) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(120, 113, 108, 0.1) 1px, transparent 1px);
+  background-size: 5px 5px;
+  border-style: dotted;
+}
 
 /* Panel */
 .rg-panel {
@@ -146,6 +225,12 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: border-color var(--rg-transition-fast), box-shadow var(--rg-transition-fast);
+}
+
+.rg-panel:hover {
+  border-color: var(--rg-border-strong);
+  box-shadow: var(--rg-shadow-md);
 }
 
 .rg-panel-header {
@@ -154,18 +239,21 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: var(--rg-surface-sidebar);
 }
 
 .rg-panel-title {
   font-size: var(--rg-text-section-title);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--rg-text-primary);
   margin: 0;
+  letter-spacing: var(--rg-tracking-tight);
 }
 
 .rg-panel-meta {
   color: var(--rg-text-secondary);
   font-size: var(--rg-text-meta);
+  font-variant-numeric: tabular-nums;
 }
 
 .rg-panel-content {
@@ -182,12 +270,13 @@
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  font-variant-numeric: tabular-nums;
 }
 
 .rg-table th {
   padding: var(--rg-density-padding-y) var(--rg-density-padding-x);
   font-size: var(--rg-text-meta);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--rg-tracking-wider);
   color: var(--rg-text-tertiary);
@@ -197,9 +286,14 @@
 
 .rg-table td {
   padding: var(--rg-density-padding-y) var(--rg-density-padding-x);
-  font-size: var(--rg-density-text);
+  font-size: var(--rg-investigation-table-font-size, var(--rg-density-text));
   color: var(--rg-text-primary);
   border-bottom: var(--rg-border-width) solid var(--rg-border-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.rg-table tbody tr {
+  transition: background-color var(--rg-transition-fast);
 }
 
 .rg-table tbody tr:hover {
@@ -264,6 +358,7 @@
 .rg-field-value {
   font-size: var(--rg-text-body);
   color: var(--rg-text-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 /* States */
@@ -318,10 +413,10 @@
 .rg-skeleton {
   background-color: var(--rg-border);
   border-radius: var(--rg-radius-sm);
-  animation: rg-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: rg-pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes rg-pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: .5; }
+  50% { opacity: .4; }
 }

@@ -1,26 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import Badge from '../../ui/Badge';
 import { getSummary, getInvestigations } from '../../services/api.js';
-
-const SEVERITY_COLORS = {
-  CRITICAL: 'var(--rg-severity-critical)',
-  HIGH: 'var(--rg-severity-high)',
-  MEDIUM: 'var(--rg-severity-medium)',
-  LOW: 'var(--rg-severity-low)',
-};
-const SEVERITY_BG = {
-  CRITICAL: 'var(--rg-severity-critical-bg)',
-  HIGH: 'var(--rg-severity-high-bg)',
-  MEDIUM: 'var(--rg-severity-medium-bg)',
-  LOW: 'var(--rg-severity-low-bg)',
-};
-const SEVERITY_BORDER = {
-  CRITICAL: 'var(--rg-severity-critical-border)',
-  HIGH: 'var(--rg-severity-high-border)',
-  MEDIUM: 'var(--rg-severity-medium-border)',
-  LOW: 'var(--rg-severity-low-border)',
-};
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -38,10 +20,10 @@ export default function DashboardPage() {
   if (isLoadingSummary || isLoadingList) {
     return (
       <div className="page">
-        <div style={{ height: 160, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, animation: 'rg-pulse 2s infinite', marginBottom: 24 }} />
+        <div style={{ height: 140, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, animation: 'rg-pulse 1.8s infinite', marginBottom: 24 }} />
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-          <div style={{ height: 300, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, animation: 'rg-pulse 2s infinite' }} />
-          <div style={{ height: 300, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, animation: 'rg-pulse 2s infinite' }} />
+          <div style={{ height: 280, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, animation: 'rg-pulse 1.8s infinite' }} />
+          <div style={{ height: 280, background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, animation: 'rg-pulse 1.8s infinite' }} />
         </div>
       </div>
     );
@@ -64,76 +46,74 @@ export default function DashboardPage() {
 
   return (
     <div className="page page-transition" style={{ maxWidth: 1200, margin: '0 auto' }}>
-      {/* HERO */}
+      {/* HERO BANNER */}
       <div className="animate-fade-in-up stagger-1" style={{
-        padding: '32px 32px',
+        padding: '28px 32px',
         background: 'var(--rg-surface)',
         border: '1px solid var(--rg-border)',
-        borderRadius: 4,
+        borderRadius: 8,
         marginBottom: 24,
+        boxShadow: 'var(--rg-shadow-sm)',
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
           <div>
-            <h1 style={{ margin: 0, fontSize: 24, fontWeight: 300, color: 'var(--rg-brand)' }}>RefundGuard</h1>
-            <h2 style={{ margin: 0, fontSize: 13, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--rg-text-primary)' }}>
-              Refund Fraud Intelligence
+            <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: 'var(--rg-brand)', letterSpacing: '-0.02em' }}>RefundGuard Intelligence</h1>
+            <h2 style={{ margin: '4px 0 0', fontSize: 13, fontWeight: 600, color: 'var(--rg-text-secondary)' }}>
+              Real-time refund fraud, ring network & risk posture analytics
             </h2>
           </div>
           {dataset && (
-            <div style={{ textAlign: 'right', fontSize: 11, color: 'var(--rg-text-secondary)', background: 'var(--rg-surface-hover)', padding: '8px 12px', borderRadius: 4, border: '1px solid var(--rg-border-subtle)' }}>
-              <div style={{ fontWeight: 600, color: 'var(--rg-text-primary)', marginBottom: 2 }}>Dataset: {dataset.source} (seed: {dataset.seed})</div>
-              <div>{total.toLocaleString()} customers • synthetic IP/device/complaints</div>
+            <div style={{ textAlign: 'right', fontSize: 11, color: 'var(--rg-text-secondary)', background: 'var(--rg-surface-sidebar)', padding: '8px 14px', borderRadius: 6, border: '1px solid var(--rg-border)' }}>
+              <div style={{ fontWeight: 700, color: 'var(--rg-text-primary)', marginBottom: 2 }}>Dataset: {dataset.source} (seed: {dataset.seed})</div>
+              <div className="tabular-nums">{total.toLocaleString()} customers • graph network engine active</div>
             </div>
           )}
         </div>
-        <p style={{ margin: '8px 0 0', fontSize: 14, color: 'var(--rg-text-secondary)', maxWidth: 600, lineHeight: 1.5 }}>
-          Current detection posture across customer risk, refund behavior, complaints and refund rings.
-        </p>
       </div>
 
       {/* KPI STRIP */}
       <div className="animate-fade-in-up stagger-2" style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
         gap: 16,
-        marginBottom: 32,
+        marginBottom: 24,
       }}>
-        <div style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, padding: '16px 20px' }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--rg-text-tertiary)', marginBottom: 8 }}>Total Tracked</div>
-          <div style={{ fontSize: 24, fontFamily: 'var(--rg-font-mono)', fontWeight: 600 }}>{total.toLocaleString()}</div>
+        <div style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, padding: '16px 20px', boxShadow: 'var(--rg-shadow-sm)' }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--rg-text-tertiary)', marginBottom: 6 }}>Total Tracked</div>
+          <div className="tabular-nums" style={{ fontSize: 24, fontFamily: 'var(--rg-font-mono)', fontWeight: 700 }}>{total.toLocaleString()}</div>
         </div>
-        <div style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, padding: '16px 20px', borderLeft: '3px solid var(--rg-severity-medium)' }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--rg-text-tertiary)', marginBottom: 8 }}>Unreviewed Cases</div>
-          <div style={{ fontSize: 24, fontFamily: 'var(--rg-font-mono)', fontWeight: 600 }}>{decisions.UNREVIEWED.toLocaleString()}</div>
+        <div style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, padding: '16px 20px', borderLeft: '4px solid var(--risk-med)', boxShadow: 'var(--rg-shadow-sm)' }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--rg-text-tertiary)', marginBottom: 6 }}>Unreviewed Cases</div>
+          <div className="tabular-nums" style={{ fontSize: 24, fontFamily: 'var(--rg-font-mono)', fontWeight: 700, color: 'var(--risk-med)' }}>{decisions.UNREVIEWED.toLocaleString()}</div>
         </div>
-        <div style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, padding: '16px 20px', borderLeft: '3px solid var(--rg-severity-critical)' }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--rg-text-tertiary)', marginBottom: 8 }}>Critical Risk</div>
-          <div style={{ fontSize: 24, fontFamily: 'var(--rg-font-mono)', fontWeight: 600 }}>{risk.CRITICAL.toLocaleString()}</div>
+        <div style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, padding: '16px 20px', borderLeft: '4px solid var(--risk-crit)', boxShadow: 'var(--rg-shadow-sm)' }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--rg-text-tertiary)', marginBottom: 6 }}>Critical Risk</div>
+          <div className="tabular-nums" style={{ fontSize: 24, fontFamily: 'var(--rg-font-mono)', fontWeight: 700, color: 'var(--risk-crit)' }}>{risk.CRITICAL.toLocaleString()}</div>
         </div>
-        <div style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, padding: '16px 20px' }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--rg-text-tertiary)', marginBottom: 8 }}>Detected Rings</div>
-          <div style={{ fontSize: 24, fontFamily: 'var(--rg-font-mono)', fontWeight: 600 }}>{rings?.total || 0}</div>
+        <div style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, padding: '16px 20px', boxShadow: 'var(--rg-shadow-sm)' }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--rg-text-tertiary)', marginBottom: 6 }}>Detected Rings</div>
+          <div className="tabular-nums" style={{ fontSize: 24, fontFamily: 'var(--rg-font-mono)', fontWeight: 700 }}>{rings?.total || 0}</div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 24, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: 24, marginBottom: 24 }}>
         {/* RISK POSTURE */}
-        <div className="animate-fade-in-up stagger-3" style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, padding: 24 }}>
-          <h3 style={{ margin: '0 0 20px', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--rg-text-secondary)' }}>Risk Posture</h3>
+        <div className="animate-fade-in-up stagger-3" style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, padding: 24, boxShadow: 'var(--rg-shadow-sm)' }}>
+          <h3 style={{ margin: '0 0 20px', fontSize: 11, fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--rg-text-secondary)' }}>Risk Posture</h3>
           {['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map(level => {
             const count = risk[level] || 0;
             const pct = total > 0 ? Math.round((count / total) * 100) : 0;
             return (
               <div key={level} style={{ marginBottom: 16 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, fontSize: 12 }}>
-                  <span style={{ fontWeight: 600, textTransform: 'uppercase', color: SEVERITY_COLORS[level] }}>{level}</span>
-                  <span className="mono">{count.toLocaleString()} <span style={{ color: 'var(--rg-text-tertiary)', marginLeft: 8 }}>{pct}%</span></span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, fontSize: 12 }}>
+                  <Badge severity={level.toLowerCase()}>{level}</Badge>
+                  <span className="mono tabular-nums" style={{ fontWeight: 600 }}>{count.toLocaleString()} <span style={{ color: 'var(--rg-text-tertiary)', marginLeft: 8 }}>{pct}%</span></span>
                 </div>
                 <div style={{ height: 6, background: 'var(--rg-surface-hover)', borderRadius: 3, overflow: 'hidden' }}>
-                  <div style={{ height: '100%', background: SEVERITY_COLORS[level], width: `${pct}%` }} />
+                  <div style={{ height: '100%', background: `var(--risk-${level.toLowerCase() === 'medium' ? 'med' : level.toLowerCase() === 'critical' ? 'crit' : level.toLowerCase()})`, width: `${pct}%`, transition: 'width 0.4s ease' }} />
                 </div>
               </div>
             );
@@ -141,56 +121,42 @@ export default function DashboardPage() {
         </div>
 
         {/* ANALYST WORKLOAD */}
-        <div className="animate-fade-in-up stagger-3" style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, padding: 24, display: 'flex', flexDirection: 'column' }}>
-          <h3 style={{ margin: '0 0 20px', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--rg-text-secondary)' }}>Analyst Workload</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: 'var(--rg-severity-medium-bg)', border: '1px solid var(--rg-severity-medium-border)', borderRadius: 4 }}>
-              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--rg-text-primary)' }}>Unreviewed</span>
-              <span className="mono" style={{ fontSize: 16, fontWeight: 600 }}>{decisions.UNREVIEWED.toLocaleString()}</span>
+        <div className="animate-fade-in-up stagger-3" style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', boxShadow: 'var(--rg-shadow-sm)' }}>
+          <h3 style={{ margin: '0 0 20px', fontSize: 11, fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--rg-text-secondary)' }}>Analyst Workload</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: 'var(--rg-surface-sidebar)', border: '1px solid var(--rg-border-strong)', borderRadius: 6 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--rg-text-primary)' }}>Unreviewed Queue</span>
+              <Badge decision="unreviewed">{decisions.UNREVIEWED.toLocaleString()}</Badge>
             </div>
             {['MONITOR', 'ESCALATED', 'CLEARED'].map(dec => (
-              <div key={dec} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 16px', borderBottom: '1px solid var(--rg-border-subtle)' }}>
-                <span style={{ fontSize: 13, color: 'var(--rg-text-secondary)', textTransform: 'capitalize' }}>{dec.toLowerCase()}</span>
-                <span className="mono" style={{ fontSize: 13 }}>{decisions[dec].toLocaleString()}</span>
+              <div key={dec} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 16px', borderBottom: '1px solid var(--rg-border-subtle)' }}>
+                <span style={{ fontSize: 13, color: 'var(--rg-text-secondary)', textTransform: 'capitalize', fontWeight: 500 }}>{dec.toLowerCase()}</span>
+                <span className="mono tabular-nums" style={{ fontSize: 13, fontWeight: 600 }}>{decisions[dec].toLocaleString()}</span>
               </div>
             ))}
           </div>
           <button
             onClick={() => navigate('/triage')}
-            style={{
-              marginTop: 20, padding: '10px 16px', background: 'var(--rg-brand)', color: 'white',
-              border: 'none', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer'
-            }}
+            className="rg-button rg-button--primary"
+            style={{ marginTop: 20, width: '100%' }}
           >
-            Review unreviewed cases &rarr;
+            Review Unreviewed Cases &rarr;
           </button>
         </div>
 
-        {/* REFUND RING POSTURE */}
-        <div className="animate-fade-in-up stagger-4" style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, padding: 24 }}>
-          <h3 style={{ margin: '0 0 20px', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--rg-text-secondary)' }}>Refund Ring Posture</h3>
-          <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
-            <div>
-              <div style={{ fontSize: 10, color: 'var(--rg-text-tertiary)', textTransform: 'uppercase', fontWeight: 600, marginBottom: 4 }}>Tracked</div>
-              <div className="mono">{rings?.total || 0}</div>
-            </div>
-          </div>
-          {!rings?.byLifecycle && <div style={{ fontSize: 12, color: 'var(--rg-text-secondary)' }}>Lifecycle data not available yet.</div>}
-        </div>
-
         {/* TOP SIGNALS */}
-        <div className="animate-fade-in-up stagger-4" style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, padding: 24 }}>
-          <h3 style={{ margin: '0 0 20px', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--rg-text-secondary)' }}>Most Common Risk Signals</h3>
+        <div className="animate-fade-in-up stagger-4" style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, padding: 24, boxShadow: 'var(--rg-shadow-sm)' }}>
+          <h3 style={{ margin: '0 0 20px', fontSize: 11, fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--rg-text-secondary)' }}>Most Common Risk Signals</h3>
           {topSignals && topSignals.length > 0 ? (
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <tbody>
                 {topSignals.map((s, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--rg-border-subtle)' }}>
                     <td style={{ padding: '10px 0', fontSize: 13 }}>
-                      <span style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', color: 'var(--rg-text-tertiary)', marginRight: 8 }}>{s.type}</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', color: 'var(--rg-text-tertiary)', marginRight: 8 }}>{s.type}</span>
                       {s.label}
                     </td>
-                    <td style={{ padding: '10px 0', textAlign: 'right', fontFamily: 'var(--rg-font-mono)', fontSize: 13, color: 'var(--rg-text-secondary)' }}>{s.count.toLocaleString()}</td>
+                    <td style={{ padding: '10px 0', textAlign: 'right', fontFamily: 'var(--rg-font-mono)', fontSize: 13, color: 'var(--rg-text-secondary)' }} className="tabular-nums">{s.count.toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -201,9 +167,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* TOP 10 UNREVIEWED */}
-      <div className="animate-fade-in-up stagger-5" style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 4, padding: 24 }}>
-        <h3 style={{ margin: '0 0 20px', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--rg-text-secondary)' }}>Priority Unreviewed Investigations</h3>
+      {/* PRIORITY UNREVIEWED INVESTIGATIONS */}
+      <div className="animate-fade-in-up stagger-5" style={{ background: 'var(--rg-surface)', border: '1px solid var(--rg-border)', borderRadius: 6, padding: 24, boxShadow: 'var(--rg-shadow-sm)' }}>
+        <h3 style={{ margin: '0 0 20px', fontSize: 11, fontWeight: 800, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--rg-text-secondary)' }}>Priority Unreviewed Investigations</h3>
         <div className="table-wrap">
           <table className="data-table">
             <thead>
@@ -220,20 +186,20 @@ export default function DashboardPage() {
               {unreviewedList.length === 0 ? (
                 <tr><td colSpan="6" style={{ textAlign: 'center', padding: '24px', color: 'var(--rg-text-secondary)' }}>No unreviewed cases.</td></tr>
               ) : unreviewedList.map(c => {
-                const rl = c.riskLevel;
+                const rl = (c.riskLevel || 'LOW').toLowerCase();
                 const topSig = c.topSignal;
                 return (
                   <tr key={c.customerId} onClick={() => navigate(`/investigations/${c.customerId}`)} style={{ cursor: 'pointer' }}>
                     <td className="mono" style={{ fontWeight: 600 }}>{c.customerId}</td>
                     <td>
-                      <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', color: SEVERITY_COLORS[rl], background: SEVERITY_BG[rl], padding: '2px 6px', borderRadius: 2, border: `1px solid ${SEVERITY_BORDER[rl]}` }}>
-                        {rl}
-                      </span>
+                      <Badge severity={rl}>{c.riskLevel}</Badge>
                     </td>
-                    <td className="mono">{c.riskScore}</td>
+                    <td className="mono tabular-nums">{c.riskScore}</td>
                     <td style={{ fontSize: 12 }}>{topSig ? `${topSig.label} (${topSig.contribution}pts)` : '—'}</td>
                     <td>{c.ring ? <span className="mono" style={{ fontSize: 11, color: 'var(--rg-brand)' }}>{c.ring.ringId}</span> : '—'}</td>
-                    <td style={{ fontSize: 12, color: 'var(--rg-text-secondary)' }}>UNREVIEWED</td>
+                    <td>
+                      <Badge decision="unreviewed">UNREVIEWED</Badge>
+                    </td>
                   </tr>
                 );
               })}

@@ -1,4 +1,5 @@
 import React from 'react';
+import Badge from '../../../ui/Badge';
 
 const REASON_EXPLANATIONS = {
   'NEW_RING': 'Initial detection of coordinated activity',
@@ -58,22 +59,12 @@ export default function LifecycleTimeline({ ringHist }) {
 
               <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
                 <div style={{ minWidth: 100 }}>
-                  <span style={{ fontFamily: 'var(--rg-font-mono)', fontSize: 11, color: 'var(--rg-text-tertiary)' }}>
+                  <span style={{ fontFamily: 'var(--rg-font-mono)', fontSize: 11, color: 'var(--rg-text-tertiary)', fontVariantNumeric: 'tabular-nums' }}>
                     {formatDate(snap.lastSeenAt)}
                   </span>
                 </div>
                 <div>
-                  <span style={{
-                    display: 'inline-flex', alignItems: 'center',
-                    padding: '1px 7px', fontSize: 9.5, fontWeight: 700,
-                    letterSpacing: '0.1em', textTransform: 'uppercase',
-                    color: dotColor,
-                    border: `1px solid ${dotColor}`,
-                    borderRadius: 2,
-                    background: 'var(--rg-surface)',
-                  }}>
-                    {snap.state}
-                  </span>
+                  <Badge lifecycle={lc}>{snap.state}</Badge>
                 </div>
                 <div style={{ flex: 1, minWidth: 180 }}>
                   {(snap.evidenceTriggers || []).map((trigger, idx) => (
